@@ -5,6 +5,7 @@ import { Roboto } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 
+// console.log()
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "700", "900"],
