@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 
 export default function NotFound() {
+  // console.log("")
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 py-12 text-center">
       <div className="space-y-6 max-w-md">
