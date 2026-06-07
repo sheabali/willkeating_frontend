@@ -35,7 +35,10 @@ const PHInput = ({
   const [showPassword, setShowPassword] = useState(false);
 
   // Adjust padding if there's an icon or password toggle
-  const inputPaddingClass = isPassword || Icon ? "px-10 py-6" : "py-6";
+  const inputPaddingClass =
+    isPassword || Icon
+      ? "px-10 py-6 rounded-full px-10"
+      : "py-6  rounded-full px-10";
 
   return (
     <FormField
@@ -43,7 +46,11 @@ const PHInput = ({
       name={name}
       render={({ field }) => (
         <FormItem className="space-y-2">
-          {label && <FormLabel htmlFor={name}>{label}</FormLabel>}
+          {label && (
+            <FormLabel className="text-[18px] text-[#444748]" htmlFor={name}>
+              {label}
+            </FormLabel>
+          )}
 
           <FormControl>
             <div className="relative">

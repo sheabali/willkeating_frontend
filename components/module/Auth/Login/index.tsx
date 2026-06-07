@@ -2,14 +2,16 @@
 "use client";
 
 import PHInput from "@/components/form/NRInput";
+
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { useLoginMutation } from "@/redux/api/authApi";
 import { setUser } from "@/redux/features/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
-
 import { setCookie } from "@/src/utils/cookies";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { jwtDecode, JwtPayload } from "jwt-decode";
+import { Lock, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -21,6 +23,7 @@ type LoginFormValues = {
   email: string;
   password: string;
 };
+
 interface CustomJwtPayload extends JwtPayload {
   role: string;
 }
@@ -33,7 +36,7 @@ const schema = z.object({
 const LoginPage = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const [login, { isLoading }] = useLoginMutation() as any;
+  const [login, { isLoading }] = useLoginMutation();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(schema),
@@ -45,15 +48,13 @@ const LoginPage = () => {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      const res = await login(data).unwrap();
+      const res = (await login(data).unwrap()) as any;
 
       if (res.success) {
         const token = res.data.token;
-
         setCookie(token);
 
         const user = jwtDecode<CustomJwtPayload>(token);
-
         dispatch(setUser({ token, user }));
 
         toast.success(res.message || "Login successful!");
@@ -72,76 +73,74 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="flex w-full max-w-6xl items-center gap-28 px-4">
-        <div className="hidden md:flex flex-1 items-center justify-center rounded-lg min-h-[90vh]">
+    <div
+      className="relative min-h-screen flex items-center justify-center bg-cover bg-center"
+      style={{ backgroundImage: "url('/images/login.png')" }}
+    >
+      <div className="relative w-full max-w-[676px] max-h-[676px] rounded-lg bg-white p-16 shadow-md z-10">
+        <Link href="/">
           <Image
-            src="/images/otp.jpg"
+            src="/Logo.png"
             alt="Logo"
-            width={800}
-            height={800}
-            className="object-cover rounded-lg"
-            priority
+            width={250}
+            height={250}
+            className="mx-auto w-[116px] h-[116px] rounded-2xl"
           />
-        </div>
+        </Link>
 
-        <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-md">
-          <Link href="/">
-            <Image
-              src="/Logo.png"
-              alt="Logo"
-              width={50}
-              height={50}
-              className="mx-auto mb-4 rounded-2xl"
+        <h1 className="text-center text-[#1B1C1C] text-[32px] mt-4">Sign In</h1>
+        <h1 className="text-center text-[#1B1C1C] text-[16px]">
+          Enter your email and password below to sign in{" "}
+        </h1>
+
+        <FormProvider {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 mb-[60px] mt-6"
+          >
+            <PHInput
+              control={form.control}
+              name="email"
+              label="Email Address"
+              icon={Mail}
+              type="email"
+              placeholder="Your email address"
             />
-          </Link>
-          <h1 className="text-center text-2xl font-semibold">Welcome Back</h1>
-          <p className="mb-6 mt-3 text-center text-sm text-gray-600">
-            Sign in to your account
-          </p>
-          <FormProvider {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <PHInput
-                control={form.control}
-                name="email"
-                label="Email"
-                type="email"
-                placeholder="Enter your email"
-              />
 
-              <PHInput
-                control={form.control}
-                name="password"
-                label="Password"
-                type="password"
-                placeholder="Enter your password"
-              />
+            <PHInput
+              control={form.control}
+              name="password"
+              label="Password"
+              icon={Lock}
+              type="password"
+              placeholder="Your password"
+            />
 
-              <div className="flex justify-end">
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-primary hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full py-6 font-semibold"
+            <div className="flex justify-start my-4">
+              <Link
+                href="/admin-forgot-password"
+                className="text-[20px] text-[#052858] hover:underline"
               >
-                {isLoading ? "Loading..." : "Sign In"}
-              </Button>
-            </form>
-          </FormProvider>
-          <p className="mt-6 text-center text-sm text-gray-600">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-black hover:underline">
-              Sign Up
-            </Link>
-          </p>{" "}
-        </div>
+                Forgot password?
+              </Link>
+            </div>
+
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full text-[24px] py-6"
+            >
+              {isLoading ? <Spinner /> : "Sign in"}
+            </Button>
+
+            <p className="text-center text-[#5B5C57] text-[20px] pb-4">
+              Don&apos;t have an account?{" "}
+              <Link href="/register" className="text-[#052858] hover:underline">
+                Create account
+              </Link>
+            </p>
+          </form>
+        </FormProvider>
       </div>
     </div>
   );
