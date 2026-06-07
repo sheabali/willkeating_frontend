@@ -77,15 +77,6 @@ export default function HeroSection() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-200 bg-white py-8 px-6 sm:px-8">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-center text-sm text-slate-600">
-            © 2024 Memorial Pages. A place to honor and celebrate life.
-          </p>
-        </div>
-      </footer>
     </main>
   );
 }
