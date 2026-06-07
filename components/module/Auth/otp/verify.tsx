@@ -22,7 +22,7 @@ const otpSchema = z.object({
       z
         .string()
         .length(1)
-        .regex(/^[A-Za-z0-9]$/, "Must be alphanumeric")
+        .regex(/^[A-Za-z0-9]$/, "Must be alphanumeric"),
     )
     .length(4),
 });
@@ -103,7 +103,7 @@ export default function OtpVerify() {
 
   const handleKeyDown = (
     index: number,
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (e.key === "Backspace" && !otpValues[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();

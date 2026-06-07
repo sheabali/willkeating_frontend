@@ -118,7 +118,7 @@ const LoginPage = () => {
 
             <div className="flex justify-start my-4">
               <Link
-                href="/admin-forgot-password"
+                href="/forgot-password"
                 className="text-[20px] text-[#052858] hover:underline"
               >
                 Forgot password?
@@ -128,7 +128,7 @@ const LoginPage = () => {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full text-[24px] py-6"
+              className="w-full text-[20px] py-6"
             >
               {isLoading ? <Spinner /> : "Sign in"}
             </Button>

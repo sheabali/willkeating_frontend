@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   useResendOtpMutation,
   useVerifyOtpMutation,
@@ -16,13 +15,14 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+// OTP SCHEMA FOR 6 DIGITS
 const otpSchema = z.object({
   otp: z
     .array(
       z
         .string()
         .length(1)
-        .regex(/^[A-Za-z0-9]$/, "Must be alphanumeric")
+        .regex(/^[A-Za-z0-9]$/, "Must be alphanumeric"),
     )
     .length(4),
 });
@@ -40,6 +40,10 @@ export default function Otp() {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [otpValues, setOtpValues] = useState<string[]>(Array(4).fill(""));
 
+  // TIMER
+  const [timeLeft, setTimeLeft] = useState(300);
+  const [isCounting, setIsCounting] = useState(true);
+
   const {
     handleSubmit,
     formState: { errors },
@@ -52,18 +56,52 @@ export default function Otp() {
     },
   });
 
+  const router = useRouter();
+
+  const formatTime = (seconds: number) => {
+    const min = Math.floor(seconds / 60);
+    const sec = seconds % 60;
+    return `${min}:${sec.toString().padStart(2, "0")}`;
+  };
+
+  // TIMER EFFECT
+  useEffect(() => {
+    if (!isCounting) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          setIsCounting(false);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isCounting]);
+
+  // AUTO FOCUS
+  useEffect(() => {
+    inputRefs.current[0]?.focus();
+  }, []);
+
+  // RESEND OTP
   const handleResendOtp = async () => {
     if (!email) {
       toast.error("Email not found");
       return;
     }
-    // console.log("email", email);
 
     try {
-      const res = await reSendOtp({ email: email }).unwrap();
-      // console.log("res", res);
+      const res = await reSendOtp({ email }).unwrap();
+
       if (res.success) {
         toast.success(res.message);
+
+        setTimeLeft(300);
+        setIsCounting(true);
       } else {
         toast.error(res.message || "Failed to resend OTP");
       }
@@ -72,6 +110,7 @@ export default function Otp() {
     }
   };
 
+  // INPUT CHANGE
   const handleChange = (index: number, value: string) => {
     if (value.length > 1) {
       const digits = value.split("").slice(0, 4 - index);
@@ -85,7 +124,7 @@ export default function Otp() {
       });
 
       setOtpValues(newOtpValues);
-      const nextIndex = Math.min(index + digits.length, 3);
+      const nextIndex = Math.min(index + digits.length, 4);
       inputRefs.current[nextIndex]?.focus();
     } else if (/^[0-9]$/.test(value) || value === "") {
       const newOtpValues = [...otpValues];
@@ -93,7 +132,7 @@ export default function Otp() {
       setOtpValues(newOtpValues);
       setValue(`otp.${index}`, value);
 
-      if (value && index < 3) {
+      if (value && index < 4) {
         inputRefs.current[index + 1]?.focus();
       }
     }
@@ -101,34 +140,32 @@ export default function Otp() {
     trigger("otp");
   };
 
+  // KEYBOARD NAVIGATION
   const handleKeyDown = (
     index: number,
-    e: React.KeyboardEvent<HTMLInputElement>
+    e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (e.key === "Backspace" && !otpValues[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     } else if (e.key === "ArrowLeft" && index > 0) {
       inputRefs.current[index - 1]?.focus();
-    } else if (e.key === "ArrowRight" && index < 3) {
+    } else if (e.key === "ArrowRight" && index < 4) {
       inputRefs.current[index + 1]?.focus();
     }
   };
 
-  const router = useRouter();
-
+  // SUBMIT
   const onSubmit = async (data: OtpFormData) => {
     if (!email) {
       toast.error("Email not found");
       return;
     }
 
-    const payload = { email: email, otp: Number(data.otp.join("")) };
-
-    // console.log("payload", payload);
+    const payload = { email, otp: Number(data.otp.join("")) };
 
     try {
       const res = await verifiedOtp(payload).unwrap();
-      // console.log("res", res);
+
       if (res.success) {
         toast.success(res.message);
         router.push(`/forgot-password/otp/change-password?email=${email}`);
@@ -140,111 +177,76 @@ export default function Otp() {
     }
   };
 
-  useEffect(() => {
-    inputRefs.current[0]?.focus();
-  }, []);
-
   return (
-    <div className="min-h-screen relative flex items-center justify-center">
+    <div className=" flex items-center justify-center">
       <AnimatePresence>
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          transition={{ duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }}
-          className="relative z-10 w-full max-w-md"
+          className="w-full max-w-md"
         >
-          <div className="bg-white p-8 mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.3 }}
-              className="text-center mb-8"
-            >
-              <h1 className="text-[40px] font-bold text-gray-900 mb-2">
-                Enter Code
+          <div className="bg-white pb-8">
+            <div className="text-center mb-8">
+              <h1 className="text-[30px] text-[#1B1C1C] mb-3 mt-4">
+                Identity Verification
               </h1>
-              <p className="text-gray-600 text-[18px]">
-                We’ve sent a code to {email}
-              </p>
-            </motion.div>
+              <p className="text-gray-600">We’ve sent a code to {email}</p>
+            </div>
 
-            <motion.form
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.3 }}
-              onSubmit={handleSubmit(onSubmit)}
-              className="space-y-6"
-            >
-              <div>
-                <div className="flex justify-between gap-2 sm:gap-3">
-                  {[0, 1, 2, 3].map((index) => (
-                    <div key={index} className="w-full">
-                      <input
-                        ref={(el) => {
-                          inputRefs.current[index] = el;
-                        }}
-                        type="text"
-                        inputMode="numeric"
-                        maxLength={4}
-                        value={otpValues[index]}
-                        onChange={(e) => handleChange(index, e.target.value)}
-                        onKeyDown={(e) => handleKeyDown(index, e)}
-                        className="w-15 aspect-square text-center text-xl font-medium border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors border-gray-300"
-                        aria-label={`Digit ${index + 1} of OTP`}
-                      />
-                    </div>
-                  ))}
-                </div>
-                {errors.otp && (
-                  <motion.p
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-2 text-sm text-red-600 text-center"
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              {/* OTP INPUTS */}
+              <div className="flex items-center justify-center gap-3">
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <input
+                    key={index}
+                    ref={(el) => (inputRefs.current[index] = el) as any}
+                    type="text"
+                    inputMode="numeric"
+                    value={otpValues[index]}
+                    onChange={(e) => handleChange(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(index, e)}
+                    className="w-[70px] h-[70px] text-center text-xl border rounded-lg"
+                  />
+                ))}
+              </div>
+
+              {errors.otp && (
+                <p className="text-red-500 text-sm text-center mt-2">
+                  Please enter a valid 4-digit code
+                </p>
+              )}
+
+              {/* RESEND */}
+              <div className="text-center">
+                Didn’t get a code?{" "}
+                {isCounting ? (
+                  <span className="text-gray-500">
+                    Resend in {formatTime(timeLeft)}
+                  </span>
+                ) : (
+                  <span
+                    onClick={handleResendOtp}
+                    className="font-semibold cursor-pointer hover:underline"
                   >
-                    Please enter a valid 4-digit code
-                  </motion.p>
+                    Click to resend
+                  </span>
                 )}
               </div>
-              <div>
-                Didn’t get a code?{" "}
-                <span
-                  onClick={handleResendOtp}
-                  className="text-black font-semibold cursor-pointer hover:underline"
-                >
-                  Click to resend
-                </span>
-              </div>
-              <div className="flex justify-between items-center gap-4">
-                <motion.button
+
+              {/* BUTTONS */}
+              <div className="flex gap-4">
+                <button
                   type="submit"
                   disabled={isVerifyingOtp || otpValues.some((v) => !v)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="cursor-pointer w-full bg-primary disabled:bg-primary/60 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                  className="w-full bg-primary text-[20px] rounded-full cursor-pointer text-white py-3"
                 >
-                  {isVerifyingOtp ? (
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    "Verify OTP"
-                  )}
-                </motion.button>
-
-                <div>
-                  <Link
-                    href="/forgot-password"
-                    className="text-black font-semibold hover:underline"
-                  >
-                    <Button
-                      variant="outline"
-                      className="cursor-pointer w-full font-medium py-3 px-4 rounded-lg transition-colors duration-200 hover:bg-white flex items-center justify-center"
-                    >
-                      Cancel
-                    </Button>
+                  <Link href="/forgot-password/otp/change-password">
+                    {isVerifyingOtp ? "Loading..." : "Verify OTP"}
                   </Link>
-                </div>
+                </button>
               </div>
-            </motion.form>
+            </form>
           </div>
         </motion.div>
       </AnimatePresence>
