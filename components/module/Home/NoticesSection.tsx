@@ -14,18 +14,18 @@ const NoticesSection = () => {
               alt="Portrait memory"
               width={281}
               height={322}
-              className="h-50 w-[150px] sm:h-[322px] sm:w-[281px] object-cover"
+              className="w-full h-full"
             />
           </div>
 
           {/* Right Image */}
-          <div className="absolute right-2 top-14 -rotate-8 transform  sm:right-135 sm:top-10">
+          <div className="absolute right-2 top-14">
             <Image
               src="/images/Ellipse 2.png"
               alt="Family memory"
               width={280}
               height={270}
-              className="h-[140px] w-[140px] sm:h-[270px] sm:w-[280px] object-cover"
+              className="w-full h-full"
             />
           </div>
         </div>
