@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 import { Button } from "../../ui/button";
 import { ObituaryCard } from "./obituary-card";
 
-// Sample obituary data
 const OBITUARIES = [
   {
     id: "1",

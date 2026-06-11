@@ -1,9 +1,9 @@
-import ObituariesNotices from "@/components/module/obituaries-notices";
+import FuneralNotices from "@/components/module/funeral-notices";
 
 const page = () => {
   return (
     <div>
-      <ObituariesNotices />
+      <FuneralNotices />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import { Calendar, Clock, MapPin } from "lucide-react";
 import Image from "next/image";
 
 export interface Obituary {
@@ -8,14 +9,16 @@ export interface Obituary {
   birthDate: string;
   deathDate: string;
   imageUrl: string;
+  funeralLocation: string;
+  funeralDate: string;
+  funeralTime: string;
+  funeralTimeFormat: string;
 }
 
 export function ObituaryCard({ obituary }: { obituary: Obituary }) {
   return (
     <div className="flex flex-col items-center gap-6 rounded-lg bg-neutral-100 px-8 py-8">
-      {/* Circular photo with wreath border */}
       <div className="relative h-[194px] w-[194px]">
-        {/* Golden wreath border effect using SVG */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="194"
@@ -29,7 +32,6 @@ export function ObituaryCard({ obituary }: { obituary: Obituary }) {
           />
         </svg>
 
-        {/* Photo container */}
         <div className="relative -top-40 mx-auto z-10 h-32 w-32 overflow-hidden rounded-full border-4 border-white shadow-md">
           <Image
             src={obituary.imageUrl}
@@ -41,15 +43,35 @@ export function ObituaryCard({ obituary }: { obituary: Obituary }) {
         </div>
       </div>
 
-      {/* Name */}
       <h3 className="text-center text-lg font-semibold text-neutral-900">
         {obituary.name}
       </h3>
 
-      {/* Dates */}
       <p className="text-center text-sm text-neutral-600">
         {obituary.birthDate} – {obituary.deathDate}
       </p>
+
+      <div className="flex justify-between gap-6 items-center">
+        <div className="flex items-start gap-2">
+          <MapPin size={20} />
+          <p className="text-center text-sm text-[#5B5C57]">
+            {obituary.funeralLocation}
+          </p>
+        </div>
+        <div className="flex items-center justify-center gap-4 text-sm text-neutral-600">
+          <div className="flex items-center gap-1.5">
+            <Calendar className="h-4 w-4" />
+            <span>{obituary.funeralDate}</span>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <Clock className="h-4 w-4" />
+            <span>
+              {obituary.funeralTime} {obituary.funeralTimeFormat}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

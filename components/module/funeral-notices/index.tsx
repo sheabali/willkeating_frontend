@@ -12,6 +12,10 @@ const OBITUARIES = [
     name: "Margaret Anne Murphy",
     birthDate: "12 March 1948",
     deathDate: "28 May 2025",
+    funeralLocation: "St. Mary's Church",
+    funeralDate: "5 June 2025",
+    funeralTime: "2:00",
+    funeralTimeFormat: "PM",
     imageUrl: "/images/Ellipse 6 (1).png",
   },
   {
@@ -19,6 +23,10 @@ const OBITUARIES = [
     name: "Patrick Joseph O'Connor",
     birthDate: "22 August 1956",
     deathDate: "30 May 2026",
+    funeralLocation: "St. John's Church",
+    funeralDate: "10 June 2026",
+    funeralTime: "1:00",
+    funeralTimeFormat: "PM",
     imageUrl: "/images/Ellipse 6 (2).png",
   },
   {
@@ -26,6 +34,10 @@ const OBITUARIES = [
     name: "Bridget Mary Walsh",
     birthDate: "8 January 1941",
     deathDate: "26 May 2026",
+    funeralLocation: "St. Patrick's Church",
+    funeralDate: "15 June 2026",
+    funeralTime: "3:00",
+    funeralTimeFormat: "PM",
     imageUrl: "/images/Ellipse 6 (3).png",
   },
   {
@@ -33,6 +45,10 @@ const OBITUARIES = [
     name: "Michael Francis Byrne",
     birthDate: "17 November 1963",
     deathDate: "24 May 2026",
+    funeralLocation: "St. Joseph's Church",
+    funeralDate: "20 June 2026",
+    funeralTime: "4:00",
+    funeralTimeFormat: "PM",
     imageUrl: "/images/Ellipse 6.png",
   },
   {
@@ -40,6 +56,10 @@ const OBITUARIES = [
     name: "Catherine Elizabeth Doyle",
     birthDate: "4 July 1952",
     deathDate: "29 May 2026",
+    funeralLocation: "St. Michael's Church",
+    funeralDate: "25 June 2026",
+    funeralTime: "1:00",
+    funeralTimeFormat: "PM",
     imageUrl: "/images/Ellipse 6 (1).png",
   },
   {
@@ -47,6 +67,10 @@ const OBITUARIES = [
     name: "Seán Anthony Kelly",
     birthDate: "15 September 1970",
     deathDate: "31 May 2026",
+    funeralLocation: "St. Patrick's Church",
+    funeralDate: "30 June 2026",
+    funeralTime: "2:00",
+    funeralTimeFormat: "PM",
     imageUrl: "/images/Ellipse 6 (1).png",
   },
   {
@@ -54,6 +78,10 @@ const OBITUARIES = [
     name: "Margaret Anne Murphy",
     birthDate: "12 March 1948",
     deathDate: "28 May 2025",
+    funeralLocation: "St. Mary's Church",
+    funeralDate: "5 June 2025",
+    funeralTime: "2:00",
+    funeralTimeFormat: "3:00PM",
     imageUrl: "/images/Ellipse 6 (1).png",
   },
   {
@@ -61,6 +89,10 @@ const OBITUARIES = [
     name: "Patrick Joseph O'Connor",
     birthDate: "22 August 1956",
     deathDate: "30 May 2026",
+    funeralLocation: "St. John's Church",
+    funeralDate: "10 June 2026",
+    funeralTime: "1:00",
+    funeralTimeFormat: "PM",
     imageUrl: "/images/Ellipse 6 (1).png",
   },
   {
@@ -68,6 +100,10 @@ const OBITUARIES = [
     name: "Bridget Mary Walsh",
     birthDate: "8 January 1941",
     deathDate: "26 May 2026",
+    funeralLocation: "St. Patrick's Church",
+    funeralDate: "15 June 2026",
+    funeralTime: "3:00",
+    funeralTimeFormat: "4:00PM",
     imageUrl: "/images/Ellipse 6 (1).png",
   },
 ];
@@ -123,8 +159,8 @@ export default function FuneralNotices() {
         <div className="flex justify-between items-center mb-6">
           <div>
             {" "}
-            <h1 className="mb-8 text-4xl font-serif font-semibold text-neutral-900">
-              Obituaries Notices
+            <h1 className="mb-8 text-4xl font-semibold text-neutral-900">
+              Funeral Notices
             </h1>
           </div>
           <div>
@@ -132,7 +168,7 @@ export default function FuneralNotices() {
               variant="outline"
               className="py-6 px-4 rounded-full text-[#C98A24] hover:text-primary/70"
             >
-              <Plus className="h-5 w-5" /> Create Obituaries Notice
+              <Plus className="h-5 w-5" /> Create Funeral Notice
             </Button>
           </div>
         </div>
@@ -141,13 +177,13 @@ export default function FuneralNotices() {
         <div className="mb-12 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
           {/* Search */}
           <div className="relative w-full sm:w-72">
-            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-400" />
+            <Search className="absolute  left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-400" />
             <input
               type="text"
               placeholder="Search by name, location"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full border border-neutral-300 bg-white pl-10 pr-4 py-2 text-sm text-neutral-900 placeholder-neutral-500 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
+              className="w-full border rounded-md border-neutral-300 bg-white pl-10 pr-4 py-2 text-sm text-neutral-900 placeholder-neutral-500 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
             />
           </div>
 
@@ -156,7 +192,7 @@ export default function FuneralNotices() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="appearance-none border border-neutral-300 bg-white pr-10 pl-4 py-2 text-sm text-neutral-900 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
+              className="appearance-none border rounded-md border-neutral-300 bg-white pr-10 pl-4 py-2 text-sm text-neutral-900 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
             >
               <option value="recent">Recently Published</option>
               <option value="oldest">Oldest First</option>
