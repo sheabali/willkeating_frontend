@@ -28,7 +28,8 @@ export default function Navbar() {
 
   const navItems = [
     { label: "Home", href: "/" },
-    { label: "Features", another: true, href: "#features" },
+    { label: "Obituaries", another: true, href: "/obituaries-notices" },
+    { label: "Funeral Notices", another: true, href: "/funeral-notices" },
     { label: "Pricing", href: "#pricing" },
     { label: "How it works", href: "#how-works" },
   ];

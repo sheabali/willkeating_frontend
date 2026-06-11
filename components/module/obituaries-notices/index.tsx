@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, Plus, Search } from "lucide-react";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Button } from "../../ui/button";
 import { ObituaryCard } from "./obituary-card";
@@ -43,7 +44,7 @@ const OBITUARIES = [
   },
   {
     id: "6",
-    name: "Seán Anthony Kelly",
+    name: "Sean Anthony Kelly",
     birthDate: "15 September 1970",
     deathDate: "31 May 2026",
     imageUrl: "/images/Ellipse 6 (1).png",
@@ -122,7 +123,7 @@ export default function Page() {
         <div className="flex justify-between items-center mb-6">
           <div>
             {" "}
-            <h1 className="mb-8 text-4xl font-serif font-semibold text-neutral-900">
+            <h1 className="mb-8 text-[48px] font-semibold text-neutral-900">
               Obituaries Notices
             </h1>
           </div>
@@ -131,7 +132,12 @@ export default function Page() {
               variant="outline"
               className="py-6 px-4 rounded-full text-[#C98A24] hover:text-primary/70"
             >
-              <Plus className="h-5 w-5" /> Create Obituaries Notice
+              <Link
+                href="/obituaries-notices/create-obituaries-notices"
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-5 w-5" /> Create Obituaries Notice
+              </Link>
             </Button>
           </div>
         </div>

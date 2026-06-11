@@ -16,6 +16,12 @@ export function ObituaryCard({ obituary }: { obituary: Obituary }) {
     <div className="flex flex-col items-center gap-6 rounded-lg bg-neutral-100 px-8 py-8">
       <Link href={`/obituaries-notices/${obituary.id}`}>
         {/* Circular photo with wreath border */}
+
+        {/* Name */}
+        <h3 className="text-center text-lg font-semibold my-6 text-neutral-900">
+          {obituary.name}
+        </h3>
+
         <div className="relative h-[194px] w-[194px]">
           {/* Golden wreath border effect using SVG */}
           <svg
@@ -42,11 +48,6 @@ export function ObituaryCard({ obituary }: { obituary: Obituary }) {
             />
           </div>
         </div>
-
-        {/* Name */}
-        <h3 className="text-center text-lg font-semibold text-neutral-900">
-          {obituary.name}
-        </h3>
 
         {/* Dates */}
         <p className="text-center text-sm text-neutral-600">

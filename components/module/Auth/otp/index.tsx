@@ -236,15 +236,18 @@ export default function Otp() {
 
               {/* BUTTONS */}
               <div className="flex gap-4">
-                <button
-                  type="submit"
-                  disabled={isVerifyingOtp || otpValues.some((v) => !v)}
-                  className="w-full bg-primary text-[20px] rounded-full cursor-pointer text-white py-3"
+                <Link
+                  className="w-full"
+                  href="/forgot-password/otp/change-password"
                 >
-                  <Link href="/forgot-password/otp/change-password">
+                  <button
+                    type="submit"
+                    disabled={isVerifyingOtp || otpValues.some((v) => !v)}
+                    className="w-full bg-primary text-[20px] rounded-full cursor-pointer text-white py-3"
+                  >
                     {isVerifyingOtp ? "Loading..." : "Verify OTP"}
-                  </Link>
-                </button>
+                  </button>
+                </Link>
               </div>
             </form>
           </div>

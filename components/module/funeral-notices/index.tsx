@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronDown, Plus, Search } from "lucide-react";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Button } from "../../ui/button";
 import { ObituaryCard } from "./obituary-card";
@@ -168,7 +169,12 @@ export default function FuneralNotices() {
               variant="outline"
               className="py-6 px-4 rounded-full text-[#C98A24] hover:text-primary/70"
             >
-              <Plus className="h-5 w-5" /> Create Funeral Notice
+              <Link
+                className="flex justify-between items-center gap-2"
+                href="/funeral-notices/create"
+              >
+                <Plus className="h-5 w-5" /> Create Funeral Notice
+              </Link>
             </Button>
           </div>
         </div>
