@@ -1,61 +1,84 @@
 "use client";
 
 import Image from "next/image";
+import { useCallback, useState } from "react";
+import { ImagePreviewModal } from "./image-preview-modal";
+
+type ImageLayout = "grid-2x2" | "grid-2col" | "grid-3col" | "single";
 
 interface ImageGalleryProps {
   images: string[];
-  layout: "grid-2x2" | "grid-2col" | "grid-3col" | "single";
+  layout: ImageLayout;
 }
 
-export function ImageGallery({ images, layout }: ImageGalleryProps) {
-  const getGridClass = () => {
-    switch (layout) {
-      case "grid-2x2":
-        return "grid grid-cols-2 gap-2 sm:gap-3";
-      case "grid-2col":
-        return "grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3";
-      case "grid-3col":
-        return "grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3";
-      case "single":
-        return "flex";
-      default:
-        return "grid grid-cols-2 gap-2 sm:gap-3";
-    }
-  };
+const LAYOUT_CONFIG: Record<
+  ImageLayout,
+  { gridClass: string; imageClass: string }
+> = {
+  "grid-2x2": {
+    gridClass: "grid grid-cols-2 gap-2 sm:gap-3",
+    imageClass:
+      "w-full h-32 sm:h-86 object-cover rounded-md hover:opacity-90 transition-opacity",
+  },
+  "grid-2col": {
+    gridClass: "grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3",
+    imageClass:
+      "w-full h-32 sm:h-86 object-cover rounded-md hover:opacity-90 transition-opacity",
+  },
+  "grid-3col": {
+    gridClass: "grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3",
+    imageClass:
+      "w-full h-32 sm:h-86 object-cover rounded-md hover:opacity-90 transition-opacity",
+  },
+  single: {
+    gridClass: "flex",
+    imageClass:
+      "w-full h-80 object-cover rounded-md hover:opacity-90 transition-opacity",
+  },
+};
 
-  const getImageClass = () => {
-    switch (layout) {
-      case "grid-2x2":
-        return "w-full h-32 sm:h-86 object-cover rounded-md hover:opacity-90 transition-opacity";
-      case "grid-2col":
-        return "w-full h-32 sm:h-86 object-cover rounded-md hover:opacity-90 transition-opacity";
-      case "grid-3col":
-        return "w-full h-32 sm:h-86 object-cover rounded-md hover:opacity-90 transition-opacity";
-      case "single":
-        return "w-full h-80 object-cover rounded-md hover:opacity-90 transition-opacity";
-      default:
-        return "w-full h-32 object-cover rounded-md hover:opacity-90 transition-opacity";
-    }
-  };
+export function ImageGallery({ images, layout }: ImageGalleryProps) {
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const { gridClass, imageClass } =
+    LAYOUT_CONFIG[layout] ?? LAYOUT_CONFIG["grid-2x2"];
+
+  const handleImageClick = useCallback((index: number) => {
+    setSelectedIndex(index);
+    setPreviewOpen(true);
+  }, []);
 
   if (images.length === 0) return null;
 
   return (
-    <div className={getGridClass()}>
-      {images.map((image, index) => (
-        <div
-          key={index}
-          className="relative overflow-hidden bg-gray-100 group cursor-pointer"
-        >
-          <Image
-            src={image}
-            alt={`Memory image ${index + 1}`}
-            width={800}
-            height={700}
-            className={getImageClass()}
-          />
-        </div>
-      ))}
-    </div>
+    <>
+      <div className={gridClass}>
+        {images.map((image, index) => (
+          <button
+            key={`${image}-${index}`}
+            type="button"
+            onClick={() => handleImageClick(index)}
+            className="relative overflow-hidden rounded-md bg-gray-100 text-left transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+            aria-label={`View memory image ${index + 1}`}
+          >
+            <Image
+              src={image}
+              alt={`Memory image ${index + 1}`}
+              width={800}
+              height={700}
+              className={imageClass}
+            />
+          </button>
+        ))}
+      </div>
+
+      <ImagePreviewModal
+        images={images}
+        initialIndex={selectedIndex}
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+      />
+    </>
   );
 }

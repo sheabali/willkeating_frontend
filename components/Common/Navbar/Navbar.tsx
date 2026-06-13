@@ -30,7 +30,7 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "Obituaries", another: true, href: "/obituaries-notices" },
     { label: "Funeral Notices", another: true, href: "/funeral-notices" },
-    { label: "Pricing", href: "#pricing" },
+    { label: "Pricing", href: "/pricing" },
     { label: "How it works", href: "#how-works" },
   ];
 
