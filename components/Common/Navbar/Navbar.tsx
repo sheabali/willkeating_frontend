@@ -32,7 +32,6 @@ export default function Navbar() {
     { label: "Funeral Notices", another: true, href: "/funeral-notices" },
     { label: "Memorials", another: true, href: "/memories" },
     { label: "Pricing", href: "/pricing" },
-    { label: "How it works", href: "#how-works" },
   ];
 
   const handleLogout = () => {
