@@ -24,9 +24,7 @@ function filterMemories(memories: Memory[], query: string): Memory[] {
 
 function sortMemories(memories: Memory[], filter: MemoryFilter): Memory[] {
   if (filter === "popular") {
-    return [...memories].sort(
-      (a, b) => b.comments.length - a.comments.length,
-    );
+    return [...memories].sort((a, b) => b.comments.length - a.comments.length);
   }
 
   return memories;
