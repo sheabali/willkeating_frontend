@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -55,7 +56,7 @@ export function ImagePreviewModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         showCloseButton
-        className="max-w-[min(95vw,1200px)] border-none bg-black/95 p-0 shadow-2xl sm:max-w-[min(95vw,1200px)] [&_[data-slot=dialog-close]]:text-white [&_[data-slot=dialog-close]]:hover:text-white/80"
+        className="max-w-[min(95vw,1200px)] border-none bg-black/95 p-0 shadow-2xl sm:max-w-[min(95vw,1200px)] [&_[data-slot=dialog-close]]:text-white **:data-[slot=dialog-close]:hover:text-white/80"
       >
         <div className="relative flex min-h-[50vh] items-center justify-center p-4 sm:min-h-[70vh]">
           <Image

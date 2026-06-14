@@ -1,5 +1,11 @@
+import CreateMemories from "@/components/module/Memories/create-memories";
+
 const page = () => {
-  return <div>create new memory</div>;
+  return (
+    <div>
+      <CreateMemories />
+    </div>
+  );
 };
 
 export default page;

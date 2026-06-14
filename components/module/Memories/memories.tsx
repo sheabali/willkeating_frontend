@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FilterDropdown } from "./filter-dropdown";
 import { MemoryCard } from "./memory-card";
@@ -46,10 +47,12 @@ export function Memories() {
           <h1 className="text-3xl font-semibold text-[#052858] sm:text-[48px]">
             Memories
           </h1>
-          <Button className="w-full gap-2 border border-amber-200 bg-amber-50 px-6 py-6 text-amber-600 hover:bg-amber-100 sm:w-auto">
-            <Plus className="h-4 w-4" />
-            Share Memory
-          </Button>
+          <Link href="/memories/new">
+            <Button className="w-full gap-2 border border-amber-200 bg-amber-50 px-6 py-6 text-amber-600 hover:bg-amber-100 sm:w-auto">
+              <Plus className="h-4 w-4" />
+              Share Memory
+            </Button>
+          </Link>
         </div>
 
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
