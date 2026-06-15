@@ -1,7 +1,6 @@
 "use client";
 
 import { UserDashboardData } from "@/src/types/user.type";
-import { useParams } from "next/navigation";
 import { UserDashboardSection } from "./user-dashboard-section";
 
 const mockDashboardData: UserDashboardData = {
@@ -18,18 +17,21 @@ const mockDashboardData: UserDashboardData = {
     {
       id: "1",
       deceasedName: "Robert L. Doe",
+      submittedBy: "Jane Doe",
       status: "PUBLISHED",
       createdDate: "2023-08-14",
     },
     {
       id: "2",
       deceasedName: "Martha Smith",
+      submittedBy: "Jane Doe",
       status: "PUBLISHED",
       createdDate: "2022-11-02",
     },
     {
       id: "3",
       deceasedName: "William Doe",
+      submittedBy: "Jane Doe",
       status: "PUBLISHED",
       createdDate: "2024-01-12",
     },
@@ -63,10 +65,6 @@ const mockDashboardData: UserDashboardData = {
 };
 
 export default function UserDetails() {
-  const { id } = useParams();
-
-  console.log("userID", id);
-
   const handleDeactivateAccount = () => {
     alert("Account deactivation process initiated.");
   };

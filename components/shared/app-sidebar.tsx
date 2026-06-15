@@ -46,6 +46,11 @@ const data = {
         icon: HandCoins,
       },
       {
+        title: "Obituary",
+        url: "/admin/dashboard/obituary",
+        icon: HandCoins,
+      },
+      {
         title: "Your Profile",
         url: "/user/dashboard/profile",
         icon: User,

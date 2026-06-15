@@ -21,6 +21,7 @@ export interface User {
 export interface Obituary {
   id: string;
   deceasedName: string;
+  submittedBy: string;
   status: "PUBLISHED" | "DRAFT" | "ARCHIVED";
   createdDate: string | Date;
 }
