@@ -1,5 +1,11 @@
+import UserDetails from "@/components/module/Dashboard/UserManagement/UserDetails";
+
 const page = () => {
-  return <div></div>;
+  return (
+    <div>
+      <UserDetails />
+    </div>
+  );
 };
 
 export default page;
