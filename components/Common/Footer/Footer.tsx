@@ -41,7 +41,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-amber-50">
+    <footer className="w-full bg-[#F8FAFC]">
       {/* Main Footer Content */}
       <div className="mx-auto container px-6 py-16 sm:px-8 lg:px-12">
         <div className="flex gap-12 md:flex-row md:justify-between">

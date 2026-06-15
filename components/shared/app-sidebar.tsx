@@ -56,6 +56,11 @@ const data = {
         icon: HandCoins,
       },
       {
+        title: "Moderation",
+        url: "/admin/dashboard/moderation",
+        icon: HandCoins,
+      },
+      {
         title: "Your Profile",
         url: "/user/dashboard/profile",
         icon: User,

@@ -24,7 +24,7 @@ export default function HeroSection() {
             <Button className="bg-primary text-[20px] py-6 px-6 text-white hover:bg-primary/90">
               Create a Death Notice
             </Button>
-            <Button className="border-2 text-[20px] border-[#C98A24] bg-[#fbf7f0] py-6 px-6 text-[#C98A24] hover:bg-[#fff3df] ">
+            <Button className="border-2 text-[20px] border-[#BFDBFE] bg-[#F8FAFC] py-6 px-6 text-[#c8bcfd] hover:bg-[#f4faff] ">
               Browse Memorials
             </Button>
           </div>
