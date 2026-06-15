@@ -27,20 +27,20 @@ const memorialData: MemorialData = {
     "She is survived by her three children, seven grandchildren, and a community of friends who will forever miss her warmth, her quick wisdom, and her legendary blackberry cobbler. Her legacy of kindness reminds us of all who knew her.",
   ],
   coverPhoto: {
-    src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-HHUuIe5xScUQPoNvc3miISKrrZJLw3.png",
+    src: "/images/Rectangle 14 (2).png",
     alt: "Eleanor Harrington portrait",
   },
   galleryPhotos: [
     {
-      src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
+      src: "/images/rectangle_15.png",
       alt: "Memorial gallery photo 1",
     },
     {
-      src: "https://images.unsplash.com/photo-1516627145497-ae6968895b2f?w=400&h=300&fit=crop",
+      src: "/images/Rectangle 14 (2).png",
       alt: "Memorial gallery photo 2",
     },
     {
-      src: "https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=400&h=300&fit=crop",
+      src: "/images/Rectangle 13 (3).png",
       alt: "Memorial gallery photo 3",
     },
   ],

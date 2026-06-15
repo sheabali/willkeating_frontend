@@ -1,6 +1,7 @@
 "use client";
 
 import { UserDashboardData } from "@/src/types/user.type";
+import { toast } from "sonner";
 import { UserDashboardSection } from "./user-dashboard-section";
 
 const mockDashboardData: UserDashboardData = {
@@ -66,7 +67,7 @@ const mockDashboardData: UserDashboardData = {
 
 export default function UserDetails() {
   const handleDeactivateAccount = () => {
-    alert("Account deactivation process initiated.");
+    toast.success("Account deactivation process initiated.");
   };
 
   return (

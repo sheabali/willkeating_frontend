@@ -45,7 +45,7 @@ const ActionCell = ({ id }: any) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action will delete the user. You can’t undo this change.
+            This action will delete the obituary . You can’t undo this change.
           </AlertDialogDescription>
         </AlertDialogHeader>
 

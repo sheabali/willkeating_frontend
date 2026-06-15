@@ -18,7 +18,7 @@ export function UserProfileCard({ user, onDeactivate }: UserProfileCardProps) {
         {/* Profile Image */}
         <div className="relative h-24 w-24 shrink-0">
           <Image
-            src={user.avatarUrl}
+            src="/images/user_4.jpg"
             alt={user.name}
             fill
             className="rounded-md object-cover"
