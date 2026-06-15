@@ -7,14 +7,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Logo from "@/src/assets/logo.png";
-import {
-  HandCoins,
-  Home,
-  InfoIcon,
-  LayoutDashboard,
-  User,
-  Users,
-} from "lucide-react";
+import { HandCoins, Home, LayoutDashboard, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { NavMain } from "./nav-main";
@@ -49,20 +42,8 @@ const data = {
       },
       {
         title: "Users",
-        url: "/user/dashboard/users",
+        url: "/admin/dashboard/users",
         icon: HandCoins,
-        items: [
-          {
-            title: "Users",
-            url: "/user/dashboard/estimates",
-            icon: Users,
-          },
-          {
-            title: "Pending Users",
-            url: "/user/dashboard/pending-users",
-            icon: InfoIcon,
-          },
-        ],
       },
       {
         title: "Your Profile",
