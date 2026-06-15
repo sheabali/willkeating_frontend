@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/preserve-manual-memoization */
 "use client";
 
+import MetricCard from "@/components/shared/MetricCardDashboard";
 import { Button } from "@/components/ui/button";
 import { NRTable } from "@/components/ui/core/NRTable";
 import TablePagination from "@/components/ui/core/NRTable/TablePagination";
@@ -13,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Obituary } from "@/src/types/user.type";
 import { ColumnDef } from "@tanstack/react-table";
-import { ChevronDown, Eye, Filter } from "lucide-react";
+import { BookOpen, ChevronDown, Eye, Filter } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import ActionCell from "./ActionCell";
@@ -56,6 +57,20 @@ const ObituaryManagement = () => {
       submittedBy: "Thomas Harrington",
       status: "PUBLISHED",
       createdDate: "Oct 24, 2023",
+    },
+  ];
+  const metrics = [
+    {
+      title: "Total Obituaries",
+      value: 134,
+      icon: <BookOpen className="text-[#155DFC]" />,
+      bg: "bg-[#EFF6FF]",
+    },
+    {
+      title: "Views (Last 30 days)",
+      value: 34,
+      icon: <Eye className="text-[#9810FA]" />,
+      bg: "bg-[#FAF5FF]",
     },
   ];
 
@@ -149,6 +164,12 @@ const ObituaryManagement = () => {
         <h1 className="text-[24px] font-semibold text-[#092924] mt-6">
           Obituary Management
         </h1>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 my-8">
+        {metrics.map((metric) => (
+          <MetricCard key={metric.title} {...metric} />
+        ))}
       </div>
 
       {/* Filters & Search */}
