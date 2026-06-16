@@ -167,7 +167,7 @@ export default function FuneralNotices() {
           <div>
             <Button
               variant="outline"
-              className="py-6 px-4 rounded-full text-[#C98A24] hover:text-primary/70"
+              className="py-6 px-4 rounded-full border-primary text-primary hover:text-primary/70"
             >
               <Link
                 className="flex justify-between items-center gap-2"

@@ -42,7 +42,7 @@ const features: FeatureCard[] = [
 
 export function MemorialFeatures() {
   return (
-    <section className="w-full bg-linear-to-br from-amber-50 via-orange-50 to-rose-50 px-6 py-16 md:py-24">
+    <section className="w-full bg-linear-to-br bg-[#add8e6] px-6 py-16 md:py-24">
       <div className=" container mx-auto">
         {/* Header */}
         <div className="mb-12 text-center md:mb-16">
@@ -74,7 +74,7 @@ export function MemorialFeatures() {
               </div>
 
               {/* Content */}
-              <div className="p-6 bg-[#faf3e9] text-center">
+              <div className="p-6 bg-[#add8e6] text-center">
                 <h3 className="text-xl font-semibold text-slate-900">
                   {feature.title}
                 </h3>

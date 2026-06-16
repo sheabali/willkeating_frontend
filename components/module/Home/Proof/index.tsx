@@ -185,8 +185,8 @@ const Proof = () => {
           >
             <div className="flex justify-end items-end mb-10">
               <div className="flex gap-3">
-                <CarouselPrevious className="static translate-y-0 bg-white hover:bg-[#8B2323] hover:text-white transition-all duration-300 border-gray-200 shadow-sm size-12" />
-                <CarouselNext className="static translate-y-0 bg-white hover:bg-[#8B2323] hover:text-white transition-all duration-300 border-gray-200 shadow-sm size-12" />
+                <CarouselPrevious className="static translate-y-0 bg-white hover:bg-primary hover:text-white transition-all duration-300 border-gray-200 shadow-sm size-12" />
+                <CarouselNext className="static translate-y-0 bg-white hover:bg-primary hover:text-white transition-all duration-300 border-gray-200 shadow-sm size-12" />
               </div>
             </div>
 

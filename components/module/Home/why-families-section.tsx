@@ -23,14 +23,14 @@ const defaultFeatures: WhyFamiliesFeature[] = [
     title: "Respectful & Compassionate",
     description:
       "Created to support families during life's most difficult moments.",
-    backgroundColor: "bg-[#8c3b06]",
+    backgroundColor: "bg-[#466c7a]",
   },
   {
     number: 2,
     title: "Easy to Share",
     description:
       "Keep everyone informed with a single place for funeral and memorial information.",
-    backgroundColor: "bg-[#c17738]",
+    backgroundColor: "bg-[#6f628c]",
   },
   {
     number: 3,
@@ -44,7 +44,7 @@ const defaultFeatures: WhyFamiliesFeature[] = [
     title: "Accessible Anywhere",
     description:
       "Friends and family can participate from anywhere in the world.",
-    backgroundColor: "bg-[#c17738]",
+    backgroundColor: "bg-[#86736b]",
   },
 ];
 
@@ -64,7 +64,7 @@ export function WhyFamiliesSection({
           <p
             className={
               subtitleClassName ||
-              "text-[#C98A24] text-sm md:text-base tracking-wide mb-2"
+              "text-[#0496FF] text-sm md:text-[24px] tracking-wide mb-2"
             }
           >
             {subtitle}

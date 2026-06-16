@@ -130,7 +130,7 @@ export default function Page() {
           <div>
             <Button
               variant="outline"
-              className="py-6 px-4 rounded-full text-[#C98A24] hover:text-primary/70"
+              className="py-6 px-4 rounded-full text-primary border-primary hover:text-primary/70"
             >
               <Link
                 href="/obituaries-notices/create-obituaries-notices"

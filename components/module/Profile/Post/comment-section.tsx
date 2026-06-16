@@ -116,7 +116,7 @@ export function CommentSection({
         />
         <button
           type="submit"
-          className="text-amber-500 hover:text-amber-600 transition-colors flex-shrink-0"
+          className="text-primary hover:text-primary/80 transition-colors shrink-0"
           disabled={!newComment.trim()}
         >
           <Send className="w-5 h-5" />

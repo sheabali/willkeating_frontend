@@ -293,7 +293,7 @@ export default function FuneralNoticeForm() {
         <div className="flex justify-start pt-4">
           <Button
             type="submit"
-            className="bg-primary hover:bg-primary/90 text-white font-medium px-8"
+            className="w-[200px] py-6 bg-primary hover:bg-primary/90 text-white font-medium px-8"
           >
             Save
           </Button>

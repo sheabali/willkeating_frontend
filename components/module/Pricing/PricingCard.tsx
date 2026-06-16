@@ -24,7 +24,7 @@ const PricingCard = ({ plan }: { plan: PricingPlan }) => {
       {/* Popular Badge */}
       {plan.isPopular && (
         <div className="absolute top-6 right-6 sm:top-8 sm:right-8">
-          <span className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold bg-amber-700 text-white">
+          <span className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold bg-[#0496FF] text-white">
             Popular
           </span>
         </div>

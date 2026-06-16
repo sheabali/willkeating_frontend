@@ -15,14 +15,14 @@ const BannerSection = () => {
   ];
 
   return (
-    <section className="bg-[#795316]">
+    <section className="bg-primary">
       <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-3 lg:items-center">
           {/* Stats */}
           <div className="lg:col-span-2">
             <div className="grid gap-8 sm:grid-cols-3">
               {stats.map((stat, index) => (
-                <div key={index} className="border-l-2 border-[#DFB97C] pl-6">
+                <div key={index} className="border-l-2 border-primary pl-6">
                   <h2 className="text-4xl font-bold leading-none text-white sm:text-5xl lg:text-6xl">
                     {stat.value}
                   </h2>
@@ -41,7 +41,7 @@ const BannerSection = () => {
               and support each other through remembrance.
             </p>
 
-            <button className="group inline-flex items-center gap-2 text-lg font-semibold text-[#DFB97C] transition-all hover:gap-3">
+            <button className="group inline-flex items-center gap-2 text-lg font-semibold text-white transition-all hover:gap-3">
               Explore Memorials
               <span aria-hidden="true">→</span>
             </button>

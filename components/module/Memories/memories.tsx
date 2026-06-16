@@ -48,7 +48,7 @@ export function Memories() {
             Memories
           </h1>
           <Link href="/memories/new">
-            <Button className="w-full gap-2 border border-amber-200 bg-amber-50 px-6 py-6 text-amber-600 hover:bg-amber-100 sm:w-auto">
+            <Button className="w-full gap-2 bg-[#ffffff] border border-primary px-6 py-6 text-primary font-semibold hover:bg-[#f4faff] sm:w-auto">
               <Plus className="h-4 w-4" />
               Share Memory
             </Button>
@@ -85,7 +85,7 @@ export function Memories() {
             3
           </button>
           <span className="mx-2 text-gray-600">...</span>
-          <button className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500 text-white transition-colors hover:bg-amber-600">
+          <button className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white transition-colors hover:bg-amber-600">
             9
           </button>
         </div>

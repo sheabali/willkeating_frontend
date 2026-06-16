@@ -40,7 +40,7 @@ const TransactionTable = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 10;
-  const totalItems = 2; // Update this based on real data count
+  const totalItems = 2;
 
   const transactionData: Transaction[] = [
     {

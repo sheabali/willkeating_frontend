@@ -203,7 +203,7 @@ const CreateMemories = () => {
             accept="image/*"
             multiple
             onChange={handleImageChange}
-            className="hidden"
+            className="hidden outline-none"
             aria-label="Select image files"
             disabled={isBusy}
           />
@@ -212,7 +212,7 @@ const CreateMemories = () => {
         <Button
           type="submit"
           disabled={!isFormValid || isBusy}
-          className="rounded-full bg-amber-500 px-8 py-2.5 font-medium text-white shadow-sm transition-all hover:bg-amber-600 hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
+          className="rounded-full w-[200px] py-6 bg-primary cursor-pointer px-8 font-medium text-white shadow-sm transition-all hover:bg-amber-600 hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {isBusy ? (
             <>

@@ -155,7 +155,7 @@ export default function Navbar() {
                   onClick={() => handleNavigation(item.href)}
                   className={`py-2 px-5 rounded-full text-md font-medium transition-all duration-200 active:scale-95 ${
                     isActive(item.href)
-                      ? "underline underline-offset-4 decoration-2 text-black font-semibold"
+                      ? "underline underline-offset-4 decoration-2 text-primary font-semibold"
                       : "text-gray-600 hover:text-black hover:bg-gray-100"
                   }`}
                   aria-current={isActive(item.href) ? "page" : undefined}

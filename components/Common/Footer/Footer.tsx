@@ -41,7 +41,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="w-full bg-[#F8FAFC]">
+    <footer className="w-full bg-[#add8e6]">
       {/* Main Footer Content */}
       <div className="mx-auto container px-6 py-16 sm:px-8 lg:px-12">
         <div className="flex gap-12 md:flex-row md:justify-between">
@@ -90,7 +90,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl border-t border-slate-300" />
 
       {/* Copyright Section */}
-      <div className="bg-amber-50 px-6 py-8 sm:px-8 lg:px-12">
+      <div className="bg-[#add8e6] px-6 py-8 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-7xl">
           <p className="text-center text-sm text-slate-600">
             © {currentYear} Remembered Forever. All rights reserved.

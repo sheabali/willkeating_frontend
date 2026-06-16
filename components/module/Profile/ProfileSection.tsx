@@ -57,7 +57,7 @@ export function ProfileSection({
             <div className="flex flex-col justify-center gap-1 md:gap-2">
               <h2 className="text-2xl md:text-[32px] text-[#052858]">{name}</h2>
 
-              <p className="text-[#C98A24]  text-sm md:text-[20px]">
+              <p className="text-primary text-sm md:text-[20px]">
                 Joined since {joinDate}
               </p>
 

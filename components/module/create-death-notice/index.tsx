@@ -107,7 +107,7 @@ export function DeathNoticeForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="container mx-auto w-full rounded-3xl bg-[#f3f1ef] p-8 my-12"
+      className="container mx-auto w-full rounded-3xl bg-[#f0f0ff] p-8 my-12"
     >
       <h1 className="mb-8 text-[20px] font-semibold text-[#14261C]">
         Create Death Notice
@@ -304,7 +304,7 @@ export function DeathNoticeForm() {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="text-blue-600 font-medium hover:underline"
+                className="text-[#0EA5E9] font-medium hover:underline"
               >
                 Click to upload
               </button>
@@ -326,7 +326,8 @@ export function DeathNoticeForm() {
 
       <Button
         type="submit"
-        className="rounded-full bg-primary px-8 py-4 font-semibold text-white hover:bg-primary/90"
+        size="lg"
+        className="w-[200px] rounded-full bg-primary px-8 py-6 font-semibold text-white hover:bg-primary/90"
       >
         Save
       </Button>

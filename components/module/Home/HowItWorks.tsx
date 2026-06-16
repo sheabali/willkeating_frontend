@@ -47,8 +47,8 @@ export default function HowItWorks() {
                 className="flex flex-col items-center text-center"
               >
                 {/* Icon */}
-                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-lg border-2 border-[#C98A24]">
-                  <Icon className="h-8 w-8 text-[#C98A24]" strokeWidth={1.5} />
+                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-lg border-2 border-primary">
+                  <Icon className="h-8 w-8 text-primary" strokeWidth={1.5} />
                 </div>
 
                 {/* Title */}

@@ -60,16 +60,16 @@ const data = {
         url: "/admin/dashboard/moderation",
         icon: HandCoins,
       },
-      {
-        title: "Your Profile",
-        url: "/user/dashboard/profile",
-        icon: User,
-      },
-      {
-        title: "Go Back To Home",
-        url: "/",
-        icon: Home,
-      },
+      // {
+      //   title: "Your Profile",
+      //   url: "/user/dashboard/profile",
+      //   icon: User,
+      // },
+      // {
+      //   title: "Go Back To Home",
+      //   url: "/",
+      //   icon: Home,
+      // },
     ],
   },
 };
@@ -91,14 +91,14 @@ export default function AppSidebar({ role, ...props }: AppSidebarProps) {
       <SidebarHeader>
         <Link
           href={"/"}
-          className="flex items-center w-full max-h-40 justify-center"
+          className="flex items-center w-[60%] max-h-40 mx-auto justify-center"
         >
           <Image
             src={Logo.src}
             alt="Logo"
             width={300}
             height={300}
-            className="size-auto "
+            className="size-auto"
           />
         </Link>
       </SidebarHeader>
