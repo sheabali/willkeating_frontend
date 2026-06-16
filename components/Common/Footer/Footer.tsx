@@ -52,7 +52,7 @@ export default function Footer() {
               className="group relative h-20 w-20 shrink-0 transition-transform hover:scale-105 sm:h-24 sm:w-24"
             >
               <Image
-                src="/logo.png"
+                src="/images/Logo.png"
                 alt="Remembered Forever Logo"
                 fill
                 sizes="96px"

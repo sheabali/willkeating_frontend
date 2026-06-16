@@ -113,13 +113,15 @@ const AdminLogin = () => {
               placeholder="Enter your password"
             />
 
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-6 mt-6 font-semibold"
-            >
-              {isLoading ? <Spinner /> : "Login"}
-            </Button>
+            <Link href="/admin/dashboard">
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full py-6 mt-6 font-semibold"
+              >
+                {isLoading ? <Spinner /> : "Login"}
+              </Button>
+            </Link>
           </form>
         </FormProvider>
       </div>
