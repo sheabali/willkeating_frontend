@@ -120,26 +120,20 @@ export default function Page() {
     <main className="min-h-screen bg-white px-6 py-12 sm:px-8">
       <div className="container mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            {" "}
-            <h1 className="mb-8 text-[48px] font-semibold text-neutral-900">
-              Obituaries Notices
-            </h1>
-          </div>
-          <div>
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-3xl font-semibold text-neutral-900 md:text-4xl lg:text-5xl">
+            Obituaries Notices
+          </h1>
+
+          <Link href="/obituaries-notices/create-obituaries-notices">
             <Button
               variant="outline"
-              className="py-6 px-4 rounded-full text-primary border-primary hover:text-primary/70"
+              className="w-full rounded-full border-primary px-5 py-6 text-primary hover:text-primary/70 sm:w-auto"
             >
-              <Link
-                href="/obituaries-notices/create-obituaries-notices"
-                className="flex items-center gap-2"
-              >
-                <Plus className="h-5 w-5" /> Create Obituaries Notice
-              </Link>
+              <Plus className="mr-2 h-5 w-5" />
+              Create Obituaries Notice
             </Button>
-          </div>
+          </Link>
         </div>
 
         {/* Controls */}

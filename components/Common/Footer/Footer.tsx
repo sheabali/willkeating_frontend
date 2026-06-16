@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 
@@ -37,38 +35,46 @@ const footerSections: FooterSection[] = [
   },
 ];
 
-export default function Footer() {
-  const currentYear = new Date().getFullYear();
+const wrapperClasses = "mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12";
 
+const currentYear = new Date().getFullYear();
+
+export default function Footer() {
   return (
     <footer className="w-full bg-[#add8e6]">
       {/* Main Footer Content */}
-      <div className="mx-auto container px-6 py-16 sm:px-8 lg:px-12">
-        <div className="flex gap-12 md:flex-row md:justify-between">
+      <div className={`${wrapperClasses} py-16`}>
+        <div className="flex flex-col items-center gap-10 md:flex-row md:items-start md:justify-between md:gap-12">
           {/* Logo Section */}
-          <div className="flex shrink-0 justify-center md:justify-start">
+          <div className="flex w-full justify-center md:w-auto md:justify-start">
             <Link
               href="/"
-              className="group relative h-24 w-24 transition-transform hover:scale-105"
+              className="group relative h-20 w-20 shrink-0 transition-transform hover:scale-105 sm:h-24 sm:w-24"
             >
               <Image
                 src="/logo.png"
                 alt="Remembered Forever Logo"
                 fill
+                sizes="96px"
                 className="object-contain"
-                priority
               />
             </Link>
           </div>
 
           {/* Links Sections */}
-          <div className="flex flex-1 flex-col gap-8 sm:flex-row sm:gap-12 md:gap-16">
+          <nav
+            aria-label="Footer"
+            className="flex w-full flex-col gap-8 text-center sm:flex-row sm:justify-between sm:gap-12 sm:text-left md:w-auto md:gap-16"
+          >
             {footerSections.map((section) => (
-              <nav key={section.title} className="flex flex-col gap-4">
+              <div
+                key={section.title}
+                className="flex flex-col items-center gap-4 sm:items-start"
+              >
                 <h3 className="text-sm font-semibold text-slate-800">
                   {section.title}
                 </h3>
-                <ul className="flex flex-col gap-3">
+                <ul className="flex flex-col items-center gap-3 sm:items-start">
                   {section.links.map((link) => (
                     <li key={link.href}>
                       <Link
@@ -80,22 +86,22 @@ export default function Footer() {
                     </li>
                   ))}
                 </ul>
-              </nav>
+              </div>
             ))}
-          </div>
+          </nav>
         </div>
       </div>
 
       {/* Divider */}
-      <div className="mx-auto max-w-7xl border-t border-slate-300" />
+      <div className={wrapperClasses}>
+        <div className="border-t border-slate-300" />
+      </div>
 
       {/* Copyright Section */}
-      <div className="bg-[#add8e6] px-6 py-8 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-center text-sm text-slate-600">
-            © {currentYear} Remembered Forever. All rights reserved.
-          </p>
-        </div>
+      <div className={`${wrapperClasses} py-8`}>
+        <p className="text-center text-sm text-slate-600">
+          © {currentYear} Remembered Forever. All rights reserved.
+        </p>
       </div>
     </footer>
   );

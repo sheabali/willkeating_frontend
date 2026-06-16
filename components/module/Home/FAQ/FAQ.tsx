@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 const faqItems = [
   {
@@ -33,91 +33,107 @@ const faqItems = [
   {
     id: "5",
     question: "How does the memorial subscription work?",
-    answer: "How does the memorial subscription work?",
+    answer:
+      "Subscriptions renew automatically at the plan you choose, keeping the memorial page live and editable. You can switch plans or cancel at any time from your account settings.",
   },
   {
     id: "6",
     question: "Is my information secure?",
-    answer: "Is my information secure?",
+    answer:
+      "Yes. Your details are encrypted in transit and at rest, and only used to publish and manage the notice you create — never sold or shared with third parties.",
   },
 ];
 
+// Single set of variants reused by every animated element. Combined with
+// staggerChildren on the parent, this replaces several independent
+// whileInView observers with one, which is both cheaper to run and keeps
+// the reveal visually in sync.
+const containerVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
+};
+
+const fadeUpVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+
 export default function FAQ() {
   return (
-    <section className="py-24 bg-[#F9FAFB] relative overflow-hidden">
-      {/* Background Decor */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-50/50 rounded-full blur-3xl" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-red-50/50 rounded-full blur-3xl" />
+    <section className="relative overflow-hidden bg-[#F9FAFB] py-16 sm:py-20 lg:py-24">
+      {/* Background decor */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -right-[10%] -top-[10%] h-[60%] w-[60%] rounded-full bg-blue-50/50 blur-3xl sm:h-[40%] sm:w-[40%]" />
+        <div className="absolute -bottom-[10%] -left-[10%] h-[60%] w-[60%] rounded-full bg-red-50/50 blur-3xl sm:h-[40%] sm:w-[40%]" />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+      <div className="container relative z-10 mx-auto px-4 sm:px-6">
         {/* Header */}
-        <div className="flex  items-center justify-center text-center mb-16">
-          <div className="flex flex-col justify-start items-start text-start">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="flex items-center justify-start gap-3 mb-6"
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="mb-12 flex flex-col gap-6 sm:mb-16 lg:flex-row lg:items-end lg:justify-between lg:gap-12"
+        >
+          <div className="flex flex-col items-start text-left">
+            <motion.span
+              variants={fadeUpVariants}
+              className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-[#7E0A0A] sm:mb-6"
             >
-              <span className="text-sm text-[#7E0A0A] font-medium uppercase  tracking-[0.2em]">
-                FAQ
-              </span>
-            </motion.div>
+              FAQ
+            </motion.span>
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="text-4xl sm:text-5xl font-bold text-[#1A1A1A] mb-6 tracking-tight leading-[1.1]"
+              variants={fadeUpVariants}
+              className="text-3xl font-bold leading-[1.1] tracking-tight text-[#1A1A1A] sm:text-4xl md:text-5xl"
             >
               Frequently Asked Questions
             </motion.h2>
           </div>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-500 text-start text-lg max-w-2xl mx-auto font-medium"
+            variants={fadeUpVariants}
+            className="max-w-2xl text-left text-base font-medium text-gray-500 sm:text-lg lg:text-right"
           >
             Find answers to common questions about publishing notices, creating
             memorial pages, subscriptions, privacy, and sharing memories with
             loved ones.
           </motion.p>
-        </div>
+        </motion.div>
 
         {/* Accordion */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.2 }}
         >
-          <Accordion type="single" collapsible className="space-y-4">
+          <Accordion
+            type="single"
+            collapsible
+            className="space-y-3 sm:space-y-4"
+          >
             {faqItems.map((item, index) => (
               <AccordionItem
                 key={item.id}
                 value={item.id}
-                className="group border-none bg-white rounded-2xl px-2 sm:px-4 py-2 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-300 hover:shadow-[0_8px_20px_rgba(0,0,0,0.06)] data-[state=open]:shadow-[0_8px_20px_rgba(0,0,0,0.06)] data-[state=open]:bg-white"
+                className="group rounded-2xl border-none bg-white px-1 py-1 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-shadow duration-300 hover:shadow-[0_8px_20px_rgba(0,0,0,0.06)] sm:px-4 sm:py-2 data-[state=open]:shadow-[0_8px_20px_rgba(0,0,0,0.06)]"
               >
-                <AccordionTrigger className="flex-1 hover:no-underline py-4 px-4 sm:px-6">
-                  <div className="flex items-center gap-5 text-left w-full">
-                    <div className="hidden sm:flex w-10 h-10 rounded-xl bg-gray-50 items-center justify-center group-hover:bg-blue-50 transition-colors shrink-0">
-                      <span className="text-[#1A1A1A] font-bold text-sm">
-                        {index + 1 < 10 ? `${index + 1}` : index + 1}
+                <AccordionTrigger className="flex-1 px-3 py-3 hover:no-underline sm:px-6 sm:py-4">
+                  <div className="flex w-full items-center gap-3 text-left sm:gap-5">
+                    <div className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gray-50 transition-colors group-hover:bg-blue-50 sm:flex sm:h-10 sm:w-10">
+                      <span className="text-sm font-bold text-[#1A1A1A]">
+                        {index + 1}
                       </span>
                     </div>
-                    <span className="text-[#1A1A1A] font-bold text-lg sm:text-xl tracking-tight leading-tight flex-1">
+                    <span className="flex-1 text-base font-bold leading-tight tracking-tight text-[#1A1A1A] sm:text-lg md:text-xl">
                       {item.question}
                     </span>
                   </div>
                 </AccordionTrigger>
 
-                <AccordionContent className="px-4 sm:px-[72px] pb-6 pt-2">
-                  <div className="text-gray-600 text-base sm:text-lg leading-relaxed font-medium">
+                <AccordionContent className="px-3 pb-5 pt-1 sm:px-6 sm:pb-6 sm:pt-2 lg:px-[72px]">
+                  <div className="text-sm font-medium leading-relaxed text-gray-600 sm:text-base lg:text-lg">
                     {item.answer}
                   </div>
                 </AccordionContent>
@@ -125,28 +141,6 @@ export default function FAQ() {
             ))}
           </Accordion>
         </motion.div>
-
-        {/* CTA Footer */}
-        {/* <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="mt-16 text-center"
-        >
-          <div className="inline-flex items-center gap-3 bg-white px-8 py-4 rounded-full shadow-md border border-gray-100 hover:shadow-lg transition-all duration-300">
-            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-            <p className="text-gray-700 font-semibold">
-              Still have questions?{" "}
-              <a
-                href="#contact"
-                className="text-red-500 font-bold hover:underline ml-1"
-              >
-                Contact our support team
-              </a>
-            </p>
-          </div>
-        </motion.div> */}
       </div>
     </section>
   );
