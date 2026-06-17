@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -21,19 +22,23 @@ export default function HeroSection() {
 
           {/* CTA Buttons */}
           <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Button className="bg-primary text-[20px] py-6 px-6 text-white hover:bg-primary/90">
-              Create a Death Notice
-            </Button>
-            <Button className="border-2 text-[20px] border-primary bg-[#F8FAFC] py-6 px-6 text-primary hover:bg-[#f4faff] ">
-              Browse Memorials
-            </Button>
+            <Link href="/obituaries-notices/create-obituaries-notices">
+              <Button className="bg-primary text-[20px] py-6 px-6 text-white hover:bg-primary/90">
+                Create a Death Notice
+              </Button>
+            </Link>
+            <Link href="/memories">
+              <Button className="border-2 text-[20px] border-primary bg-[#F8FAFC] py-6 px-6 text-primary hover:bg-[#f4faff] ">
+                Browse Memorials
+              </Button>
+            </Link>
           </div>
         </div>
 
         {/* Polaroid Images Section */}
         <div className="relative mt-12 flex h-[350px] items-center justify-center sm:mt-12 sm:h-96">
           {/* Left Image */}
-          <div className="absolute left-2 top-16 z-20 -rotate-6 transform sm:left-175 sm:top-20">
+          <div className="absolute left-2 top-16 z-20 -rotate-6 transform sm:left-155 sm:top-20">
             <Image
               src="/images/memorial-1.png"
               alt="Family memory"
@@ -55,7 +60,7 @@ export default function HeroSection() {
           </div>
 
           {/* Right Image */}
-          <div className="absolute right-2 top-14 z-20 -rotate-8 transform  sm:right-165 sm:top-10">
+          <div className="absolute right-2 top-14 z-20 -rotate-8 transform  sm:right-135 sm:top-10">
             <Image
               src="/images/memorial-3.png"
               alt="Family memory"
@@ -66,7 +71,7 @@ export default function HeroSection() {
           </div>
 
           {/* Graphic Element */}
-          <div className="absolute right-4 top-12 z-20 sm:right-173 sm:top-8">
+          <div className="absolute right-4 top-12 z-20 sm:right-143 sm:top-8">
             <Image
               src="/images/Graphic_Elements.png"
               alt="Graphic Element"

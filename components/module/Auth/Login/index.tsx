@@ -125,15 +125,13 @@ const LoginPage = () => {
               </Link>
             </div>
 
-            <Link href="/">
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full text-[20px] py-6"
-              >
-                {isLoading ? <Spinner /> : "Sign in"}
-              </Button>
-            </Link>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full text-[20px] py-6"
+            >
+              {isLoading ? <Spinner /> : "Sign in"}
+            </Button>
 
             <p className="text-center text-[#5B5C57] text-[20px] pb-4">
               Don&apos;t have an account?{" "}

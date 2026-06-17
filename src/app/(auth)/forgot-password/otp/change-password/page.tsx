@@ -63,7 +63,7 @@ export default function ResetPassword() {
 
       if (res.success) {
         toast.success(res.message);
-        router.push("/admin-login");
+        router.push("/login");
       } else {
         toast.error(res.message);
       }
@@ -182,9 +182,7 @@ export default function ResetPassword() {
               className="w-full bg-primary rounded-full hover:bg-primary/90 text-[20px] py-6 font-semibold transition-colors"
               disabled={isSubmitting || !isPasswordMatch || isLoading}
             >
-              <Link href="/login">
-                {isLoading ? "Resetting..." : "Reset Password"}
-              </Link>
+              {isLoading ? "Resetting..." : "Reset Password"}
             </Button>
           </form>
         </Form>

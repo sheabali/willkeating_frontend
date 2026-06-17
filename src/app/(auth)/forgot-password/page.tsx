@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import Link from "next/link";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -35,19 +34,22 @@ export default function ResetPassword() {
 
   const { isSubmitting } = form.formState;
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    router.push(`/forgot-password/otp?email=${data.email}`);
+  const onSubmit = async (data: FieldValues) => {
+    console.log("1. Submit clicked");
+
     try {
+      console.log("2. Calling API");
+
       const res = (await forgotPassword(data).unwrap()) as any;
+
+      console.log("3. API Response:", res);
 
       if (res.success) {
         toast.success(res.message);
-      } else {
-        toast.error(res.message || "Something went wrong");
+        router.push(`/forgot-password/otp?email=${data.email}`);
       }
-    } catch (error: any) {
-      console.error("Error submitting form:", error);
-      toast.error(error?.data?.message || "Failed to send OTP");
+    } catch (error) {
+      console.log("4. Error:", error);
     }
   };
 

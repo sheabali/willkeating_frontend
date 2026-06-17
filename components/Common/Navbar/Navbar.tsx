@@ -220,6 +220,14 @@ export default function Navbar() {
                                 : ""}
                         </Link>
                       </li>
+                      <li className="px-4">
+                        <Link
+                          className="block py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition rounded-b-none"
+                          href="/funeral-notices"
+                        >
+                          Publish Notice
+                        </Link>
+                      </li>
                       <li>
                         <button
                           className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-gray-50 transition rounded-b-xl"
@@ -241,11 +249,19 @@ export default function Navbar() {
                       Sign in
                     </Button>
                   </Link>
-                  <Link href="/register">
-                    <Button className="gap-1.5 py-6 px-5 font-medium">
-                      Publish Notice{" "}
-                    </Button>
-                  </Link>
+                  {currentUser ? (
+                    <Link href="/register">
+                      <Button className="gap-1.5 py-6 px-5 font-medium">
+                        Publish Notice
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link href="/register">
+                      <Button className="gap-1.5 py-6 px-5 font-medium">
+                        Sign up
+                      </Button>
+                    </Link>
+                  )}
                 </>
               )}
             </div>

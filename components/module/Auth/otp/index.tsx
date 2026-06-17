@@ -8,7 +8,6 @@ import {
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -236,18 +235,13 @@ export default function Otp() {
 
               {/* BUTTONS */}
               <div className="flex gap-4">
-                <Link
-                  className="w-full"
-                  href="/forgot-password/otp/change-password"
+                <button
+                  type="submit"
+                  disabled={isVerifyingOtp || otpValues.some((v) => !v)}
+                  className="w-full bg-primary text-[20px] rounded-full cursor-pointer text-white py-3"
                 >
-                  <button
-                    type="submit"
-                    disabled={isVerifyingOtp || otpValues.some((v) => !v)}
-                    className="w-full bg-primary text-[20px] rounded-full cursor-pointer text-white py-3"
-                  >
-                    {isVerifyingOtp ? "Loading..." : "Verify OTP"}
-                  </button>
-                </Link>
+                  {isVerifyingOtp ? "Loading..." : "Verify OTP"}
+                </button>
               </div>
             </form>
           </div>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const NoticesSection = () => {
   return (
@@ -53,12 +54,12 @@ const NoticesSection = () => {
         </p>
 
         {/* CTA Link */}
-        <a
-          href="/notices"
+        <Link
+          href="/obituaries-notices"
           className="mt-6 text-base font-semibold text-[#6366F1] underline underline-offset-4 transition-colors hover:text-[#4F52C7]"
         >
           View All Notices
-        </a>
+        </Link>
       </div>
     </section>
   );
