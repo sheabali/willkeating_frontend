@@ -50,7 +50,7 @@ export function ObituaryCard({ obituary }: { obituary: Obituary }) {
         </div>
 
         {/* Dates */}
-        <p className="text-center text-sm text-neutral-600">
+        <p className="text-center text-md my-6 text-neutral-600">
           {obituary.birthDate} – {obituary.deathDate}
         </p>
       </Link>

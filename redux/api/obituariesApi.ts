@@ -4,6 +4,14 @@ import { baseApi } from "./baseApi";
 
 export const obituariesApi = baseApi.injectEndpoints({
   endpoints: (builder: any) => ({
+    createObituaries: builder.mutation({
+      query: (formData: FormData) => ({
+        url: "/death-notices/create",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["User"],
+    }),
     getAllObituaries: builder.query({
       query: (params: any) => {
         const searchParams = new URLSearchParams();
@@ -32,5 +40,8 @@ export const obituariesApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllObituariesQuery, useGetSingleObituariesQuery } =
-  obituariesApi;
+export const {
+  useCreateObituariesMutation,
+  useGetAllObituariesQuery,
+  useGetSingleObituariesQuery,
+} = obituariesApi;

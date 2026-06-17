@@ -8,12 +8,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
+import { useCreateObituariesMutation } from "@/redux/api/obituariesApi";
 import { format } from "date-fns";
 import { CalendarIcon, Upload } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface DeathNoticeFormData {
   name: string;
@@ -29,10 +32,12 @@ export function DeathNoticeForm() {
   const [isDragActive, setIsDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const [createDeathNotice, { isLoading }] = useCreateObituariesMutation();
+
   const {
     register,
     handleSubmit,
-    watch,
+    // watch,
     setValue,
     control,
     formState: { errors },
@@ -46,7 +51,7 @@ export function DeathNoticeForm() {
     },
   });
 
-  const image = watch("image");
+  // const image = watch("image");
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -98,10 +103,30 @@ export function DeathNoticeForm() {
     }
   };
 
-  const onSubmit = (data: DeathNoticeFormData) => {
-    console.log("Form data:", data);
+  const onSubmit = async (data: DeathNoticeFormData) => {
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append(
+      "dateOfBirth",
+      format(new Date(data.dateOfBirth), "yyyy-MM-dd"),
+    );
+    formData.append(
+      "dateOfPassing",
+      format(new Date(data.dateOfPassing), "yyyy-MM-dd"),
+    );
+    formData.append("location", data.location);
+    formData.append("story", data.shortStory);
+    if (data.image) {
+      formData.append("images", data.image);
+    }
 
-    alert("Death notice created successfully!");
+    try {
+      await createDeathNotice(formData).unwrap();
+      toast.success("Death notice created successfully!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to create death notice");
+    }
   };
 
   return (
@@ -329,7 +354,7 @@ export function DeathNoticeForm() {
         size="lg"
         className="w-[200px] rounded-full bg-primary px-8 py-6 font-semibold text-white hover:bg-primary/90"
       >
-        Save
+        {isLoading ? <Spinner /> : "Create Death Notice"}
       </Button>
     </form>
   );
