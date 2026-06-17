@@ -1,120 +1,60 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { ChevronDown, Plus, Search } from "lucide-react";
+import { useGetAllObituariesQuery } from "@/redux/api/obituariesApi";
+import { Plus, Search } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 import { ObituaryCard } from "./obituary-card";
 
-const OBITUARIES = [
-  {
-    id: "1",
-    name: "Margaret Anne Murphy",
-    birthDate: "12 March 1948",
-    deathDate: "28 May 2025",
-    imageUrl: "/images/Ellipse 6 (1).png",
-  },
-  {
-    id: "2",
-    name: "Patrick Joseph O'Connor",
-    birthDate: "22 August 1956",
-    deathDate: "30 May 2026",
-    imageUrl: "/images/Ellipse 6 (2).png",
-  },
-  {
-    id: "3",
-    name: "Bridget Mary Walsh",
-    birthDate: "8 January 1941",
-    deathDate: "26 May 2026",
-    imageUrl: "/images/Ellipse 6 (3).png",
-  },
-  {
-    id: "4",
-    name: "Michael Francis Byrne",
-    birthDate: "17 November 1963",
-    deathDate: "24 May 2026",
-    imageUrl: "/images/Ellipse 6.png",
-  },
-  {
-    id: "5",
-    name: "Catherine Elizabeth Doyle",
-    birthDate: "4 July 1952",
-    deathDate: "29 May 2026",
-    imageUrl: "/images/Ellipse 6 (1).png",
-  },
-  {
-    id: "6",
-    name: "Sean Anthony Kelly",
-    birthDate: "15 September 1970",
-    deathDate: "31 May 2026",
-    imageUrl: "/images/Ellipse 6 (1).png",
-  },
-  {
-    id: "7",
-    name: "Margaret Anne Murphy",
-    birthDate: "12 March 1948",
-    deathDate: "28 May 2025",
-    imageUrl: "/images/Ellipse 6 (1).png",
-  },
-  {
-    id: "8",
-    name: "Patrick Joseph O'Connor",
-    birthDate: "22 August 1956",
-    deathDate: "30 May 2026",
-    imageUrl: "/images/Ellipse 6 (1).png",
-  },
-  {
-    id: "9",
-    name: "Bridget Mary Walsh",
-    birthDate: "8 January 1941",
-    deathDate: "26 May 2026",
-    imageUrl: "/images/Ellipse 6 (1).png",
-  },
-];
-
 type SortOption = "recent" | "oldest" | "name";
 
+const SORT_PARAMS: Record<
+  SortOption,
+  { sortBy: string; sortOrder: "asc" | "desc" }
+> = {
+  recent: { sortBy: "createdAt", sortOrder: "desc" },
+  oldest: { sortBy: "createdAt", sortOrder: "asc" },
+  name: { sortBy: "name", sortOrder: "asc" },
+};
+
+const LIMIT = 9;
+
+function formatDate(dateStr?: string) {
+  if (!dateStr) return "";
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 export default function Page() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("recent");
+  const [page, setPage] = useState(1);
 
-  const filteredAndSorted = useMemo(() => {
-    const results = OBITUARIES.filter((obituary) => {
-      const query = searchQuery.toLowerCase();
-      return (
-        obituary.name.toLowerCase().includes(query) ||
-        obituary.birthDate.toLowerCase().includes(query) ||
-        obituary.deathDate.toLowerCase().includes(query)
-      );
-    });
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchInput), 400);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
-    // Sort the results
-    if (sortBy === "recent") {
-      results.sort((a, b) => {
-        const dateA = new Date(
-          b.deathDate.split(" ").reverse().join("-"),
-        ).getTime();
-        const dateB = new Date(
-          a.deathDate.split(" ").reverse().join("-"),
-        ).getTime();
-        return dateA - dateB;
-      });
-    } else if (sortBy === "oldest") {
-      results.sort((a, b) => {
-        const dateA = new Date(
-          a.deathDate.split(" ").reverse().join("-"),
-        ).getTime();
-        const dateB = new Date(
-          b.deathDate.split(" ").reverse().join("-"),
-        ).getTime();
-        return dateA - dateB;
-      });
-    } else if (sortBy === "name") {
-      results.sort((a, b) => a.name.localeCompare(b.name));
-    }
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, sortBy]);
 
-    return results;
-  }, [searchQuery, sortBy]);
+  const { data, isLoading, isFetching } = useGetAllObituariesQuery({
+    page,
+    limit: LIMIT,
+    search: debouncedSearch || undefined,
+    ...SORT_PARAMS[sortBy],
+  }) as any;
+
+  const obituaries = data?.data ?? [];
+  const meta = data?.meta;
 
   return (
     <main className="min-h-screen bg-white px-6 py-12 sm:px-8">
@@ -144,15 +84,15 @@ export default function Page() {
             <input
               type="text"
               placeholder="Search by name, location"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               className="w-full border border-neutral-300 bg-white pl-10 pr-4 py-2 text-sm text-neutral-900 placeholder-neutral-500 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
             />
           </div>
 
           {/* Sort Dropdown */}
           <div className="relative">
-            <select
+            {/* <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
               className="appearance-none border border-neutral-300 bg-white pr-10 pl-4 py-2 text-sm text-neutral-900 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
@@ -161,24 +101,70 @@ export default function Page() {
               <option value="oldest">Oldest First</option>
               <option value="name">Name (A-Z)</option>
             </select>
-            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-600" />
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-600" /> */}
           </div>
         </div>
 
+        {/* Loading state */}
+        {isLoading && (
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: LIMIT }).map((_, i) => (
+              <div
+                key={i}
+                className="h-64 animate-pulse rounded-lg bg-neutral-100"
+              />
+            ))}
+          </div>
+        )}
+
         {/* Grid */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredAndSorted.map((obituary) => (
-            <ObituaryCard key={obituary.id} obituary={obituary} />
-          ))}
-        </div>
+        {!isLoading && (
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {obituaries.map((obituary: any) => (
+              <ObituaryCard
+                key={obituary.id}
+                obituary={{
+                  id: obituary.id,
+                  name: obituary.name,
+                  birthDate: formatDate(obituary.dateOfBirth),
+                  deathDate: formatDate(obituary.dateOfPassing),
+                  imageUrl: obituary.images?.[0] ?? "/images/Ellipse 6.png",
+                }}
+              />
+            ))}
+          </div>
+        )}
 
         {/* Empty state */}
-        {filteredAndSorted.length === 0 && (
+        {!isLoading && obituaries.length === 0 && (
           <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
             <p className="text-lg text-neutral-600">No obituaries found</p>
             <p className="text-sm text-neutral-500">
               Try adjusting your search terms
             </p>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {meta && meta.totalPage > 1 && (
+          <div className="mt-10 flex items-center justify-center gap-4">
+            <Button
+              variant="outline"
+              disabled={page <= 1 || isFetching}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+            >
+              Previous
+            </Button>
+            <span className="text-sm text-neutral-600">
+              Page {meta.page} of {meta.totalPage}
+            </span>
+            <Button
+              variant="outline"
+              disabled={page >= meta.totalPage || isFetching}
+              onClick={() => setPage((p) => Math.min(meta.totalPage, p + 1))}
+            >
+              Next
+            </Button>
           </div>
         )}
       </div>

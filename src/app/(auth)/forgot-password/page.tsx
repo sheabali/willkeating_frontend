@@ -24,7 +24,7 @@ import { toast } from "sonner";
 export default function ResetPassword() {
   const router = useRouter();
 
-  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation() as any;
 
   const form = useForm<FieldValues>({
     defaultValues: {
@@ -35,21 +35,20 @@ export default function ResetPassword() {
   const { isSubmitting } = form.formState;
 
   const onSubmit = async (data: FieldValues) => {
-    console.log("1. Submit clicked");
-
     try {
-      console.log("2. Calling API");
+      const res = await forgotPassword(data).unwrap();
 
-      const res = (await forgotPassword(data).unwrap()) as any;
+      console.log("Response:", res);
 
-      console.log("3. API Response:", res);
+      toast.success(res.message || "OTP sent successfully");
 
-      if (res.success) {
-        toast.success(res.message);
-        router.push(`/forgot-password/otp?email=${data.email}`);
-      }
-    } catch (error) {
-      console.log("4. Error:", error);
+      router.push(
+        `/forgot-password/otp?email=${encodeURIComponent(data.email)}`,
+      );
+    } catch (error: any) {
+      console.error(error);
+
+      toast.error(error?.data?.message || "Failed to send OTP");
     }
   };
 
@@ -110,16 +109,14 @@ export default function ResetPassword() {
             >
               {isLoading ? "Sending..." : "Send Reset Code"}
             </Button>
-            <Link
-              href="/login"
-              className="text-primary font-medium hover:underline"
-            >
+            <Link href="/login">
               <Button
-                type="submit"
+                type="button"
                 variant="outline"
-                className="w-full rounded-full text-[20px] font-semibold py-6 transition-colors"
+                className="w-full rounded-full text-[20px] font-semibold py-6"
               >
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Login
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Login
               </Button>
             </Link>
           </form>
