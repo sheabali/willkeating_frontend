@@ -3,10 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Upload } from "lucide-react";
+import { useCreateFuneralMutation } from "@/redux/api/funeralApi";
+import { Upload, X } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface FuneralFormData {
   name: string;
@@ -16,17 +19,28 @@ interface FuneralFormData {
   funeralDate: string;
   funeralTime: string;
   funeralTimeFormat: "AM" | "PM";
-  image: FileList;
 }
 
+const MAX_IMAGES = 5;
+const MAX_SIZE_MB = 10;
+
 export default function FuneralNoticeForm() {
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const router = useRouter();
+
+  const [images, setImages] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [imageError, setImageError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+
+  const [createFuneral, { isLoading }] = useCreateFuneralMutation();
+
   const {
     register,
     handleSubmit,
-    watch,
-    setValue,
+    reset,
     formState: { errors },
   } = useForm<FuneralFormData>({
     defaultValues: {
@@ -34,17 +48,50 @@ export default function FuneralNoticeForm() {
     },
   });
 
-  const imageFiles = watch("image");
+  const addFiles = (incoming: File[]) => {
+    setImageError(null);
+
+    const validFiles = incoming.filter((file) => {
+      const isValidType = ["image/jpeg", "image/jpg", "image/png"].includes(
+        file.type,
+      );
+      const isValidSize = file.size <= MAX_SIZE_MB * 1024 * 1024;
+      return isValidType && isValidSize;
+    });
+
+    if (validFiles.length < incoming.length) {
+      setImageError(`Only JPG/PNG files under ${MAX_SIZE_MB}MB are allowed.`);
+    }
+
+    const combined = [...images, ...validFiles];
+
+    if (combined.length > MAX_IMAGES) {
+      setImageError(`You can upload up to ${MAX_IMAGES} images.`);
+    }
+
+    const trimmed = combined.slice(0, MAX_IMAGES);
+    setImages(trimmed);
+
+    trimmed.forEach((file, index) => {
+      if (imagePreviews[index]) return; // already have a preview for existing files
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreviews((prev) => {
+          const next = [...prev];
+          next[index] = reader.result as string;
+          return next;
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files && files[0]) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUploadedImage(reader.result as string);
-      };
-      reader.readAsDataURL(files[0]);
+    if (files && files.length > 0) {
+      addFiles(Array.from(files));
     }
+    e.target.value = "";
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -60,25 +107,51 @@ export default function FuneralNoticeForm() {
     e.preventDefault();
     setIsDragging(false);
     const files = e.dataTransfer.files;
-    if (files && files[0]) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUploadedImage(reader.result as string);
-      };
-      reader.readAsDataURL(files[0]);
-      // Create a DataTransfer object to set the file input
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(files[0]);
-      const input = document.getElementById("image-input") as HTMLInputElement;
-      if (input) {
-        input.files = dataTransfer.files;
-      }
+    if (files && files.length > 0) {
+      addFiles(Array.from(files));
     }
   };
 
-  const onSubmit = (data: FuneralFormData) => {
-    console.log("Form data:", data);
-    // Here you would typically send the data to a server
+  const removeImage = (index: number) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const onSubmit = async (data: FuneralFormData) => {
+    setSubmitStatus("idle");
+    setImageError(null);
+
+    if (images.length === 0) {
+      setImageError("Please upload at least one image.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("dateOfBirth", data.dateOfBirth);
+    formData.append("dateOfPassing", data.dateOfPassing);
+    formData.append("funeralLocation", data.funeralLocation);
+    formData.append("funeralDate", data.funeralDate);
+    formData.append(
+      "funeralTime",
+      `${data.funeralTime} ${data.funeralTimeFormat}`,
+    );
+    images.forEach((file) => {
+      formData.append("images", file);
+    });
+
+    try {
+      await createFuneral(formData).unwrap();
+      setSubmitStatus("success");
+      reset({ funeralTimeFormat: "PM" } as FuneralFormData);
+      setImages([]);
+      setImagePreviews([]);
+      toast.success("Funeral notice created successfully.");
+      router.push("/funeral-notices");
+    } catch (err) {
+      toast.error("Failed to create funeral notice.");
+      setSubmitStatus("error");
+    }
   };
 
   return (
@@ -226,7 +299,7 @@ export default function FuneralNoticeForm() {
         {/* Image Upload */}
         <div className="">
           <Label className="text-sm font-medium text-gray-700 mb-1 block">
-            Upload Image
+            Upload Images
           </Label>
           <div
             onDragOver={handleDragOver}
@@ -239,38 +312,48 @@ export default function FuneralNoticeForm() {
             <input
               id="image-input"
               type="file"
-              accept="image/jpeg,image/jpg,image/png,image/gif"
+              accept="image/jpeg,image/jpg,image/png"
+              multiple
               className="hidden"
-              {...register("image")}
               onChange={handleImageChange}
             />
-            {uploadedImage ? (
-              <div className="space-y-2">
-                <div className="w-40 h-40 mx-auto rounded overflow-hidden">
-                  <Image
-                    src={uploadedImage}
-                    alt="Uploaded"
-                    width={300}
-                    height={300}
-                    className="w-40 h-40 object-contain"
-                  />
+
+            {imagePreviews.length > 0 ? (
+              <div className="space-y-3">
+                <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+                  {imagePreviews.map((src, index) => (
+                    <div
+                      key={index}
+                      className="relative w-full aspect-square rounded-lg overflow-hidden border border-gray-200"
+                    >
+                      <Image
+                        src={src}
+                        alt={`Upload preview ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className="absolute top-1 right-1 bg-black/60 hover:bg-black/80 text-white rounded-full p-1"
+                        aria-label="Remove image"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
                 </div>
                 <p className="text-sm text-gray-600">
-                  Image uploaded successfully
+                  {images.length} of {MAX_IMAGES} images added
                 </p>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setUploadedImage(null);
-                    const input = document.getElementById(
-                      "image-input",
-                    ) as HTMLInputElement;
-                    if (input) input.value = "";
-                  }}
-                  className="text-sm text-blue-600 hover:underline"
-                >
-                  Change image
-                </button>
+                {images.length < MAX_IMAGES && (
+                  <label
+                    htmlFor="image-input"
+                    className="text-sm text-blue-600 hover:underline cursor-pointer"
+                  >
+                    Add more images
+                  </label>
+                )}
               </div>
             ) : (
               <div className="space-y-2">
@@ -282,20 +365,27 @@ export default function FuneralNoticeForm() {
                 </p>
                 <p className="text-gray-500 text-sm">or drag and drop</p>
                 <p className="text-gray-400 text-xs">
-                  JPG, JPEG, PNG less than 10MB
+                  JPG, JPEG, PNG less than {MAX_SIZE_MB}MB, up to {MAX_IMAGES}{" "}
+                  images
                 </p>
               </div>
             )}
           </div>
+          {imageError && (
+            <span className="text-red-500 text-sm block mt-1">
+              {imageError}
+            </span>
+          )}
         </div>
 
         {/* Save Button */}
         <div className="flex justify-start pt-4">
           <Button
             type="submit"
+            disabled={isLoading}
             className="w-[200px] py-6 bg-primary hover:bg-primary/90 text-white font-medium px-8"
           >
-            Save
+            {isLoading ? "Saving..." : "Save"}
           </Button>
         </div>
       </div>

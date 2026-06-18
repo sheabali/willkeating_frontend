@@ -1,8 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useCreateMemoryMutation } from "@/redux/api/memoryApi";
+
 import { ImageIcon, Loader2, X } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -15,6 +18,8 @@ const MAX_IMAGES = 4;
 const MAX_SIZE_MB = 5;
 
 const CreateMemories = () => {
+  const router = useRouter();
+
   const [formData, setFormData] = useState<MemoryFormData>({
     text: "",
     images: [],
@@ -23,26 +28,10 @@ const CreateMemories = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [createMemory, { isLoading: isSaving }] = useCreateMemoryMutation();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  async function handleMemorySubmit(data: MemoryFormData) {
-    setIsLoading(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log("Memory submitted:", {
-        text: data.text,
-        imageCount: data.images.length,
-        images: data.images.map((f) => ({ name: f.name, size: f.size })),
-      });
-      toast.success("Memory saved successfully!");
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Failed to save memory. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  }
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, text: e.target.value }));
@@ -112,15 +101,25 @@ const CreateMemories = () => {
       alert("Please write something");
       return;
     }
+
+    const payload = new FormData();
+    payload.append("story", formData.text.trim());
+    formData.images.forEach((file) => {
+      payload.append("images", file);
+    });
+
     try {
       setIsSubmitting(true);
-      await handleMemorySubmit(formData);
+      await createMemory(payload).unwrap();
+      toast.success("Memory saved successfully!");
       setFormData({ text: "", images: [] });
       setPreviews([]);
       if (fileInputRef.current) fileInputRef.current.value = "";
       textareaRef.current?.focus();
+      router.push("/memories");
     } catch (error) {
       console.error("Error submitting memory:", error);
+      toast.error("Failed to save memory. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

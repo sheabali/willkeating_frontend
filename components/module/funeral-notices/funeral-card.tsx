@@ -3,7 +3,7 @@
 import { Calendar, Clock, MapPin } from "lucide-react";
 import Image from "next/image";
 
-export interface Obituary {
+export interface Funeral {
   id: string;
   name: string;
   birthDate: string;
@@ -15,7 +15,7 @@ export interface Obituary {
   funeralTimeFormat: string;
 }
 
-export function ObituaryCard({ obituary }: { obituary: Obituary }) {
+export function FuneralCard({ funeral }: { funeral: Funeral }) {
   return (
     <div className="flex flex-col items-center gap-6 rounded-lg bg-[#f0f0ff]  px-8 py-8">
       <div className="relative h-[194px] w-[194px]">
@@ -34,8 +34,8 @@ export function ObituaryCard({ obituary }: { obituary: Obituary }) {
 
         <div className="relative -top-40 mx-auto z-10 h-32 w-32 overflow-hidden rounded-full border-4 border-white shadow-md">
           <Image
-            src={obituary.imageUrl}
-            alt={obituary.name}
+            src={funeral.imageUrl}
+            alt={funeral.name}
             fill
             className="object-cover grayscale"
             sizes="128px"
@@ -44,30 +44,30 @@ export function ObituaryCard({ obituary }: { obituary: Obituary }) {
       </div>
 
       <h3 className="text-center text-lg font-semibold text-neutral-900">
-        {obituary.name}
+        {funeral.name}
       </h3>
 
       <p className="text-center text-sm text-neutral-600">
-        {obituary.birthDate} – {obituary.deathDate}
+        {funeral.birthDate} – {funeral.deathDate}
       </p>
 
       <div className="flex justify-between gap-6 items-center">
         <div className="flex items-start gap-2">
           <MapPin size={20} />
           <p className="text-center text-sm text-[#5B5C57]">
-            {obituary.funeralLocation}
+            {funeral.funeralLocation}
           </p>
         </div>
         <div className="flex items-center justify-center gap-4 text-sm text-neutral-600">
           <div className="flex items-center gap-1.5">
             <Calendar className="h-4 w-4" />
-            <span>{obituary.funeralDate}</span>
+            <span>{funeral.funeralDate}</span>
           </div>
 
           <div className="flex items-center gap-1.5">
             <Clock className="h-4 w-4" />
             <span>
-              {obituary.funeralTime} {obituary.funeralTimeFormat}
+              {funeral.funeralTime} {funeral.funeralTimeFormat}
             </span>
           </div>
         </div>

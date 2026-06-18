@@ -36,7 +36,7 @@ const PricingCard = ({ plan }: { plan: PricingPlan }) => {
       </div>
 
       {/* Plan Name */}
-      <h3 className="text-xl sm:text-[32px] text-slate-900 mb-3">
+      <h3 className="text-xl sm:text-[32px] my-6 text-slate-900 mb-3">
         {plan.name}
       </h3>
 

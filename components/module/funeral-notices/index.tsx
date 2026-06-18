@@ -1,163 +1,62 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { ChevronDown, Plus, Search } from "lucide-react";
+import { useGetAllFuneralQuery } from "@/redux/api/funeralApi";
+import { Plus, Search } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../../ui/button";
-import { ObituaryCard } from "./obituary-card";
-
-const OBITUARIES = [
-  {
-    id: "1",
-    name: "Margaret Anne Murphy",
-    birthDate: "12 March 1948",
-    deathDate: "28 May 2025",
-    funeralLocation: "St. Mary's Church",
-    funeralDate: "5 June 2025",
-    funeralTime: "2:00",
-    funeralTimeFormat: "PM",
-    imageUrl: "/images/Ellipse 6 (1).png",
-  },
-  {
-    id: "2",
-    name: "Patrick Joseph O'Connor",
-    birthDate: "22 August 1956",
-    deathDate: "30 May 2026",
-    funeralLocation: "St. John's Church",
-    funeralDate: "10 June 2026",
-    funeralTime: "1:00",
-    funeralTimeFormat: "PM",
-    imageUrl: "/images/Ellipse 6 (2).png",
-  },
-  {
-    id: "3",
-    name: "Bridget Mary Walsh",
-    birthDate: "8 January 1941",
-    deathDate: "26 May 2026",
-    funeralLocation: "St. Patrick's Church",
-    funeralDate: "15 June 2026",
-    funeralTime: "3:00",
-    funeralTimeFormat: "PM",
-    imageUrl: "/images/Ellipse 6 (3).png",
-  },
-  {
-    id: "4",
-    name: "Michael Francis Byrne",
-    birthDate: "17 November 1963",
-    deathDate: "24 May 2026",
-    funeralLocation: "St. Joseph's Church",
-    funeralDate: "20 June 2026",
-    funeralTime: "4:00",
-    funeralTimeFormat: "PM",
-    imageUrl: "/images/Ellipse 6.png",
-  },
-  {
-    id: "5",
-    name: "Catherine Elizabeth Doyle",
-    birthDate: "4 July 1952",
-    deathDate: "29 May 2026",
-    funeralLocation: "St. Michael's Church",
-    funeralDate: "25 June 2026",
-    funeralTime: "1:00",
-    funeralTimeFormat: "PM",
-    imageUrl: "/images/Ellipse 6 (1).png",
-  },
-  {
-    id: "6",
-    name: "Seán Anthony Kelly",
-    birthDate: "15 September 1970",
-    deathDate: "31 May 2026",
-    funeralLocation: "St. Patrick's Church",
-    funeralDate: "30 June 2026",
-    funeralTime: "2:00",
-    funeralTimeFormat: "PM",
-    imageUrl: "/images/Ellipse 6 (1).png",
-  },
-  {
-    id: "7",
-    name: "Margaret Anne Murphy",
-    birthDate: "12 March 1948",
-    deathDate: "28 May 2025",
-    funeralLocation: "St. Mary's Church",
-    funeralDate: "5 June 2025",
-    funeralTime: "2:00",
-    funeralTimeFormat: "3:00PM",
-    imageUrl: "/images/Ellipse 6 (1).png",
-  },
-  {
-    id: "8",
-    name: "Patrick Joseph O'Connor",
-    birthDate: "22 August 1956",
-    deathDate: "30 May 2026",
-    funeralLocation: "St. John's Church",
-    funeralDate: "10 June 2026",
-    funeralTime: "1:00",
-    funeralTimeFormat: "PM",
-    imageUrl: "/images/Ellipse 6 (1).png",
-  },
-  {
-    id: "9",
-    name: "Bridget Mary Walsh",
-    birthDate: "8 January 1941",
-    deathDate: "26 May 2026",
-    funeralLocation: "St. Patrick's Church",
-    funeralDate: "15 June 2026",
-    funeralTime: "3:00",
-    funeralTimeFormat: "4:00PM",
-    imageUrl: "/images/Ellipse 6 (1).png",
-  },
-];
+import { FuneralCard } from "./funeral-card";
 
 type SortOption = "recent" | "oldest" | "name";
 
+const SORT_PARAMS: Record<
+  SortOption,
+  { sortBy: string; sortOrder: "asc" | "desc" }
+> = {
+  recent: { sortBy: "createdAt", sortOrder: "desc" },
+  oldest: { sortBy: "createdAt", sortOrder: "asc" },
+  name: { sortBy: "name", sortOrder: "asc" },
+};
+
+const LIMIT = 9;
+
 export default function FuneralNotices() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("recent");
+  const [page, setPage] = useState(1);
 
-  const filteredAndSorted = useMemo(() => {
-    const results = OBITUARIES.filter((obituary) => {
-      const query = searchQuery.toLowerCase();
-      return (
-        obituary.name.toLowerCase().includes(query) ||
-        obituary.birthDate.toLowerCase().includes(query) ||
-        obituary.deathDate.toLowerCase().includes(query)
-      );
-    });
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchInput);
+    }, 400);
 
-    // Sort the results
-    if (sortBy === "recent") {
-      results.sort((a, b) => {
-        const dateA = new Date(
-          b.deathDate.split(" ").reverse().join("-"),
-        ).getTime();
-        const dateB = new Date(
-          a.deathDate.split(" ").reverse().join("-"),
-        ).getTime();
-        return dateA - dateB;
-      });
-    } else if (sortBy === "oldest") {
-      results.sort((a, b) => {
-        const dateA = new Date(
-          a.deathDate.split(" ").reverse().join("-"),
-        ).getTime();
-        const dateB = new Date(
-          b.deathDate.split(" ").reverse().join("-"),
-        ).getTime();
-        return dateA - dateB;
-      });
-    } else if (sortBy === "name") {
-      results.sort((a, b) => a.name.localeCompare(b.name));
-    }
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
-    return results;
-  }, [searchQuery, sortBy]);
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, sortBy]);
+
+  const { data, isLoading, isFetching } = useGetAllFuneralQuery({
+    page,
+    limit: LIMIT,
+    search: debouncedSearch || undefined,
+    ...SORT_PARAMS[sortBy],
+  }) as any;
+
+  const funerals = data?.data || [];
+  const meta = data?.meta;
 
   return (
     <main className="min-h-screen bg-white px-6 py-12 sm:px-8">
       <div className="container mx-auto">
         {/* Header */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-3xl font-semibold text-neutral-900 md:text-4xl">
+          <h1 className="text-3xl font-semibold text-neutral-900 md:text-4xl lg:text-5xl">
             Funeral Notices
           </h1>
 
@@ -174,47 +73,90 @@ export default function FuneralNotices() {
 
         {/* Controls */}
         <div className="mb-12 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
-          {/* Search */}
           <div className="relative w-full sm:w-72">
-            <Search className="absolute  left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-400" />
+            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-400" />
+
             <input
               type="text"
               placeholder="Search by name, location"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full border rounded-md border-neutral-300 bg-white pl-10 pr-4 py-2 text-sm text-neutral-900 placeholder-neutral-500 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="w-full border border-neutral-300 bg-white py-2 pl-10 pr-4 text-sm text-neutral-900 placeholder-neutral-500 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
             />
           </div>
+        </div>
 
-          {/* Sort Dropdown */}
-          <div className="relative">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="appearance-none border rounded-md border-neutral-300 bg-white pr-10 pl-4 py-2 text-sm text-neutral-900 focus:border-neutral-900 focus:outline-none focus:ring-1 focus:ring-neutral-900"
-            >
-              <option value="recent">Recently Published</option>
-              <option value="oldest">Oldest First</option>
-              <option value="name">Name (A-Z)</option>
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-600" />
+        {/* Loading */}
+        {isLoading && (
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: LIMIT }).map((_, index) => (
+              <div
+                key={index}
+                className="h-64 animate-pulse rounded-lg bg-neutral-100"
+              />
+            ))}
           </div>
-        </div>
+        )}
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredAndSorted.map((obituary) => (
-            <ObituaryCard key={obituary.id} obituary={obituary} />
-          ))}
-        </div>
+        {/* Funeral Cards */}
+        {!isLoading && funerals?.length > 0 && (
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {funerals.map((funeral: any) => (
+              <FuneralCard
+                key={funeral.id}
+                funeral={{
+                  id: funeral.id,
+                  name: funeral.name,
+                  birthDate: funeral.dateOfBirth,
+                  deathDate: funeral.dateOfPassing,
+                  imageUrl: funeral.images?.[0] || "/placeholder.png",
+                  funeralLocation: funeral.funeralLocation,
+                  funeralDate: funeral.funeralDate,
+                  funeralTime: funeral.funeralTime,
+                  funeralTimeFormat: "",
+                }}
+              />
+            ))}
+          </div>
+        )}
 
-        {/* Empty state */}
-        {filteredAndSorted.length === 0 && (
-          <div className="flex flex-col items-center justify-center gap-4 py-12 text-center">
-            <p className="text-lg text-neutral-600">No obituaries found</p>
-            <p className="text-sm text-neutral-500">
-              Try adjusting your search terms
+        {/* Empty State */}
+        {!isLoading && funerals.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <h3 className="text-lg font-medium text-neutral-700">
+              No obituaries found
+            </h3>
+
+            <p className="mt-2 text-sm text-neutral-500">
+              Try adjusting your search terms.
             </p>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {meta && meta.totalPage > 1 && (
+          <div className="mt-10 flex items-center justify-center gap-4">
+            <Button
+              variant="outline"
+              disabled={page <= 1 || isFetching}
+              onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+            >
+              Previous
+            </Button>
+
+            <span className="text-sm text-neutral-600">
+              Page {meta.page} of {meta.totalPage}
+            </span>
+
+            <Button
+              variant="outline"
+              disabled={page >= meta.totalPage || isFetching}
+              onClick={() =>
+                setPage((prev) => Math.min(meta.totalPage, prev + 1))
+              }
+            >
+              Next
+            </Button>
           </div>
         )}
       </div>

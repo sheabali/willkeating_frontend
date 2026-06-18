@@ -2,6 +2,7 @@
 
 import { MoreVertical } from "lucide-react";
 import Image from "next/image";
+
 import { CommentSection } from "./comment-section";
 import { ImageGallery } from "./image-gallery";
 import { Memory } from "./memories";
@@ -11,19 +12,21 @@ interface MemoryCardProps {
 }
 
 export function MemoryCard({ memory }: MemoryCardProps) {
+  console.log("memory", memory);
+
   return (
     <article className="rounded-lg border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
       {/* Header */}
       <div className="border-b border-gray-100 px-4 py-4 sm:px-6">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="relative  shrink-0 rounded-full overflow-hidden bg-gray-100">
+            <div className="relative h-12 w-12 shrink-0 rounded-full overflow-hidden bg-gray-100">
               <Image
                 src={memory.author.avatar}
                 alt={memory.author.name}
-                width={500}
-                height={500}
-                className="w-full h-full object-contain"
+                width={100}
+                height={100}
+                className="w-full h-full object-cover"
               />
             </div>
             <div className="flex-1">
@@ -54,7 +57,7 @@ export function MemoryCard({ memory }: MemoryCardProps) {
       )}
 
       {/* Comments Section */}
-      <CommentSection comments={memory.comments} />
+      <CommentSection comments={memory.comments} memorialId={memory.id} />
     </article>
   );
 }
