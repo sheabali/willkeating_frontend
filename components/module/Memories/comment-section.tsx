@@ -26,7 +26,7 @@ export function CommentSection({
   memorialId,
   comments,
   currentUserAvatar = FALLBACK_AVATAR,
-}: CommentSectionProps) {
+}: any) {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [newComment, setNewComment] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -34,7 +34,7 @@ export function CommentSection({
 
   const [createComment, { isLoading }] = useCommentsMemorialMutation();
 
-  const commentCount = comments.filter((c) => c.text).length;
+  const commentCount = comments.filter((c: any) => c.text).length;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -88,7 +88,7 @@ export function CommentSection({
       {/* Comment Avatars */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex -space-x-2">
-          {comments.slice(0, 4).map((comment, index) => (
+          {comments.slice(0, 4).map((comment: any, index: number) => (
             <div
               key={index}
               className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-white bg-gray-100"
@@ -112,7 +112,7 @@ export function CommentSection({
       {/* Comments List */}
       <div className="space-y-3">
         {comments.map(
-          (comment, index) =>
+          (comment: any, index: number) =>
             comment.text && (
               <div key={index} className="flex gap-3">
                 <div className="relative w-8 h-8 shrink-0 rounded-full overflow-hidden bg-gray-100">

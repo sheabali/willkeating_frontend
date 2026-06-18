@@ -3,7 +3,8 @@
 
 import { MoreVertical } from "lucide-react";
 import Image from "next/image";
-import { CommentSection } from "./comment-section";
+
+import { CommentSection } from "../../Memories/comment-section";
 import { ImageGallery } from "./image-gallery";
 
 interface PostCardProps {
