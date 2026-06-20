@@ -1,0 +1,3291 @@
+{
+  "info": {
+    "_postman_id": "f7c6088c-96e3-4913-ae8d-684f8fbd502c",
+    "name": "willkeating45_server API",
+    "description": "Complete API documentation for willkeating45_server memorial platform.\n\nBase URL: `{{baseUrl}}`\n\nAuthentication: Send JWT token in `Authorization` header (without Bearer prefix, matching existing auth middleware).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "30824095",
+    "_collection_link": "https://go.postman.co/collection/30824095-f7c6088c-96e3-4913-ae8d-684f8fbd502c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"fullName\": \"Rafsan Sayed\",\n    \"email\": \"rsabusayed132@gmail.com\",\n    \"phone\": \"+8801824543819\",\n    \"password\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/auth/register",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Register",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"fullName\": \"Rafsan Sayed\",\n    \"email\": \"rafsansayed132@gmail.com\",\n    \"phone\": \"+8801824543819\",\n    \"password\": \"1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{willkeating45__local_baseUrl}}/auth/register",
+                  "host": [
+                    "{{willkeating45__local_baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "610"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"262-Wdc//S65gN05r0/c5xv8kn0sQYY\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 06 Jun 2026 03:01:46 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"User Registered successfully!\",\n    \"data\": {\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMjM4ZDlhY2YyZDA3MGZmMjY1ZGZhZiIsImVtYWlsIjoicmFmc2Fuc2F5ZWQxMzJAZ21haWwuY29tIiwicm9sZSI6IlVzZXIiLCJpYXQiOjE3ODA3MTQ5MDYsImV4cCI6MTgxMjI1MDkwNn0.IZ0L1LoHCXTANWTEe9V0TSG7LVfuS_6qRdA2h6bmAYA\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMjM4ZDlhY2YyZDA3MGZmMjY1ZGZhZiIsImVtYWlsIjoicmFmc2Fuc2F5ZWQxMzJAZ21haWwuY29tIiwicm9sZSI6IlVzZXIiLCJpYXQiOjE3ODA3MTQ5MDYsImV4cCI6MTgxMjI1MDkwNn0.5J783hQc3yU7z5qqMWcWv2qD5XURhyfMh1_QmCXtaG8\",\n        \"role\": \"User\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data && jsonData.data.accessToken) {",
+                  "    pm.environment.set(\"accessToken\", jsonData.data.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "\n{\n    \"email\": \"admin@gmail.com\",\n    \"password\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/auth/login",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Login",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\n{\n    \"email\": \"admin@gmail.com\",\n    \"password\": \"1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{willkeating45__local_baseUrl}}/auth/login",
+                  "host": [
+                    "{{willkeating45__local_baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMjM4YzlkY2YyZDA3MGZmMjY1ZGZhZSIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNzgwNzE0OTYxLCJleHAiOjE4MTIyNTA5NjF9.-vN3smzGwAG-B2TQ9ONHpcvBFpx9NhpbI-4Re7BAgXs; Path=/; HttpOnly"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "587"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"24b-rjJefWkfHixZkQAGwCBRzIFgzV8\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 06 Jun 2026 03:02:41 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"User logged in successfully\",\n    \"data\": {\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMjM4YzlkY2YyZDA3MGZmMjY1ZGZhZSIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNzgwNzE0OTYxLCJleHAiOjE4MTIyNTA5NjF9.-vN3smzGwAG-B2TQ9ONHpcvBFpx9NhpbI-4Re7BAgXs\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMjM4YzlkY2YyZDA3MGZmMjY1ZGZhZSIsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNzgwNzE0OTYxLCJleHAiOjE4MTIyNTA5NjF9.RsLJYmKjlHmaaSVDR0EGsyZfa6AreFRv7J6s2vWanxQ\",\n        \"role\": \"Admin\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/auth/logout",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Logout",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{willkeating45__user_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{willkeating45__local_baseUrl}}/auth/logout",
+                  "host": [
+                    "{{willkeating45__local_baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Set-Cookie",
+                  "value": "token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "124"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"7c-eQO2tQKv2nw2+VDx1JC3XUgtpEM\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 06 Jun 2026 03:04:58 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"User Successfully logged out\",\n    \"data\": {\n        \"message\": \"Logout successful\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"rafsansayed132@gmail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/auth/forgot-password",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "forgot-password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Forgot Password",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"rafsansayed132@gmail.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{willkeating45__local_baseUrl}}/auth/forgot-password",
+                  "host": [
+                    "{{willkeating45__local_baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "forgot-password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "120"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"78-zNr2+jigoy1Hx7Pwu6rVEEKrFNw\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 06 Jun 2026 03:05:52 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"We sent you an OTP, please check your email\",\n    \"data\": {\n        \"otp\": 3436\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"rafsansayed132@gmail.com\",\n    \"otp\": 3436\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/auth/verify-otp",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "verify-otp"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Verify OTP",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"rafsansayed132@gmail.com\",\n    \"otp\": 3436\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{willkeating45__local_baseUrl}}/auth/verify-otp",
+                  "host": [
+                    "{{willkeating45__local_baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "verify-otp"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "164"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"a4-tw/x9n9YbH/t4Rtn24JWE6l/0WY\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 06 Jun 2026 03:07:26 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"OTP verified successfully, now you can reset your password\",\n    \"data\": {\n        \"message\": \"OTP verification successful\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Resend OTP",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"rafsansayed132@gmail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/auth/resend-otp",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "resend-otp"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Resend OTP",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"rafsansayed132@gmail.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{willkeating45__local_baseUrl}}/auth/resend-otp",
+                  "host": [
+                    "{{willkeating45__local_baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "resend-otp"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "122"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"7a-mUSkAsn3Ia4U8qNiBFgJJM1u5DM\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 06 Jun 2026 03:08:26 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"We resent you an OTP, please check your email\",\n    \"data\": {\n        \"otp\": 5742\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"rafsansayed132@gmail.com\",\n    \"password\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/auth/reset-password",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "reset-password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Reset Password",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"email\": \"rafsansayed132@gmail.com\",\n    \"password\": \"1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{willkeating45__local_baseUrl}}/auth/reset-password",
+                  "host": [
+                    "{{willkeating45__local_baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "117"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"75-5eKoJawZSyvJAeCUpFFRlUXukZo\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 06 Jun 2026 03:09:16 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"your password reset successfully now you can login\",\n    \"data\": {},\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"oldPassword\": \"1234\",\n    \"newPassword\": \"1234\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/auth/change-password",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "change-password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Change Password",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{willkeating45__user_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"oldPassword\": \"1234\",\n    \"newPassword\": \"1234\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{willkeating45__local_baseUrl}}/auth/change-password",
+                  "host": [
+                    "{{willkeating45__local_baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "change-password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "137"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"89-wq1CDoBWK3Q1ftx7Rn+VYib58C8\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 06 Jun 2026 03:09:58 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"success\": true,\n    \"message\": \"Password changed successfully\",\n    \"data\": {\n        \"message\": \"Password changed successfully\"\n    },\n    \"stats\": {}\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"password\":\"123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/auth/delete-user",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "delete-user"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Delete User",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{willkeating45__user_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"password\":\"123\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{willkeating45__local_baseUrl}}/auth/delete-user",
+                  "host": [
+                    "{{willkeating45__local_baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "delete-user"
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "492"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"1ec-uFZL7v6Ft+vASro5TPrK3hBOjFg\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Sat, 06 Jun 2026 03:10:37 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": false,\n    \"message\": \"Password does not match\",\n    \"errorSources\": [\n        {\n            \"type\": \"ApiError\",\n            \"details\": \"Password does not match\"\n        }\n    ],\n    \"err\": {\n        \"statusCode\": 401\n    },\n    \"stack\": \"Error: Password does not match\\n    at C:\\\\Users\\\\Rafsan Sayed\\\\Hyper_Hawks_Workspace\\\\willkeating45_server\\\\src\\\\app\\\\modules\\\\Auth\\\\auth.service.ts:458:11\\n    at Generator.next (<anonymous>)\\n    at fulfilled (C:\\\\Users\\\\Rafsan Sayed\\\\Hyper_Hawks_Workspace\\\\willkeating45_server\\\\src\\\\app\\\\modules\\\\Auth\\\\auth.service.ts:38:58)\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "apple login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"userId\": \"rafsansayed132@gmail.com\",   //ekhane apple theke pawa userId dite hobe jeta sorboda same thakbe\r\n    \"email\": \"1234\",\r\n    \"fullName\": \"1234\",\r\n    \"fcmToken\": \"1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/auth/apple-login",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "apple-login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "google login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"rafsansayed132@gmail.com\",\r\n    \"fullName\": \"1234\",\r\n    \"image\": \"1234\",\r\n    \"fcmToken\": \"1234\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/auth/google-login",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "google-login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User Profile",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/users/profile",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "fullName",
+                  "value": "Rafsan Sayed",
+                  "type": "text"
+                },
+                {
+                  "key": "phone",
+                  "value": "9876543210",
+                  "type": "text"
+                },
+                {
+                  "key": "image",
+                  "type": "file",
+                  "value": null,
+                  "disabled": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/users/update-profile",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "update-profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Posts (Memorials)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/users/my-posts",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "my-posts"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt",
+                  "disabled": true
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Toggle Notification",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isNotificationOn\": true\n}"
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/users/toggle-notification",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "toggle-notification"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Death Notices (Obituary)",
+      "item": [
+        {
+          "name": "Create Death Notice",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Margaret Anne Murphy",
+                  "type": "text"
+                },
+                {
+                  "key": "dateOfBirth",
+                  "value": "1948-03-12",
+                  "type": "text",
+                  "description": "year-month-date"
+                },
+                {
+                  "key": "dateOfPassing",
+                  "value": "2025-05-28",
+                  "type": "text",
+                  "description": "year-month-date"
+                },
+                {
+                  "key": "location",
+                  "value": "Cork, Ireland",
+                  "type": "text"
+                },
+                {
+                  "key": "story",
+                  "value": "A beloved mother and friend...",
+                  "type": "text"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": "/C:/Users/Rafsan Sayed/Downloads/424734e8c93cc81239782dcfc8594bb2.jpg_720x720q80.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/death-notices/create",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "death-notices",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Death Notices (Public)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/death-notices?page=1&limit=9&search=Margaret&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "death-notices"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "9",
+                  "description": "Items per page"
+                },
+                {
+                  "key": "search",
+                  "value": "Margaret",
+                  "description": "Search by name or location"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "description": "Recently Published"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Death Notice (Public)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/death-notices/single/6a24d88bee93ef5a315d49e1",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "death-notices",
+                "single",
+                "6a24d88bee93ef5a315d49e1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Death Notice",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "story",
+                  "value": "Updated story... by nothing",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/death-notices/update/6a24d88bee93ef5a315d49e1",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "death-notices",
+                "update",
+                "6a24d88bee93ef5a315d49e1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Death Notice",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/death-notices/delete/6a24d88bee93ef5a315d49e1",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "death-notices",
+                "delete",
+                "6a24d88bee93ef5a315d49e1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "My Created Death Notices",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/death-notices/my-created-death-notices?page=1&limit=10",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "death-notices",
+                "my-created-death-notices"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Funeral Notices",
+      "item": [
+        {
+          "name": "Create Funeral Notice",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Patrick Joseph O'Connor",
+                  "type": "text"
+                },
+                {
+                  "key": "dateOfBirth",
+                  "value": "1950-01-15",
+                  "type": "text"
+                },
+                {
+                  "key": "dateOfPassing",
+                  "value": "2025-06-01",
+                  "type": "text"
+                },
+                {
+                  "key": "funeralLocation",
+                  "value": "Cork, Ireland",
+                  "type": "text"
+                },
+                {
+                  "key": "funeralDate",
+                  "value": "2026-05-12",
+                  "type": "text"
+                },
+                {
+                  "key": "funeralTime",
+                  "value": "3:00 PM",
+                  "type": "text"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": "/C:/Users/Rafsan Sayed/Downloads/1778726098704.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/funeral-notices/create",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "funeral-notices",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Funeral Notices (Public)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/funeral-notices?page=1&limit=9&search=patrick&sortBy=createdAt&sortOrder=desc",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "funeral-notices"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "9"
+                },
+                {
+                  "key": "search",
+                  "value": "patrick",
+                  "description": "Search by name or funeral location"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Funeral Notice (Public)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/funeral-notices/single/6a24df88b77283c95f36bfdb",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "funeral-notices",
+                "single",
+                "6a24df88b77283c95f36bfdb"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Funeral Notice",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Patrick Joseph O'Connor ll",
+                  "type": "text",
+                  "uuid": "230e75f9-f0cf-4458-b398-cb2794ab3527"
+                },
+                {
+                  "key": "dateOfBirth",
+                  "value": "1950-01-15",
+                  "type": "text",
+                  "uuid": "3866da14-b415-4996-a5ec-2e6f17210a4c"
+                },
+                {
+                  "key": "dateOfPassing",
+                  "value": "2025-06-01",
+                  "type": "text",
+                  "uuid": "141de47d-3bee-49fc-9de5-b52ad8eea148"
+                },
+                {
+                  "key": "funeralDate",
+                  "value": "2026-05-12",
+                  "type": "text",
+                  "uuid": "2debe4ac-6042-4e6d-9972-45d8fdefa7da"
+                },
+                {
+                  "key": "funeralTime",
+                  "value": "2:00 PM",
+                  "type": "text",
+                  "uuid": "90a15fd5-7293-459b-95a3-0f721094866c"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/funeral-notices/update/6a24df88b77283c95f36bfdb",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "funeral-notices",
+                "update",
+                "6a24df88b77283c95f36bfdb"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Funeral Notice",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/funeral-notices/delete/6a24df88b77283c95f36bfdb",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "funeral-notices",
+                "delete",
+                "6a24df88b77283c95f36bfdb"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "My Created Funeral Notices",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/funeral-notices/my-created-funeral-notices?page=1&limit=10",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "funeral-notices",
+                "my-created-funeral-notices"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Memorials (Shared Memories)",
+      "item": [
+        {
+          "name": "Create Memorial (Memorial Plan Required)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "story",
+                  "value": "Forever in our hearts...",
+                  "type": "text"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": "/C:/Users/Rafsan Sayed/Downloads/product_1771039982_2637.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/memorials/create",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "memorials",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Memorials (Public)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/memorials",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "memorials"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "rafsan",
+                  "description": "Search by author name or story",
+                  "disabled": true
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt",
+                  "disabled": true
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Single Memorial (Public)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/memorials/single/6a24e828337b39bda4543bfd",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "memorials",
+                "single",
+                "6a24e828337b39bda4543bfd"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Memorial",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "story",
+                  "value": "Forever in our hearts... in frover",
+                  "type": "text",
+                  "uuid": "ca2235cd-dd0c-44b5-8c17-785d67e4533d"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/memorials/update/6a24e828337b39bda4543bfd",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "memorials",
+                "update",
+                "6a24e828337b39bda4543bfd"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Memorial",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/memorials/delete/6a24e828337b39bda4543bfd",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "memorials",
+                "delete",
+                "6a24e828337b39bda4543bfd"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "My Created Memorials",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/memorials/my-created-memorials?page=1&limit=10",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "memorials",
+                "my-created-memorials"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "Get Comments by Memorial",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/comments/memorial/:memorialId?page=1&limit=20",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "comments",
+                "memorial",
+                ":memorialId"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "memorialId",
+                  "value": "6a24e828337b39bda4543bfd"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Comment (Memorial Plan Required)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "text",
+                  "value": "Sending love and prayers.",
+                  "type": "text"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "uuid": "5cb02641-8bd9-4183-b922-3256fe8faa38",
+                  "src": "/C:/Users/Rafsan Sayed/Downloads/Mars-Seal.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/comments/memorial/:memorialId",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "comments",
+                "memorial",
+                ":memorialId"
+              ],
+              "variable": [
+                {
+                  "key": "memorialId",
+                  "value": "6a24e828337b39bda4543bfd"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/comments/6a24eca3753116664ca5aad6",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "comments",
+                "6a24eca3753116664ca5aad6"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Report Memorial Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"This post contains inappropriate content.\"\n}"
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/reports/memorial/6a24e828337b39bda4543bfd",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "reports",
+                "memorial",
+                "6a24e828337b39bda4543bfd"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Report Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Offensive comment.\",\n  \"commentId\": \"COMMENT_ID_HERE\"\n}"
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/reports/memorial/4587043940298439",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "reports",
+                "memorial",
+                "4587043940298439"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Feedback",
+      "item": [
+        {
+          "name": "create feedback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"review\": \"The memorial page became a place of comfort for everyone who knew and loved them.\"\n}"
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/feedback/create",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "feedback",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Plans & Subscription",
+      "item": [
+        {
+          "name": "create sub plan",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}",
+                "type": "text"
+              },
+              {
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"planName\": \"Premium Memorial Plan\",\r\n    \"planPrice\": \"399/yearly\",\r\n    \"planMode\": \"Premium Memorial Plan\",\r\n    \"planType\": \"YEARLY\", //  MONTHLY YEARLY  LIFETIME\r\n    \"items\": [\r\n        {\r\n            \"name\": \"Everything in free plan include\"\r\n        },\r\n        {\r\n            \"name\": \"Memorial feed with full manageing\"\r\n        },\r\n        {\r\n            \"name\": \"Tribute wall (comments)\"\r\n        }\r\n    ]\r\n}\r\n\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/plans/create",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "plans",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all plans",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/plans/get-all",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "plans",
+                "get-all"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get single sub",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              },
+              {
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n \r\n  \"planName\": \"Student\",\r\n  \"planPrice\": 599,\r\n  \"planType\": \"monthly\",\r\n  \"items\": [\r\n    {\r\n      \"name\": \"MIX total cloths 10\"\r\n    },\r\n    {\r\n      \"name\": \"Wash\"\r\n    },\r\n    {\r\n      \"name\": \"Iron\"\r\n    },\r\n    {\r\n      \"name\": \"Dry clean\"\r\n    }\r\n  ]\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/plans/single/6a250ca180d8339e2ec55a03",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "plans",
+                "single",
+                "6a250ca180d8339e2ec55a03"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all sub stat",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              },
+              {
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "//planName  -- student-plus-plus  -- arbnb-student-plus-plus --- genarel-pro  --  student  --- ",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/plans/get-all-sub-stat",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "plans",
+                "get-all-sub-stat"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "my subscription",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "type": "text"
+              },
+              {
+                "key": "",
+                "value": "",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/plans/my-subscriptions",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "plans",
+                "my-subscriptions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Buy sub plan",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"subscriptionId\": \"6a250d9480d8339e2ec55a07\", //plan id\n    \"amount\": 399,\n    \"tax\":  0.99,\n       \"paymentMethodId\":\"pm_1TfahADEId8XEA8pg6LOy4vw\"\n    // \"setupIntentData\": {\n    //     \"payment_method\": \"pm_card_visa\",\n    //     \"save_payment_method\": true\n    // } //notun card setup korte eita dibe\n\n}"
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/plans/buy-sub-plan",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "plans",
+                "buy-sub-plan"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "upgrade sub",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"subscriptionId\": \"6a250d9480d8339e2ec55a07\", //plan id\n    \"amount\": 399,\n    \"tax\":  0.99,\n    //    \"paymentMethodId\":\"pm_1TA1EaDEId8XEA8pGYKaFtw5\"\n    \"setupIntentData\": {\n        \"payment_method\": \"pm_card_visa\",\n        \"save_payment_method\": true\n    } //notun card setup korte eita dibe\n\n}"
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/plans/upgrade-sub-plan",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "plans",
+                "upgrade-sub-plan"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "cancel subscription",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/plans/cancel-sub-plan",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "plans",
+                "cancel-sub-plan"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin Dashboard",
+      "item": [
+        {
+          "name": "Dashboard overview",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/overview?revenuePeriod=monthly",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "overview"
+              ],
+              "query": [
+                {
+                  "key": "revenuePeriod",
+                  "value": "monthly",
+                  "description": "monthly / yearly"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/users",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "john",
+                  "description": "Search name, email, phone",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "ACTIVE",
+                  "description": "ACTIVE | INACTIVE | SUSPENDED",
+                  "disabled": true
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt",
+                  "disabled": true
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/users/6a238d9acf2d070ff265dfaf",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "users",
+                "6a238d9acf2d070ff265dfaf"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"SUSPENDED\"\n}\n\n//   ACTIVE\n//   INACTIVE\n//   SUSPENDED"
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/users/6a238d9acf2d070ff265dfaf/status",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "users",
+                "6a238d9acf2d070ff265dfaf",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/stats",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "stats"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Revenue Analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/revenue",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "revenue"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Recent Activity",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/recent-activity",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "recent-activity"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/users/6a238d9acf2d070ff265dfaf",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "users",
+                "6a238d9acf2d070ff265dfaf"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List All Obituaries",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/obituaries",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "obituaries"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "murphy",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "PUBLISHED",
+                  "description": "PUBLISHED | PENDING | DRAFT",
+                  "disabled": true
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt",
+                  "disabled": true
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Death Notice Details (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/obituaries/death/6a24d88bee93ef5a315d49e1",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "obituaries",
+                "death",
+                "6a24d88bee93ef5a315d49e1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Funeral Notice Details (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/obituaries/funeral/6a24df88b77283c95f36bfdb",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "obituaries",
+                "funeral",
+                "6a24df88b77283c95f36bfdb"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all payments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/payments",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "payments"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "TRX",
+                  "description": "Search transaction ID, package, user name",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "COMPLETED",
+                  "disabled": true
+                },
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01",
+                  "disabled": true
+                },
+                {
+                  "key": "endDate",
+                  "value": "2025-12-31",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all moderation reports",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/moderation/reports",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "moderation",
+                "reports"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "PENDING",
+                  "description": "PENDING | DISMISSED | REMOVED",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Dismiss Report",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/moderation/reports/6a24ed8661be9f858f7b1244/dismiss",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "moderation",
+                "reports",
+                "6a24ed8661be9f858f7b1244",
+                "dismiss"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Reported Content",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/moderation/reports/6a24ed8661be9f858f7b1244/remove",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "moderation",
+                "reports",
+                "6a24ed8661be9f858f7b1244",
+                "remove"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all feedback",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/feedback",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "feedback"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "disabled": true
+                },
+                {
+                  "key": "search",
+                  "value": "john",
+                  "description": "Search name, email, phone",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "ACTIVE",
+                  "description": "ACTIVE | INACTIVE | SUSPENDED",
+                  "disabled": true
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt",
+                  "disabled": true
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update feedback staatus",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PUBLISHED\"\n}"
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/feedback/update/6a2660fe090e9ed6710d40a6",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "feedback",
+                "update",
+                "6a2660fe090e9ed6710d40a6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "delete feedback",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PUBLISHED\"\n}"
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/feedback/delete/6a2660fe090e9ed6710d40a6",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "feedback",
+                "delete",
+                "6a2660fe090e9ed6710d40a6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Death Notice Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PUBLISHED\"\n}"
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/obituaries/death/44534546453324/status",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "obituaries",
+                "death",
+                "44534546453324",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Funeral Notice Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"PENDING\"\n}"
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/obituaries/funeral/:id/status",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "obituaries",
+                "funeral",
+                ":id",
+                "status"
+              ],
+              "variable": [
+                {
+                  "key": "id"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Death Notice (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/obituaries/death/:id",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "obituaries",
+                "death",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Funeral Notice (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/admin/dashboard/obituaries/funeral/:id",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "admin",
+                "dashboard",
+                "obituaries",
+                "funeral",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Landing page public api",
+      "item": [
+        {
+          "name": "get published feedback",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Offensive comment.\",\n  \"commentId\": \"COMMENT_ID_HERE\"\n}"
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/feedback/published",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "feedback",
+                "published"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "track vistor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/users/track-visitor",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "track-visitor"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get all visitor",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/users/visitor-statistics",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "visitor-statistics"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "landing page stats data",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{willkeating45__user_token}}",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{willkeating45__local_baseUrl}}/users/landing-statistics",
+              "host": [
+                "{{willkeating45__local_baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "landing-statistics"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api/v1"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "adminToken",
+      "value": ""
+    },
+    {
+      "key": "willkeating45__local_baseUrl",
+      "value": ""
+    },
+    {
+      "key": "willkeating45__user_token",
+      "value": ""
+    },
+    {
+      "key": "willkeating45__admin_token",
+      "value": ""
+    }
+  ]
+}

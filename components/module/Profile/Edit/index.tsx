@@ -1,9 +1,17 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  useGetProfileQuery,
+  useUpdateProfileMutation,
+} from "@/redux/api/profileApi";
+import placeholder from "@/src/assets/placeholders/image_placeholder.png";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 interface EditProfileProps {
   initialFullName?: string;
@@ -18,25 +26,67 @@ interface ProfileData {
 }
 
 export default function EditProfile({
-  initialFullName = "Alex Curry",
-  initialPhoneNumber = "+1 (561) 555-0128",
-  profileImageUrl = "/images/User profile photo.png",
+  initialFullName,
+  initialPhoneNumber,
+  profileImageUrl,
   onSave,
 }: EditProfileProps) {
-  const [fullName, setFullName] = useState(initialFullName);
-  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber);
-  const [isSaving, setIsSaving] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+  const { data: profileData } = useGetProfileQuery({}) as any;
+
+  const profile = profileData?.data;
+
+  const [fullName, setFullName] = useState(initialFullName ?? "");
+  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber ?? "");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (profile) {
+      setFullName(profile.fullName ?? "");
+      setPhoneNumber(profile.phone ?? "");
+    }
+  }, [profile]);
+
+  const displayImage =
+    imagePreview ?? profileImageUrl ?? profile?.image ?? placeholder;
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
 
   const handleSaveChanges = async () => {
-    setIsSaving(true);
+    if (!fullName.trim()) {
+      toast.error("Full name is required");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("fullName", fullName.trim());
+    formData.append("phone", phoneNumber.trim());
+
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
     try {
-      if (onSave) {
-        onSave({ fullName, phoneNumber });
+      const res = (await updateProfile(formData).unwrap()) as any;
+
+      if (res.success) {
+        toast.success(res.message || "Profile updated successfully");
+        onSave?.({ fullName, phoneNumber });
+        setImageFile(null);
+      } else {
+        toast.error(res.message || "Failed to update profile");
       }
-      // Add a small delay to show the loading state
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    } finally {
-      setIsSaving(false);
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Something went wrong");
+      console.error("Error updating profile:", error);
     }
   };
 
@@ -58,7 +108,7 @@ export default function EditProfile({
             {/* Avatar */}
             <div className="relative w-32 h-32 rounded-full overflow-hidden bg-slate-200">
               <Image
-                src={profileImageUrl}
+                src={displayImage}
                 alt="Profile picture"
                 fill
                 className="object-cover"
@@ -67,7 +117,12 @@ export default function EditProfile({
             </div>
 
             {/* Edit Badge */}
-            <div className="absolute bottom-2 right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-md">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute bottom-2 right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-md cursor-pointer"
+              aria-label="Change profile picture"
+            >
               <svg
                 className="w-4 h-4 text-white"
                 fill="none"
@@ -81,7 +136,15 @@ export default function EditProfile({
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-            </div>
+            </button>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageSelect}
+            />
           </div>
 
           {/* Personal Information Form */}
@@ -132,10 +195,10 @@ export default function EditProfile({
             {/* Save Button */}
             <Button
               onClick={handleSaveChanges}
-              disabled={isSaving}
+              disabled={isLoading}
               className="w-full font-semibold md:w-auto bg-primary hover:bg-primary/90 text-white py-6 px-8 rounded-full transition-colors duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              {isSaving ? "Saving..." : "Save Changes"}
+              {isLoading ? "Saving..." : "Save Changes"}
             </Button>
           </div>
         </div>

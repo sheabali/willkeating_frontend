@@ -2,7 +2,7 @@
 "use client";
 
 import { useCommentsMemorialMutation } from "@/redux/api/memoryApi";
-import { Heart, Paperclip, Send, X } from "lucide-react";
+import { Send, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
@@ -104,9 +104,9 @@ export function CommentSection({
             </div>
           ))}
         </div>
-        <button className="text-gray-400 hover:text-red-500 transition-colors">
+        {/* <button className="text-gray-400 hover:text-red-500 transition-colors">
           <Heart className="w-5 h-5" />
-        </button>
+        </button> */}
       </div>
 
       {/* Comments List */}
@@ -199,14 +199,14 @@ export function CommentSection({
           onChange={handleFileChange}
           className="hidden"
         />
-        <button
+        {/* <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
           className="text-gray-400 hover:text-gray-600 transition-colors shrink-0"
           disabled={isLoading}
         >
           <Paperclip className="w-5 h-5" />
-        </button>
+        </button> */}
         <button
           type="submit"
           className="text-primary hover:text-primary/80 transition-colors shrink-0 disabled:opacity-40"

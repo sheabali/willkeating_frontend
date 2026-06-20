@@ -5,6 +5,7 @@ import { Mail, Phone } from "lucide-react";
 import Image from "next/image";
 
 interface ProfileSectionProps {
+  id: string;
   name: string;
   email: string;
   phone: string;
@@ -35,16 +36,13 @@ export function ProfileSection({
         </p>
       </div>
 
-      {/* Profile Card */}
       <div className="bg-white border border-slate-200 rounded-lg p-6 md:p-8">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 md:gap-8">
-          {/* Profile Info Section */}
           <div className="flex flex-col sm:flex-col gap-6 md:gap-8 flex-1">
-            {/* Profile Image */}
             <div className="shrink-0">
               <div className="relative w-24 h-24 sm:w-28 sm:h-28">
                 <Image
-                  src={profileImage}
+                  src={profileImage || "/images/user.png"}
                   alt={profileImageAlt}
                   fill
                   className="rounded-full object-cover"
@@ -53,7 +51,6 @@ export function ProfileSection({
               </div>
             </div>
 
-            {/* Profile Details */}
             <div className="flex flex-col justify-center gap-1 md:gap-2">
               <h2 className="text-2xl md:text-[32px] text-[#052858]">{name}</h2>
 
@@ -61,7 +58,6 @@ export function ProfileSection({
                 Joined since {joinDate}
               </p>
 
-              {/* Contact Information */}
               <div className="flex  gap-2 mt-2 md:mt-3 text-sm md:text-base text-slate-700">
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 md:w-5 md:h-5 text-slate-500 shrink-0" />
@@ -75,7 +71,6 @@ export function ProfileSection({
             </div>
           </div>
 
-          {/* Edit Button */}
           <div className="shrink-0 pt-2 md:pt-0">
             <Button
               onClick={onEditClick}
