@@ -1,6 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { AdminUserStatus } from "@/redux/api/dashboardApi";
 import { User } from "@/src/types/user.type";
 
 import Image from "next/image";
@@ -8,31 +10,45 @@ import Image from "next/image";
 interface UserProfileCardProps {
   user: User;
   onDeactivate: () => void;
+  isDeactivating?: boolean;
+  userStatus?: AdminUserStatus;
 }
 
-export function UserProfileCard({ user, onDeactivate }: UserProfileCardProps) {
+export function UserProfileCard({
+  user,
+  onDeactivate,
+  isDeactivating,
+  userStatus,
+}: UserProfileCardProps) {
+  const isSuspended = userStatus === "SUSPENDED" || userStatus === "INACTIVE";
+
   return (
     <div className="flex flex-col gap-4 rounded-lg border border-neutral-200 bg-white p-6 shadow-sm md:flex-row md:items-center md:justify-between">
-      {/* Left Content */}
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-6">
-        {/* Profile Image */}
         <div className="relative h-24 w-24 shrink-0">
           <Image
-            src="/images/user_4.jpg"
+            src={user.avatarUrl || "/images/user_4.jpg"}
             alt={user.name}
             fill
             className="rounded-md object-cover"
             priority
           />
-          {/* Online Status Indicator */}
-          <div className="absolute bottom-0 right-0 h-5 w-5 rounded-full border-2 border-white bg-green-500" />
+          <div
+            className={`absolute bottom-0 right-0 h-5 w-5 rounded-full border-2 border-white ${
+              isSuspended ? "bg-yellow-500" : "bg-green-500"
+            }`}
+          />
         </div>
 
-        {/* User Info */}
         <div className="flex flex-col gap-4">
           <div>
             <h2 className="text-[32px] text-[#182232]">{user.name}</h2>
             <p className="text-[16px] text-[#45474C]">{user.email}</p>
+            {userStatus && (
+              <p className="mt-1 text-sm font-medium text-neutral-600">
+                Status: {userStatus}
+              </p>
+            )}
           </div>
 
           {/* Stats */}
@@ -64,17 +80,21 @@ export function UserProfileCard({ user, onDeactivate }: UserProfileCardProps) {
         </div>
       </div>
 
-      {/* Right Action */}
       <Button
         onClick={onDeactivate}
         variant="outline"
-        className="mt-4 w-full border-red-200 text-red-600 hover:bg-red-50 md:mt-0 md:w-auto"
+        disabled={isDeactivating || isSuspended}
+        className="mt-4 w-full border-red-200 text-red-600 hover:bg-red-50 md:mt-0 md:w-auto disabled:opacity-50"
       >
-        <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="1" />
-          <path d="M12 3c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zm0 16c-3.9 0-7-3.1-7-7s3.1-7 7-7 7 3.1 7 7-3.1 7-7 7z" />
-        </svg>
-        Deactivate Account
+        {isDeactivating ? (
+          <Spinner className="mr-2 h-4 w-4" />
+        ) : (
+          <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="1" />
+            <path d="M12 3c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zm0 16c-3.9 0-7-3.1-7-7s3.1-7 7-7 7 3.1 7 7-3.1 7-7 7z" />
+          </svg>
+        )}
+        {isSuspended ? "Account Suspended" : "Deactivate Account"}
       </Button>
     </div>
   );

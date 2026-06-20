@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { Trash2 } from "lucide-react";
-import { toast } from "sonner";
+"use client";
 
 import {
   AlertDialog,
@@ -15,18 +12,24 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Spinner } from "@/components/ui/spinner";
-import { useUpdateUserMutation } from "@/redux/api/authApi";
+import { useDeleteUserMutation } from "@/redux/api/dashboardApi";
+import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
-const ActionCell = ({ id }: any) => {
-  const [updateStatus, { isLoading }] = useUpdateUserMutation();
+interface ActionCellProps {
+  id: string;
+}
 
-  const handleStatusChange = async () => {
+const ActionCell = ({ id }: ActionCellProps) => {
+  const [deleteUser, { isLoading }] = useDeleteUserMutation();
+
+  const handleDelete = async () => {
     try {
-      await updateStatus({ id, status: "BLOCKED" }).unwrap();
-      toast.success("Technician deleted successfully");
-    } catch (err: any) {
-      toast.error(err?.data?.message || "Failed to delete technician.");
-      console.error("Failed to update status:", err);
+      const res = await deleteUser(id).unwrap();
+      toast.success(res.message || "User deleted successfully");
+    } catch (err: unknown) {
+      const error = err as { data?: { message?: string } };
+      toast.error(error?.data?.message || "Failed to delete user.");
     }
   };
 
@@ -45,7 +48,7 @@ const ActionCell = ({ id }: any) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action will delete the user. You can’t undo this change.
+            This action will delete the user. You can&apos;t undo this change.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -53,7 +56,7 @@ const ActionCell = ({ id }: any) => {
           <AlertDialogCancel className="rounded-full">Cancel</AlertDialogCancel>
           <AlertDialogAction
             className="bg-red-500 hover:bg-red-600"
-            onClick={handleStatusChange}
+            onClick={handleDelete}
             disabled={isLoading}
           >
             Yes, Delete

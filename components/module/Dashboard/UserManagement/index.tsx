@@ -1,9 +1,9 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable react-hooks/preserve-manual-memoization */
 "use client";
 
-import { NRTable } from "@/components/ui/core/NRTable";
-// import { useGetTechniciansManagementStatsQuery } from "@/redux/api/shopOwnerDashboardApi";
 import { Button } from "@/components/ui/button";
+import { NRTable } from "@/components/ui/core/NRTable";
 import TablePagination from "@/components/ui/core/NRTable/TablePagination";
 import {
   DropdownMenu,
@@ -12,32 +12,38 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { AdminUserStatus, useGetAllUsersQuery } from "@/redux/api/dashboardApi";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronDown, Eye, Filter } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ActionCell from "./ActionCell";
-
-type UserStatus = "ACTIVE" | "INVITED" | "SUSPENDED" | "BLOCKED";
 
 type User = {
   id: string;
   fullName: string;
   email: string;
   phone: string;
-  status: UserStatus;
+  status: AdminUserStatus;
   totalObituaries: number;
   createdAt: string;
 };
 
-const statusStyles: Record<UserStatus, string> = {
+const statusStyles: Record<AdminUserStatus, string> = {
   ACTIVE: "bg-green-100 text-green-600 border-green-200",
-  INVITED: "bg-blue-100 text-blue-600 border-blue-200",
+  INACTIVE: "bg-gray-100 text-gray-600 border-gray-200",
   SUSPENDED: "bg-yellow-100 text-yellow-600 border-yellow-200",
-  BLOCKED: "bg-red-100 text-red-600 border-red-200",
 };
 
-const StatusBadge = ({ status }: { status: UserStatus }) => (
+const STATUS_FILTERS: Array<{ label: string; value?: AdminUserStatus }> = [
+  { label: "All Status" },
+  { label: "Active", value: "ACTIVE" },
+  { label: "Inactive", value: "INACTIVE" },
+  { label: "Suspended", value: "SUSPENDED" },
+];
+
+const StatusBadge = ({ status }: { status: AdminUserStatus }) => (
   <span
     className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${statusStyles[status]}`}
   >
@@ -48,86 +54,58 @@ const StatusBadge = ({ status }: { status: UserStatus }) => (
 const UserManagement = () => {
   const router = useRouter();
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [statusFilter, setStatusFilter] = useState<AdminUserStatus | undefined>(
+    undefined,
+  );
+
   const limit = 10;
-  const totalItems = 20;
 
-  // console.log("searchTerm", searchTerm);
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchInput), 400);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
-  // const { data: managementStatsData, isLoading: managementStatsLoading } =
-  //   useGetTechniciansManagementStatsQuery({});
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch, statusFilter]);
+
+  const { data, isLoading, isFetching } = useGetAllUsersQuery({
+    page: currentPage,
+    limit,
+    search: debouncedSearch || undefined,
+    status: statusFilter,
+    sortBy: "createdAt",
+    sortOrder: "desc",
+  });
+
+  const meta = data?.meta;
+  const totalItems = meta?.total ?? 0;
+  const totalPages = meta?.totalPage ?? 1;
+
+  const userData: User[] = useMemo(
+    () =>
+      (data?.data ?? []).map((user) => ({
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone,
+        status: user.status,
+        totalObituaries: user.obituaryCount,
+        createdAt: user.createdAt,
+      })),
+    [data?.data],
+  );
+
   const handleView = (id: string) => {
-    console.log("view", id);
     router.push(`/admin/dashboard/users/${id}`);
   };
 
-  const userData: User[] = [
-    {
-      id: "U001",
-      fullName: "John Smith",
-      email: "john@example.com",
-      phone: "+1 234-567-8901",
-      status: "ACTIVE",
-      totalObituaries: 12,
-      createdAt: "2024-01-15",
-    },
-    {
-      id: "U002",
-      fullName: "Jane Doe",
-      email: "jane@example.com",
-      phone: "+1 987-654-3210",
-      status: "INVITED",
-      totalObituaries: 8,
-      createdAt: "2024-02-10",
-    },
-    {
-      id: "U001",
-      fullName: "John Smith",
-      email: "john@example.com",
-      phone: "+1 234-567-8901",
-      status: "ACTIVE",
-      totalObituaries: 12,
-      createdAt: "2024-01-15",
-    },
-    {
-      id: "U002",
-      fullName: "Jane Doe",
-      email: "jane@example.com",
-      phone: "+1 987-654-3210",
-      status: "INVITED",
-      totalObituaries: 8,
-      createdAt: "2024-02-10",
-    },
-    {
-      id: "U001",
-      fullName: "John Smith",
-      email: "john@example.com",
-      phone: "+1 234-567-8901",
-      status: "ACTIVE",
-      totalObituaries: 12,
-      createdAt: "2024-01-15",
-    },
-    {
-      id: "U002",
-      fullName: "Jane Doe",
-      email: "jane@example.com",
-      phone: "+1 987-654-3210",
-      status: "INVITED",
-      totalObituaries: 8,
-      createdAt: "2024-02-10",
-    },
-  ];
-
-  // const managementStats = managementStatsData?.data;
-  // const activeTechnicians = managementStats?.activeTechnicians || 0;
-  // const activeInvitations = managementStats?.activeInvitations || {
-  //   sent: 0,
-  //   remaining: 0,
-  // };
-  // const activePlan = managementStats?.activePlan || "N/A";
-  // const nextRenewal = managementStats?.nextRenewal || "N/A";
-  // const technicians = managementStats?.technicians || [];
+  const selectedStatusLabel =
+    STATUS_FILTERS.find((item) => item.value === statusFilter)?.label ??
+    "All Status";
 
   const columns = useMemo<ColumnDef<User>[]>(
     () => [
@@ -153,18 +131,15 @@ const UserManagement = () => {
           </div>
         ),
       },
-
       {
         id: "status",
         header: "Status",
         cell: ({ row }) => <StatusBadge status={row.original.status} />,
       },
-
       {
         accessorKey: "totalObituaries",
         header: "Obituaries",
       },
-
       {
         accessorKey: "createdAt",
         header: "Join Date",
@@ -174,7 +149,6 @@ const UserManagement = () => {
           </p>
         ),
       },
-
       {
         id: "action",
         header: "Action",
@@ -188,7 +162,7 @@ const UserManagement = () => {
             </button>
 
             <button className="rounded-md p-2 cursor-pointer text-gray-600 hover:bg-red-50 hover:text-red-600">
-              <ActionCell id={row.original.id} status={row.original.status} />
+              <ActionCell id={row.original.id} />
             </button>
           </div>
         ),
@@ -197,22 +171,8 @@ const UserManagement = () => {
     [],
   );
 
-  // if (managementStatsLoading) {
-  //   return (
-  //     <div>
-  //       <PageLoading />
-  //     </div>
-  //   );
-  // }
-
   return (
     <div>
-      {/* <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {metrics.map((metric) => (
-          <MetricCard key={metric.title} {...metric} />
-        ))}
-      </div> */}
-
       <div>
         <div className="flex items-center justify-between pb-4">
           <h2 className="text-[24px] mt-6 leading-7 text-[#092924]">
@@ -223,20 +183,16 @@ const UserManagement = () => {
 
       <div className="border rounded-2xl py-[25px] bg-[#ffffff] p-4">
         <div className="flex justify-between items-center">
-          {/* search */}
           <div className="w-1/2">
             <Input
               className="w-full py-6"
               type="text"
               placeholder="Search by name, email, or phone..."
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1);
-              }}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
             />
           </div>
-          {/* filter */}
+
           <div className="w-[30%]">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -247,7 +203,7 @@ const UserManagement = () => {
                   <div className="flex items-center gap-2">
                     <Filter className="h-4 w-4 text-gray-500" />
                     <span className="text-sm font-medium text-gray-700">
-                      All Status
+                      {selectedStatusLabel}
                     </span>
                   </div>
                   <ChevronDown className="h-4 w-4 text-gray-400" />
@@ -255,13 +211,18 @@ const UserManagement = () => {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem>All</DropdownMenuItem>
-                <DropdownMenuItem>Active</DropdownMenuItem>
-                <DropdownMenuItem>Pending</DropdownMenuItem>
-                <DropdownMenuItem>Blocked</DropdownMenuItem>
+                {STATUS_FILTERS.map((item) => (
+                  <DropdownMenuItem
+                    key={item.label}
+                    onClick={() => setStatusFilter(item.value)}
+                  >
+                    {item.label}
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
+
           <div>
             <p>Total Users: {totalItems}</p>
           </div>
@@ -270,16 +231,24 @@ const UserManagement = () => {
 
       <div className="rounded-xl bg-white shadow mt-4">
         <div className="pb-4 px-4 pt-2">
-          <NRTable columns={columns} data={userData} />
+          {isLoading ? (
+            <div className="flex min-h-[300px] items-center justify-center">
+              <Spinner className="h-8 w-8" />
+            </div>
+          ) : (
+            <NRTable columns={columns} data={userData} />
+          )}
         </div>
 
-        {/* Pagination */}
-        <div className="flex items-center justify-start border-t border-gray-200 bg-white  py-3 ">
+        <div className="flex items-center justify-start border-t border-gray-200 bg-white py-3">
           <TablePagination
-            totalPage={Math.ceil(totalItems / limit)}
+            totalPage={totalPages}
             currentPage={currentPage}
             onPageChange={setCurrentPage}
           />
+          {isFetching && !isLoading && (
+            <span className="ml-4 text-sm text-gray-500">Updating...</span>
+          )}
         </div>
       </div>
     </div>

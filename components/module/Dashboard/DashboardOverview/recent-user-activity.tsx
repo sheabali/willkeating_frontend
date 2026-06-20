@@ -79,7 +79,7 @@ export function RecentUserActivity({
       </h2>
 
       <div className="space-y-4">
-        {activities.map((activity) => {
+        {activities.slice(0, 5).map((activity) => {
           const avatarColors = getAvatarInitialColors(activity.initials);
           return (
             <div

@@ -17,8 +17,8 @@ export function VitalStats({ born, passed }: VitalStatsProps) {
         <h3 className="text-xs font-semibold text-neutral-600 tracking-widest uppercase mb-4">
           Born
         </h3>
-        <p className="text-2xl text-neutral-900 mb-2">{born.date}</p>
-        <p className="text-sm text-neutral-600">{born.location}</p>
+        <p className="text-2xl text-neutral-900 mb-2">{born?.date}</p>
+        <p className="text-sm text-neutral-600">{born?.location}</p>
       </div>
 
       {/* Passed Section */}
@@ -26,8 +26,10 @@ export function VitalStats({ born, passed }: VitalStatsProps) {
         <h3 className="text-xs font-semibold text-neutral-600 tracking-widest uppercase mb-4">
           Passed
         </h3>
-        <p className="text-2xl text-neutral-900 mb-2">{passed.date}</p>
-        {passed.age && <p className="text-sm text-neutral-600">{passed.age}</p>}
+        <p className="text-2xl text-neutral-900 mb-2">{passed?.date}</p>
+        {passed?.age && (
+          <p className="text-sm text-neutral-600">{passed?.age}</p>
+        )}
       </div>
     </div>
   );

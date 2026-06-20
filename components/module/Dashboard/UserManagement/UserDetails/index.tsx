@@ -1,74 +1,106 @@
 "use client";
 
+import { Spinner } from "@/components/ui/spinner";
+import {
+  AdminUserDetails,
+  useGetUserDetailsQuery,
+  useUpdateUserStatusMutation,
+} from "@/redux/api/dashboardApi";
 import { UserDashboardData } from "@/src/types/user.type";
+import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import { UserDashboardSection } from "./user-dashboard-section";
 
-const mockDashboardData: UserDashboardData = {
-  user: {
-    id: "1",
-    name: "Jane Doe",
-    email: "jane.doe@example.com",
-    avatarUrl:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&fit=crop",
-    memberSince: "2021-10-12",
-    totalManaged: 4,
-  },
-  obituaries: [
-    {
-      id: "1",
-      deceasedName: "Robert L. Doe",
-      submittedBy: "Jane Doe",
-      status: "PUBLISHED",
-      createdDate: "2023-08-14",
+function mapUserDetailsToDashboardData(
+  data: AdminUserDetails,
+): UserDashboardData {
+  const obituaries = [
+    ...data.deathNotices.map((notice) => ({
+      id: notice.id,
+      deceasedName: notice.name,
+      submittedBy: data.fullName,
+      status: notice.status as "PUBLISHED" | "DRAFT" | "ARCHIVED",
+      createdDate: notice.createdAt,
+    })),
+    ...data.funeralNotices.map((notice) => ({
+      id: notice.id,
+      deceasedName: notice.name,
+      submittedBy: data.fullName,
+      status: notice.status as "PUBLISHED" | "DRAFT" | "ARCHIVED",
+      createdDate: notice.createdAt,
+    })),
+  ];
+
+  const payments = data.payments.map((payment) => ({
+    id: payment.id,
+    description: `${payment.method} Payment`,
+    amount: payment.amount,
+    invoiceNumber: payment.transactionId,
+    date: payment.createdAt,
+    status:
+      payment.status === "COMPLETED"
+        ? ("SUCCESSFUL" as const)
+        : payment.status === "PENDING"
+          ? ("PENDING" as const)
+          : ("FAILED" as const),
+  }));
+
+  return {
+    user: {
+      id: data.id,
+      name: data.fullName,
+      email: data.email,
+      avatarUrl: data.image || "/images/user_4.jpg",
+      memberSince: data.createdAt,
+      totalManaged: data.obituaryCount,
     },
-    {
-      id: "2",
-      deceasedName: "Martha Smith",
-      submittedBy: "Jane Doe",
-      status: "PUBLISHED",
-      createdDate: "2022-11-02",
-    },
-    {
-      id: "3",
-      deceasedName: "William Doe",
-      submittedBy: "Jane Doe",
-      status: "PUBLISHED",
-      createdDate: "2024-01-12",
-    },
-  ],
-  payments: [
-    {
-      id: "1",
-      description: "Premium Memorial Package",
-      amount: 149.0,
-      invoiceNumber: "Inv #RF-88219",
-      date: "2023-08-14",
-      status: "SUCCESSFUL",
-    },
-    {
-      id: "2",
-      description: "Basic Memorial Upgrade",
-      amount: 49.0,
-      invoiceNumber: "Inv #RF-44120",
-      date: "2022-11-02",
-      status: "SUCCESSFUL",
-    },
-    {
-      id: "3",
-      description: "Service Fee (Standard)",
-      amount: 25.0,
-      invoiceNumber: "Inv #RF-21004",
-      date: "2021-10-12",
-      status: "SUCCESSFUL",
-    },
-  ],
-};
+    obituaries,
+    payments,
+  };
+}
 
 export default function UserDetails() {
-  const handleDeactivateAccount = () => {
-    toast.success("Account deactivation process initiated.");
+  const { id } = useParams<{ id: string }>();
+  const { data, isLoading, isError } = useGetUserDetailsQuery(id, {
+    skip: !id,
+  });
+  const [updateUserStatus, { isLoading: isUpdatingStatus }] =
+    useUpdateUserStatusMutation();
+
+  const handleDeactivateAccount = async () => {
+    if (!id) return;
+
+    try {
+      const res = await updateUserStatus({
+        id,
+        status: "SUSPENDED",
+      }).unwrap();
+      toast.success(res.message || "User status updated successfully");
+    } catch (err: unknown) {
+      const error = err as { data?: { message?: string } };
+      toast.error(error?.data?.message || "Failed to update user status.");
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <Spinner className="h-8 w-8" />
+      </div>
+    );
+  }
+
+  if (isError || !data?.data) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <p className="text-sm text-red-600">
+          Failed to load user details. Please try again.
+        </p>
+      </div>
+    );
+  }
+
+  const dashboardData = mapUserDetailsToDashboardData(data.data);
 
   return (
     <main className="min-h-screen bg-neutral-50">
@@ -78,8 +110,10 @@ export default function UserDetails() {
         </div>
 
         <UserDashboardSection
-          data={mockDashboardData}
+          data={dashboardData}
           onDeactivateAccount={handleDeactivateAccount}
+          isDeactivating={isUpdatingStatus}
+          userStatus={data.data.status}
         />
       </div>
     </main>

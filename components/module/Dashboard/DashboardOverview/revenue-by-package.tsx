@@ -18,7 +18,7 @@ export function RevenueByPackage({
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6">
       <h2 className="mb-6 text-lg font-semibold text-gray-900">
-        Revenue by Package
+        Subscription Overview
       </h2>
       <div className="space-y-4">
         {packages.map((pkg, index) => (

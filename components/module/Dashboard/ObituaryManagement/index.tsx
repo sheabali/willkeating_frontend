@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable react-hooks/preserve-manual-memoization */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use client";
 
-import MetricCard from "@/components/shared/MetricCardDashboard";
 import { Button } from "@/components/ui/button";
 import { NRTable } from "@/components/ui/core/NRTable";
 import TablePagination from "@/components/ui/core/NRTable/TablePagination";
@@ -12,144 +14,209 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Obituary } from "@/src/types/user.type";
+import { Spinner } from "@/components/ui/spinner";
+import { useGetAllObituaryQuery } from "@/redux/api/dashboardApi";
 import { ColumnDef } from "@tanstack/react-table";
-import { BookOpen, ChevronDown, Eye, Filter } from "lucide-react";
+import { ChevronDown, Eye, Filter } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ActionCell from "./ActionCell";
+
+type ObituaryRow = {
+  id: string;
+  deceasedName: string;
+  type: any;
+  submittedByName: string;
+  submittedByEmail: string;
+  location: string;
+  dateOfPassing: string;
+  status: any;
+  createdAt: string;
+  thumbnail?: string;
+};
+
+const statusStyles: Record<any, string> = {
+  PUBLISHED: "bg-green-100 text-green-600 border-green-200",
+  PENDING: "bg-yellow-100 text-yellow-600 border-yellow-200",
+  DRAFT: "bg-gray-100 text-gray-600 border-gray-200",
+};
+
+const typeStyles: Record<any, string> = {
+  FUNERAL_NOTICE: "bg-blue-50 text-blue-600 border-blue-200",
+  DEATH_NOTICE: "bg-purple-50 text-purple-600 border-purple-200",
+};
+
+const typeLabels: Record<any, string> = {
+  FUNERAL_NOTICE: "Funeral Notice",
+  DEATH_NOTICE: "Death Notice",
+};
+
+const STATUS_FILTERS: Array<{ label: string; value?: any }> = [
+  { label: "All Status" },
+  { label: "Published", value: "PUBLISHED" },
+  { label: "Pending", value: "PENDING" },
+  { label: "Draft", value: "DRAFT" },
+];
+
+const StatusBadge = ({ status }: { status: any }) => (
+  <span
+    className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${statusStyles[status]}`}
+  >
+    {status}
+  </span>
+);
+
+const TypeBadge = ({ type }: { type: any }) => (
+  <span
+    className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${typeStyles[type]}`}
+  >
+    {typeLabels[type]}
+  </span>
+);
 
 const ObituaryManagement = () => {
   const router = useRouter();
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState<string>("All");
+  const [statusFilter, setStatusFilter] = useState<any | undefined>(undefined);
 
   const limit = 10;
-  const totalItems = 24;
 
-  const obituaryData: Obituary[] = [
-    {
-      id: "EH",
-      deceasedName: "Eleanor Harrington",
-      submittedBy: "Thomas Harrington",
-      status: "PUBLISHED",
-      createdDate: "Oct 24, 2023",
-    },
-    {
-      id: "EH",
-      deceasedName: "Eleanor Harrington",
-      submittedBy: "Thomas Harrington",
-      status: "PUBLISHED",
-      createdDate: "Oct 24, 2023",
-    },
-    {
-      id: "EH",
-      deceasedName: "Eleanor Harrington",
-      submittedBy: "Thomas Harrington",
-      status: "PUBLISHED",
-      createdDate: "Oct 24, 2023",
-    },
-    {
-      id: "EH",
-      deceasedName: "Eleanor Harrington",
-      submittedBy: "Thomas Harrington",
-      status: "PUBLISHED",
-      createdDate: "Oct 24, 2023",
-    },
-  ];
-  const metrics = [
-    {
-      title: "Total Obituaries",
-      value: 134,
-      icon: <BookOpen className="text-[#155DFC]" />,
-      bg: "bg-[#EFF6FF]",
-    },
-    {
-      title: "Views (Last 30 days)",
-      value: 34,
-      icon: <Eye className="text-[#9810FA]" />,
-      bg: "bg-[#FAF5FF]",
-    },
-  ];
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchInput), 400);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
 
-  const handleView = (id: string) => {
-    router.push(`/admin/dashboard/obituary/${id}`);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearch, statusFilter]);
+
+  const { data, isLoading, isFetching } = useGetAllObituaryQuery({
+    page: currentPage,
+    limit,
+    search: debouncedSearch || undefined,
+    status: statusFilter,
+    sortBy: "createdAt",
+    sortOrder: "desc",
+  });
+
+  const meta = data?.meta;
+  const totalItems = meta?.total ?? 0;
+  const totalPages = meta?.totalPage ?? 1;
+
+  const obituaryData: any[] = useMemo(
+    () =>
+      (data?.data ?? []).map((item) => ({
+        id: item.id,
+        deceasedName: item.name,
+        type: item.type,
+        submittedByName: item.createdBy?.fullName ?? "—",
+        submittedByEmail: item.createdBy?.email ?? "—",
+        location: item.funeralLocation ?? item.location ?? "—",
+        dateOfPassing: item.dateOfPassing,
+        status: item.status,
+        createdAt: item.createdAt,
+        thumbnail: item.images?.[0],
+      })),
+    [data?.data],
+  );
+
+  const handleView = (id: string, type: string) => {
+    router.push(`/admin/dashboard/obituary/${id}?type=${type}`);
   };
 
-  const columns = useMemo<ColumnDef<Obituary>[]>(
+  const selectedStatusLabel =
+    STATUS_FILTERS.find((item) => item.value === statusFilter)?.label ??
+    "All Status";
+
+  const columns = useMemo<ColumnDef<ObituaryRow>[]>(
     () => [
       {
         accessorKey: "deceasedName",
-        header: "DECEASED NAME",
+        header: "Deceased",
         cell: ({ row }) => (
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-sm font-medium text-gray-700">
-              {row.original.deceasedName
-                ?.split(" ")
-                .map((n) => n[0])
-                .join("")
-                .toUpperCase()
-                .slice(0, 2)}
-            </div>
-            <div>
-              <p className="font-medium text-[#101828]">
+            {row.original.thumbnail && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={row.original.thumbnail}
+                alt={row.original.deceasedName}
+                className="h-9 w-9 rounded-full object-cover"
+              />
+            )}
+            <div className="flex flex-col">
+              <p className="text-[16px] font-medium text-[#101828]">
                 {row.original.deceasedName}
               </p>
-              <p className="text-xs text-gray-500">ID: {row.original.id}</p>
+              <TypeBadge type={row.original.type} />
             </div>
           </div>
         ),
       },
       {
-        accessorKey: "submittedBy",
-        header: "SUBMITTED BY",
+        accessorKey: "submittedByName",
+        header: "Submitted By",
         cell: ({ row }) => (
-          <p className="text-sm text-gray-900">{row.original.submittedBy}</p>
+          <div className="flex flex-col">
+            <p className="text-sm text-gray-900">
+              {row.original.submittedByName}
+            </p>
+            <p className="text-xs text-gray-500">
+              {row.original.submittedByEmail}
+            </p>
+          </div>
         ),
       },
       {
-        accessorKey: "status",
-        header: "STATUS",
+        accessorKey: "location",
+        header: "Location",
         cell: ({ row }) => (
-          <span
-            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-              row.original.status === "PUBLISHED"
-                ? "bg-green-100 text-green-700 border border-green-200"
-                : "bg-gray-100 text-gray-700 border border-gray-200"
-            }`}
-          >
-            {row.original.status}
-          </span>
+          <p className="text-sm text-gray-700">{row.original.location}</p>
         ),
       },
       {
-        accessorKey: "createdDate",
-        header: "CREATED DATE",
-        cell: ({ row }) => {
-          const createdDate =
-            row.original.createdDate instanceof Date
-              ? row.original.createdDate.toLocaleDateString()
-              : row.original.createdDate;
-
-          return <p className="text-sm text-gray-700">{createdDate}</p>;
-        },
+        accessorKey: "dateOfPassing",
+        header: "Date of Passing",
+        cell: ({ row }) =>
+          row.original.dateOfPassing ? (
+            <p className="text-sm text-gray-700">
+              {new Date(row.original.dateOfPassing).toLocaleDateString()}
+            </p>
+          ) : (
+            <p className="text-sm text-gray-400">—</p>
+          ),
       },
       {
-        id: "actions",
-        header: "ACTIONS",
+        id: "status",
+        header: "Status",
+        cell: ({ row }) => <StatusBadge status={row.original.status} />,
+      },
+      {
+        accessorKey: "createdAt",
+        header: "Created",
+        cell: ({ row }) => (
+          <p className="text-sm text-gray-700">
+            {new Date(row.original.createdAt).toLocaleDateString()}
+          </p>
+        ),
+      },
+      {
+        id: "action",
+        header: "Action",
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
             <button
-              onClick={() => handleView(row.original.id)}
-              className="p-2 rounded-md hover:bg-gray-100 text-gray-600 hover:text-blue-600 transition-colors"
-              title="View Obituary"
+              onClick={() => handleView(row.original.id, row.original.type)}
+              className="rounded-md p-2 cursor-pointer text-gray-600 hover:bg-gray-100 hover:text-blue-600"
             >
               <Eye className="h-5 w-5" />
             </button>
 
-            <ActionCell id={row.original.id} status={row.original.status} />
+            <button className="rounded-md p-2 cursor-pointer text-gray-600 hover:bg-red-50 hover:text-red-600">
+              <ActionCell id={row.original.id} />
+            </button>
           </div>
         ),
       },
@@ -158,49 +225,38 @@ const ObituaryManagement = () => {
   );
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
+    <div>
       <div>
-        <h1 className="text-[24px] font-semibold text-[#092924] mt-6">
-          Obituary Management
-        </h1>
+        <div className="flex items-center justify-between pb-4">
+          <h2 className="text-[24px] mt-6 leading-7 text-[#092924]">
+            Obituary Management
+          </h2>
+        </div>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 my-8">
-        {metrics.map((metric) => (
-          <MetricCard key={metric.title} {...metric} />
-        ))}
-      </div>
-
-      {/* Filters & Search */}
-      <div className="border rounded-2xl bg-white p-6">
-        <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
-          {/* Search */}
-          <div className="w-full sm:w-96">
+      <div className="border rounded-2xl py-[25px] bg-[#ffffff] p-4">
+        <div className="flex justify-between items-center">
+          <div className="w-1/2">
             <Input
+              className="w-full py-6"
               type="text"
-              placeholder="Search by deceased name or submitter..."
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="py-6"
+              placeholder="Search by deceased name..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
             />
           </div>
 
-          {/* Status Filter */}
-          <div className="w-full sm:w-72">
+          <div className="w-[30%]">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full h-11 border-gray-200 justify-between hover:bg-gray-50"
+                  className="w-full gap-2 flex items-center justify-between h-11 border-gray-200 hover:bg-gray-50"
                 >
                   <div className="flex items-center gap-2">
                     <Filter className="h-4 w-4 text-gray-500" />
                     <span className="text-sm font-medium text-gray-700">
-                      {statusFilter}
+                      {selectedStatusLabel}
                     </span>
                   </div>
                   <ChevronDown className="h-4 w-4 text-gray-400" />
@@ -208,38 +264,44 @@ const ObituaryManagement = () => {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent align="end" className="w-48">
-                {["All", "PUBLISHED", "DRAFT", "PENDING"].map((status) => (
+                {STATUS_FILTERS.map((item) => (
                   <DropdownMenuItem
-                    key={status}
-                    onClick={() => setStatusFilter(status)}
+                    key={item.label}
+                    onClick={() => setStatusFilter(item.value)}
                   >
-                    {status}
+                    {item.label}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
 
-          {/* Total Count */}
-          <div className="text-sm text-gray-600 whitespace-nowrap">
-            Total Obituaries: <span className="font-medium">{totalItems}</span>
+          <div>
+            <p>Total Obituaries: {totalItems}</p>
           </div>
         </div>
       </div>
 
-      {/* Table */}
-      <div className="rounded-xl bg-white shadow">
-        <div className="p-4">
-          <NRTable columns={columns} data={obituaryData} />
+      <div className="rounded-xl bg-white shadow mt-4">
+        <div className="pb-4 px-4 pt-2">
+          {isLoading ? (
+            <div className="flex min-h-[300px] items-center justify-center">
+              <Spinner className="h-8 w-8" />
+            </div>
+          ) : (
+            <NRTable columns={columns} data={obituaryData} />
+          )}
         </div>
 
-        {/* Pagination */}
-        <div className="border-t border-gray-200 bg-white px-4 py-4">
+        <div className="flex items-center justify-start border-t border-gray-200 bg-white py-3">
           <TablePagination
-            totalPage={Math.ceil(totalItems / limit)}
+            totalPage={totalPages}
             currentPage={currentPage}
             onPageChange={setCurrentPage}
           />
+          {isFetching && !isLoading && (
+            <span className="ml-4 text-sm text-gray-500">Updating...</span>
+          )}
         </div>
       </div>
     </div>

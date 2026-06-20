@@ -28,7 +28,7 @@ export function FuneralInformation({
         {/* Location Information */}
         <div className="space-y-4">
           <div className="flex gap-3">
-            <MapPin className="w-5 h-5 text-neutral-600 flex-shrink-0 mt-0.5" />
+            <MapPin className="w-5 h-5 text-neutral-600 shrink-0 mt-0.5" />
             <div>
               <h3 className="font-semibold text-neutral-900">{location}</h3>
               <p className="text-sm text-neutral-600 mt-1 leading-relaxed">
