@@ -3,7 +3,7 @@
 
 import { useGetObituaryDetailsQuery } from "@/redux/api/dashboardApi";
 import { useParams } from "next/navigation";
-import { MemorialPage } from "./memorial-page";
+import FuneralNotice from "./memorial-page";
 
 export const metadata = {
   title: "Eleanor Harrington | Memorial",
@@ -25,6 +25,5 @@ export default function ObituaryDetails() {
     return <div>Loading...</div>;
   }
 
-  return <MemorialPage data={obituaryDetails} />;
-  // return <>div</>;
+  return <FuneralNotice data={obituaryDetails} />;
 }

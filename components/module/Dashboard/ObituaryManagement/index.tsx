@@ -124,7 +124,11 @@ const ObituaryManagement = () => {
   );
 
   const handleView = (id: string, type: string) => {
-    router.push(`/admin/dashboard/obituary/${id}?type=${type}`);
+    if (type === "FUNERAL_NOTICE") {
+      router.push(`/admin/dashboard/obituary/${id}`);
+    } else {
+      router.push(`/admin/dashboard/death/${id}`);
+    }
   };
 
   const selectedStatusLabel =
