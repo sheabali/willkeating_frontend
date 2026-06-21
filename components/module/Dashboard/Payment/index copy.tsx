@@ -10,17 +10,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { TransactionRow } from "@/src/types/payment.viewmodels";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronDown, Filter } from "lucide-react";
-import { useMemo, useState } from "react";
-
-type Transaction = {
-  transactionId: string;
-  date: string;
-  user: string;
-  amount: number;
-  status: "completed" | "pending" | "failed";
-};
+import { useMemo } from "react";
 
 const statusStyles: Record<string, string> = {
   completed: "bg-green-100 text-green-700 border-green-200",
@@ -36,37 +30,48 @@ const StatusBadge = ({ status }: { status: string }) => (
   </span>
 );
 
-const TransactionTable = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const limit = 10;
-  const totalItems = 2;
+export type StatusFilter = "ALL" | "COMPLETED" | "PENDING" | "FAILED";
 
-  const transactionData: Transaction[] = [
-    {
-      transactionId: "TXN-001",
-      date: "2024-12-05",
-      user: "John Smith",
-      amount: 279.5,
-      status: "completed",
-    },
-    {
-      transactionId: "TXN-002",
-      date: "2024-12-04",
-      user: "Emma Wilson",
-      amount: 198,
-      status: "completed",
-    },
-  ];
+const STATUS_LABELS: Record<StatusFilter, string> = {
+  ALL: "All Status",
+  COMPLETED: "Completed",
+  PENDING: "Pending",
+  FAILED: "Failed",
+};
 
-  const columns = useMemo<ColumnDef<Transaction>[]>(
+interface TransactionTableProps {
+  data: TransactionRow[];
+  isLoading?: boolean;
+  totalItems: number;
+  limit?: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
+  searchTerm: string;
+  onSearchChange: (term: string) => void;
+  statusFilter: StatusFilter;
+  onStatusFilterChange: (status: StatusFilter) => void;
+}
+
+const TransactionTable = ({
+  data,
+  isLoading = false,
+  totalItems,
+  limit = 10,
+  currentPage,
+  onPageChange,
+  searchTerm,
+  onSearchChange,
+  statusFilter,
+  onStatusFilterChange,
+}: TransactionTableProps) => {
+  const columns = useMemo<ColumnDef<TransactionRow>[]>(
     () => [
       {
         accessorKey: "transactionId",
         header: "Transaction ID",
         cell: ({ row }) => (
           <span className="font-medium text-gray-900">
-            {row.original.transactionId}
+            {row.original.transactionId.slice(0, 10).toUpperCase()}
           </span>
         ),
       },
@@ -75,17 +80,22 @@ const TransactionTable = () => {
         header: "Date",
         cell: ({ row }) => (
           <span className="text-sm text-gray-700">
-            {new Date(row.original.date).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            })}
+            {row.original.date
+              ? new Date(row.original.date).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })
+              : "—"}
           </span>
         ),
       },
       {
-        accessorKey: "user",
+        accessorKey: "userName",
         header: "User",
+        cell: ({ row }) => (
+          <span className="text-sm text-gray-700">{row.original.userName}</span>
+        ),
       },
       {
         accessorKey: "amount",
@@ -115,21 +125,16 @@ const TransactionTable = () => {
 
       <div className="border rounded-2xl py-[25px] bg-[#ffffff] p-4">
         <div className="flex justify-between items-center">
-          {/* Search */}
           <div className="w-1/2">
             <Input
               className="w-full py-6"
               type="text"
               placeholder="Search by Transaction ID, User, or Amount..."
               value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1);
-              }}
+              onChange={(e) => onSearchChange(e.target.value)}
             />
           </div>
 
-          {/* Filter */}
           <div className="w-[30%]">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -140,7 +145,7 @@ const TransactionTable = () => {
                   <div className="flex items-center gap-2">
                     <Filter className="h-4 w-4 text-gray-500" />
                     <span className="text-sm font-medium text-gray-700">
-                      All Status
+                      {STATUS_LABELS[statusFilter]}
                     </span>
                   </div>
                   <ChevronDown className="h-4 w-4 text-gray-400" />
@@ -148,10 +153,14 @@ const TransactionTable = () => {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem>All</DropdownMenuItem>
-                <DropdownMenuItem>Completed</DropdownMenuItem>
-                <DropdownMenuItem>Pending</DropdownMenuItem>
-                <DropdownMenuItem>Failed</DropdownMenuItem>
+                {(Object.keys(STATUS_LABELS) as StatusFilter[]).map((key) => (
+                  <DropdownMenuItem
+                    key={key}
+                    onClick={() => onStatusFilterChange(key)}
+                  >
+                    {STATUS_LABELS[key]}
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -166,15 +175,20 @@ const TransactionTable = () => {
 
       <div className="rounded-xl bg-white shadow mt-4">
         <div className="pb-4 px-4 pt-2">
-          <NRTable columns={columns} data={transactionData} />
+          {isLoading ? (
+            <div className="py-10 text-center text-sm text-gray-500">
+              Loading transactions...
+            </div>
+          ) : (
+            <NRTable columns={columns} data={data} />
+          )}
         </div>
 
-        {/* Pagination */}
         <div className="flex items-center justify-start border-t border-gray-200 bg-white py-3">
           <TablePagination
-            totalPage={Math.ceil(totalItems / limit)}
+            totalPage={Math.max(1, Math.ceil(totalItems / limit))}
             currentPage={currentPage}
-            onPageChange={setCurrentPage}
+            onPageChange={onPageChange}
           />
         </div>
       </div>

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { PaymentApiResponse } from "@/src/types/payment.types";
 import { baseApi } from "./baseApi";
 
 export type RevenuePeriod = "monthly" | "yearly";
@@ -243,7 +244,6 @@ export const dashboardApi = baseApi.injectEndpoints({
         providesTags: [{ type: "User", id: "ADMIN_LIST" }],
       },
     ),
-
     getObituaryDetails: builder.query<AdminUserDetailsResponse, string>({
       query: (id) => ({
         url: `/admin/dashboard/obituaries/funeral/${id}`,
@@ -258,6 +258,50 @@ export const dashboardApi = baseApi.injectEndpoints({
       }),
       providesTags: (_result, _error, id) => [{ type: "User", id }],
     }),
+    getPaymentData: builder.query<PaymentApiResponse, any | void>({
+      query: (params) => {
+        const searchParams = new URLSearchParams();
+
+        if (params?.page) searchParams.set("page", String(params.page));
+        if (params?.limit) searchParams.set("limit", String(params.limit));
+        if (params?.status) searchParams.set("status", params.status);
+        if (params?.startDate) searchParams.set("startDate", params.startDate);
+        if (params?.endDate) searchParams.set("endDate", params.endDate);
+        if (params?.search) searchParams.set("search", params.search);
+
+        const qs = searchParams.toString();
+
+        return {
+          url: `/admin/dashboard/payments${qs ? `?${qs}` : ""}`,
+          method: "GET",
+        };
+      },
+      // providesTags: ["Payment"],
+    }),
+
+    getAllModerationReports: builder.query({
+      query: () => ({
+        url: `/admin/dashboard/moderation/reports`,
+        method: "GET",
+      }),
+      providesTags: [{ type: "User", id: "ADMIN_LIST" }],
+    }),
+
+    removeReportedContent: builder.mutation({
+      query: (id) => ({
+        url: `/admin/dashboard/moderation/reports/${id}/remove`,
+        method: "PATCH",
+      }),
+      invalidatesTags: [{ type: "User", id: "ADMIN_LIST" }],
+    }),
+
+    dismissReport: builder.mutation({
+      query: (id) => ({
+        url: `/admin/dashboard/moderation/reports/${id}/dismiss`,
+        method: "PATCH",
+      }),
+      invalidatesTags: [{ type: "User", id: "ADMIN_LIST" }],
+    }),
   }),
 });
 
@@ -270,4 +314,8 @@ export const {
   useGetAllObituaryQuery,
   useGetObituaryDetailsQuery,
   useGetDeathDetailsQuery,
+  useGetPaymentDataQuery,
+  useDismissReportMutation,
+  useRemoveReportedContentMutation,
+  useGetAllModerationReportsQuery,
 } = dashboardApi;

@@ -15,68 +15,75 @@ interface MonthlyRevenueProps {
     month: string;
     revenue: number;
   }>;
+  isLoading?: boolean;
 }
 
-const defaultData = [
-  { month: "Jan", revenue: 45000 },
-  { month: "Feb", revenue: 52000 },
-  { month: "Mar", revenue: 48000 },
-  { month: "Apr", revenue: 61000 },
-  { month: "May", revenue: 55000 },
-  { month: "Jun", revenue: 67000 },
-];
+export function MonthlyRevenue({
+  data = [],
+  isLoading = false,
+}: MonthlyRevenueProps) {
+  const hasData = data.length > 0;
 
-export function MonthlyRevenue({ data = defaultData }: MonthlyRevenueProps) {
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6">
       <h2 className="mb-4 text-[20px] text-[#101828]">Monthly Revenue Trend</h2>
       <div className="h-64 w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={data}
-            margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
-          >
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="#e5e7eb"
-              vertical={false}
-            />
-            <XAxis
-              dataKey="month"
-              stroke="#6b7280"
-              style={{ fontSize: "12px" }}
-            />
-            <YAxis
-              stroke="#6b7280"
-              style={{ fontSize: "12px" }}
-              tickFormatter={(value: string | number) => {
-                const numValue =
-                  typeof value === "string" ? parseFloat(value) : value;
-                return `$${(numValue / 1000).toFixed(0)}k`;
-              }}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "#ffffff",
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
-              }}
-              formatter={(value) => {
-                const numValue = typeof value === "number" ? value : 0;
-                return `$${numValue.toLocaleString()}`;
-              }}
-              labelStyle={{ color: "#111827" }}
-            />
-            <Line
-              type="monotone"
-              dataKey="revenue"
-              stroke="#10B981"
-              strokeWidth={2}
-              dot={{ fill: "#10B981", r: 4 }}
-              activeDot={{ r: 6 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        {isLoading ? (
+          <div className="flex h-full items-center justify-center text-sm text-gray-500">
+            Loading revenue data...
+          </div>
+        ) : !hasData ? (
+          <div className="flex h-full items-center justify-center text-sm text-gray-500">
+            No revenue data available
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={data}
+              margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#e5e7eb"
+                vertical={false}
+              />
+              <XAxis
+                dataKey="month"
+                stroke="#6b7280"
+                style={{ fontSize: "12px" }}
+              />
+              <YAxis
+                stroke="#6b7280"
+                style={{ fontSize: "12px" }}
+                tickFormatter={(value: string | number) => {
+                  const numValue =
+                    typeof value === "string" ? parseFloat(value) : value;
+                  return `$${(numValue / 1000).toFixed(0)}k`;
+                }}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#ffffff",
+                  border: "1px solid #e5e7eb",
+                  borderRadius: "8px",
+                }}
+                formatter={(value) => {
+                  const numValue = typeof value === "number" ? value : 0;
+                  return `$${numValue.toLocaleString()}`;
+                }}
+                labelStyle={{ color: "#111827" }}
+              />
+              <Line
+                type="monotone"
+                dataKey="revenue"
+                stroke="#10B981"
+                strokeWidth={2}
+                dot={{ fill: "#10B981", r: 4 }}
+                activeDot={{ r: 6 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
       </div>
     </div>
   );

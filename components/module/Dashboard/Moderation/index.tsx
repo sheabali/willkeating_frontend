@@ -1,79 +1,70 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import { useState } from "react";
+import {
+  useDismissReportMutation,
+  useGetAllModerationReportsQuery,
+  useRemoveReportedContentMutation,
+} from "@/redux/api/dashboardApi";
+
+import { mapModerationReportsToViewModels } from "@/src/libs/mappers/moderation.mapper";
+import { ModerationReportViewModel } from "@/src/types/moderation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner"; // swap for whatever toast lib you're using
 import {
   ReviewContentItem,
   ReviewReportedContent,
 } from "./review-reported-content";
 
-const mockData: ReviewContentItem[] = [
-  {
-    id: "1",
-    reportedIn: "Elsa Thorne's Memorial",
-    timestamp: "2 hours ago",
-    content: {
-      type: "text",
-      text: '"...and honestly, he was a bitter old man who never deserved the respect he demanded from us. I\'m glad he is finally gone to the rest of us can breathe. This site is a joke for even hosting this."',
-    },
-    reportedBy: {
-      name: "Sarah Jenkins",
-      avatar: "/images/user_4.jpg",
-      role: "Regular User",
-    },
-    onRemove: (id) => console.log("Remove:", id),
-    onDismiss: (id) => console.log("Dismiss:", id),
-  },
-  {
-    id: "2",
-    reportedIn: "Eleanor Vance's Legacy",
-    timestamp: "5 hours ago",
-    content: {
-      type: "image",
-      imageUrl: "/images/user_4.jpg",
-      imageCaption:
-        '"Need help with home repairs? Call Jack at 555-0123 for the best rates in town. We also do garden maintenance"',
-    },
-    reportedBy: {
-      name: "Anonymous AI Guard",
-      avatar: "/images/user_4.jpg",
-      role: "System Flag",
-    },
-    onRemove: (id) => console.log("Remove:", id),
-    onDismiss: (id) => console.log("Dismiss:", id),
-  },
-  {
-    id: "3",
-    reportedIn: "Marcus Hall Memorial",
-    timestamp: "8 hours ago",
-    content: {
-      type: "text",
-      text: '"I remember Marcus used to live at 442 West Oak Street. If anyone wants to drop off flowers for his family, they are still there, phone number 555-892-3341. RIP Marcus."',
-    },
-    reportedBy: {
-      name: "David Chen",
-      avatar: "/images/user_4.jpg",
-      role: "Premium Member",
-    },
-    onRemove: (id) => console.log("Remove:", id),
-    onDismiss: (id) => console.log("Dismiss:", id),
-  },
-];
-
 export default function ModerationPage() {
-  const [items, setItems] = useState<ReviewContentItem[]>(mockData);
+  const { data: moderationReportsData, isLoading } =
+    useGetAllModerationReportsQuery({});
 
-  const handleRemove = (id: string) => {
+  const [removeReported] = useRemoveReportedContentMutation();
+  const [dismissReport] = useDismissReportMutation();
+
+  const [items, setItems] = useState<ModerationReportViewModel[]>([]);
+  const [lastUpdated, setLastUpdated] = useState("");
+
+  useEffect(() => {
+    if (!moderationReportsData) return;
+    setItems(mapModerationReportsToViewModels(moderationReportsData.data));
+    setLastUpdated(
+      new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    );
+  }, [moderationReportsData]);
+
+  const handleRemove = async (id: string) => {
+    const previous = items;
     setItems((prev) => prev.filter((item) => item.id !== id));
+    try {
+      await removeReported(id).unwrap(); // adjust arg shape to match your mutation signature
+    } catch {
+      setItems(previous);
+      toast.error("Failed to remove content. Please try again.");
+    }
   };
 
-  const handleDismiss = (id: string) => {
+  const handleDismiss = async (id: string) => {
+    const previous = items;
     setItems((prev) => prev.filter((item) => item.id !== id));
+    try {
+      await dismissReport(id).unwrap();
+    } catch {
+      setItems(previous);
+      toast.error("Failed to dismiss report. Please try again.");
+    }
   };
 
-  const updatedItems = items.map((item) => ({
+  const pendingCount =
+    moderationReportsData?.data?.filter((r: any) => r.status === "PENDING")
+      .length ?? items.length;
+
+  const reviewItems: ReviewContentItem[] = items.map((item) => ({
     ...item,
-    onRemove: () => handleRemove(item.id),
-    onDismiss: () => handleDismiss(item.id),
+    onRemove: handleRemove,
+    onDismiss: handleDismiss,
   }));
 
   return (
@@ -81,9 +72,10 @@ export default function ModerationPage() {
       <div className="container mx-auto">
         <ReviewReportedContent
           title="Review Reported Content"
-          pendingCount={updatedItems.length}
-          lastUpdated="2 mins ago"
-          items={updatedItems}
+          pendingCount={pendingCount}
+          lastUpdated={lastUpdated}
+          items={reviewItems}
+          loading={isLoading}
         />
       </div>
     </main>
