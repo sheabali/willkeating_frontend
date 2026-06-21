@@ -4,11 +4,17 @@ import { CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import { PricingPlan } from ".";
 
-const PricingCard = ({ plan }: { plan: PricingPlan }) => {
+interface PricingCardProps {
+  plan: PricingPlan;
+  onSelect?: (planId: string) => void;
+  isProcessing?: boolean;
+}
+
+const PricingCard = ({ plan, onSelect, isProcessing }: PricingCardProps) => {
   return (
     <div
       className={`relative rounded-2xl p-8 sm:p-10 flex flex-col h-full transition-all duration-300 hover:shadow-lg ${
-        plan.backgroundColor || "bg-slate-50"
+        plan.backgroundColor ? "bg-primary/5" : "bg-slate-50"
       } ${plan.isPopular ? "md:scale-105 md:shadow-xl" : ""}`}
     >
       {plan.showBackgroundImage && (
@@ -62,13 +68,15 @@ const PricingCard = ({ plan }: { plan: PricingPlan }) => {
       {/* CTA Button */}
       <Button
         variant={plan.buttonVariant}
+        disabled={isProcessing}
+        onClick={() => onSelect?.(plan)}
         className={`w-full mb-8 font-semibold text-base py-3 ${
           plan.buttonVariant === "default"
             ? "bg-primary rounded-md py-6 hover:bg-primary/90 text-white"
             : "border-slate-300 rounded-md py-6 text-slate-900 hover:bg-slate-100"
         }`}
       >
-        {plan.buttonText}
+        {isProcessing ? "Processing..." : plan.buttonText}
       </Button>
 
       {/* Features List */}

@@ -2,6 +2,10 @@
 "use client";
 
 import { useGetAllPricesQuery } from "@/redux/api/priceApi";
+import { useCreateSubscriptionIntentMutation } from "@/redux/api/subscriptionApi";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import PlanSelectionSkeleton from "../Onboarding/PlanSelectionSkeleton";
 import PricingCard from "./PricingCard";
 import RocketIcon from "./RocketIcon";
 import UserIcon from "./UserIcon";
@@ -11,6 +15,7 @@ interface PricingFeature {
 }
 
 export type PricingPlan = {
+  id: string;
   name: string;
   price: number;
   period?: string;
@@ -51,6 +56,7 @@ function mapApiPlan(plan: ApiPlan, index: number): PricingPlan {
   const isPopular = plan.planType !== "LIFETIME";
 
   return {
+    id: plan.id,
     name: plan.planName,
     price,
     period: PERIOD_BY_TYPE[plan.planType],
@@ -70,34 +76,66 @@ function mapApiPlan(plan: ApiPlan, index: number): PricingPlan {
 }
 
 export function PricingSection() {
+  const router = useRouter();
+  const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
+
+  const [createSubscription, { isLoading: isCreating }] =
+    useCreateSubscriptionIntentMutation();
+
   const { data: priceData, isLoading } = useGetAllPricesQuery({}) as any;
 
   const apiPlans: ApiPlan[] = priceData?.data?.data ?? [];
   const plans = apiPlans.map(mapApiPlan);
 
+  const handleSelectPlan = async (plan: any) => {
+    console.log("plan", plan);
+
+    setLoadingPlanId(plan.id);
+    router.push(`/registers/payment/?planId=${plan.id}&amount=${plan.price}`);
+    // try {
+    //   const res = (await createSubscription({ planId }).unwrap()) as any;
+    //   if (res?.success) {
+    //     toast.success(
+    //       res?.data?.message ||
+    //         "Subscription intent created! Redirecting to payment...",
+    //     );
+    //     if (res?.data?.orderId) {
+    //       if (res.data.clientSecret) {
+    //         localStorage.setItem("clientSecret", res.data.clientSecret);
+    //       } else {
+    //         console.warn("No clientSecret returned from server");
+    //       }
+    //       router.push(
+    //         `/register/payment?paymentId=${res.data.orderId}&planId=${planId}`,
+    //       );
+    //     }
+    //   }
+    // } catch (err: any) {
+    //   toast.error(
+    //     err?.data?.message ||
+    //       "Failed to create subscription intent. Please try again.",
+    //   );
+    //   console.error("Subscription error:", err);
+    // } finally {
+    //   setLoadingPlanId(null);
+    // }
+  };
+
+  if (isLoading) return <PlanSelectionSkeleton />;
+
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-start mb-12 lg:mb-24">
-          <h2 className="text-3xl sm:text-[48px] lg:text-5xl  text-[#052858] mb-4 text-balance">
-            Simple & Transparent Pricing
-          </h2>
-          <p className="text-base sm:text-[20px] text-[#5B5C57]  mx-auto text-balance">
-            Start free to share important funeral information. Upgrade anytime
-            to create a lasting memorial page.
-          </p>
-        </div>
-
         {/* Pricing Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-6">
-          {isLoading ? (
-            <p className="text-slate-500">Loading plans...</p>
-          ) : (
-            plans.map((plan, index) => (
-              <PricingCard key={`${plan.name}-${index}`} plan={plan} />
-            ))
-          )}
+          {plans.map((plan) => (
+            <PricingCard
+              key={plan.id}
+              plan={plan}
+              onSelect={handleSelectPlan}
+              isProcessing={isCreating && loadingPlanId === plan.id}
+            />
+          ))}
         </div>
       </div>
     </section>
