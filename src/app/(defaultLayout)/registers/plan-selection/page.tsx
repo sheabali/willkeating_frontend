@@ -8,7 +8,7 @@ import { OnboardingProvider } from "@/redux/context/onboarding-context";
 export default function PlanSelectionPage() {
   return (
     <OnboardingProvider>
-      <OnboardingLayout currentStep={3}>
+      <OnboardingLayout currentStep={1}>
         <PricingSection />
       </OnboardingLayout>
     </OnboardingProvider>

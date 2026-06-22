@@ -19,19 +19,22 @@ export default function SubscriptionSection() {
   console.log("clientSecret", clientSecret);
 
   const { data: planData, isLoading } = useGetSingleSubscriptionQuery(
-    paymentId || "",
-  );
+    planId || "",
+  ) as any;
 
   const plan = planData?.data;
 
   console.log("pla0n", plan);
 
-  const duration = plan?.duration;
-  const amount = plan?.amount;
-  const features = plan?.plan?.features || [];
-  const name = plan?.plan?.name || "";
-  const hasTrial = plan?.plan?.hasTrial ?? false;
-  const planPrice = plan?.planPrice;
+  const duration = plan?.planType || durationParam;
+
+  const rawAmount = searchParams.get("amount") || plan?.planPrice || "0";
+  const amount = Number(String(rawAmount).split("/")[0].replace(/[^0-9.]/g, "")) || 0;
+
+  const features = plan?.items || plan?.SubscribeModelPlan || [];
+  const name = plan?.planName || plan?.name || "";
+  const hasTrial = plan?.hasTrial ?? false;
+  const planPrice = amount;
 
   if (isLoading) {
     return (
@@ -53,11 +56,11 @@ export default function SubscriptionSection() {
     <div className="w-full bg-white">
       <div className="flex flex-col lg:flex-row">
         {/* Left Side */}
-        <div className="w-full lg:w-[45%] bg-[#F3F6F3] p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 flex items-center justify-center">
+        <div className="w-full lg:w-[45%]  p-6 sm:p-8 md:p-12 lg:p-16 xl:p-20 flex items-center justify-center">
           <div className="w-full max-w-md mx-auto lg:mx-0">
             {/* Header */}
             <div className="mb-10">
-              <h1 className="text-2xl md:text-3xl xl:text-4xl font-serif">
+              <h1 className="text-xl md:text-2xl xl:text-2xl font-serif">
                 Complete Your Subscription
               </h1>
               {hasTrial && (
@@ -156,9 +159,10 @@ export default function SubscriptionSection() {
             )}
 
             <AccountForm
-              planId={plan.id}
+              planId={plan?.id || planId}
               paymentId={paymentId}
               clientSecret={clientSecret}
+              amount={amount}
             />
           </div>
         </div>

@@ -5,7 +5,7 @@
 
 import { Card } from "@/components/ui/card";
 
-import { useCreateSubscriptionIntentMutation } from "@/redux/api/subscriptionApi";
+import { useBuySubPlanMutation } from "@/redux/api/subscriptionApi";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -22,16 +22,17 @@ interface Props {
   planId: string;
   paymentId: string | null;
   clientSecret: string;
+  amount: number;
 }
 
-export function AccountForm({ planId, paymentId, clientSecret }: Props) {
+export function AccountForm({ planId, paymentId, clientSecret, amount }: Props) {
   console.log("clientSecret", clientSecret);
 
   const router = useRouter();
   const params = useSearchParams();
 
-  const [makeConfirmPayment, { isLoading: confirmLoading }] =
-    useCreateSubscriptionIntentMutation();
+  const [buySubPlan, { isLoading: confirmLoading }] =
+    useBuySubPlanMutation();
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,66 +44,27 @@ export function AccountForm({ planId, paymentId, clientSecret }: Props) {
         return;
       }
 
-      if (!clientSecret || !clientSecret.includes("_secret_")) {
-        toast.error(
-          "Payment session is invalid or expired. Please go back and select your plan again.",
-        );
-        console.error("Invalid clientSecret:", clientSecret);
-        return;
-      }
-
       setIsSubmitting(true);
 
       try {
-        const stripe = await stripePromise;
-        if (!stripe) throw new Error("Stripe not loaded");
-
-        // Detect intent type by prefix:
-        // "seti_" = SetupIntent (trial — card saved, no charge)
-        // "pi_"   = PaymentIntent (paid plan — card charged)
-        const isSetupIntent = clientSecret.startsWith("seti_");
-
-        let intentId: string | undefined;
-        let stripeError: any;
-
-        if (isSetupIntent) {
-          const { setupIntent, error } = await stripe.confirmCardSetup(
-            clientSecret,
-            { payment_method: paymentMethodId },
-          );
-          intentId = setupIntent?.id;
-          stripeError = error;
-        } else {
-          const { paymentIntent, error } = await stripe.confirmCardPayment(
-            clientSecret,
-            { payment_method: paymentMethodId },
-          );
-          intentId = paymentIntent?.id;
-          stripeError = error;
-        }
-
-        if (stripeError) {
-          toast.error(stripeError.message ?? "Payment failed");
-          return;
-        }
-
-        if (!intentId) {
-          toast.error("Something went wrong. Please try again.");
-          return;
-        }
-
         const payload = {
-          paymentId,
-          paymentIntentId: intentId,
+          subscriptionId: planId,
+          amount,
+          tax: 0,
+          paymentMethodId,
         };
 
-        const confirmRes = await makeConfirmPayment(payload).unwrap();
+        console.log("SENDING PAYLOAD TO BACKEND:", payload);
+
+        const confirmRes = await buySubPlan(payload).unwrap() as any;
 
         console.log("confirmRes", confirmRes);
         if (confirmRes.success) {
-          toast.success(confirmRes.message);
+          toast.success(confirmRes.message || "Subscription successful!");
           localStorage.removeItem("clientSecret");
           setShowSuccess(true);
+        } else {
+          toast.error(confirmRes.message || "Payment failed");
         }
       } catch (err: any) {
         toast.error(err?.data?.message ?? err?.message ?? "Order failed");
@@ -110,7 +72,7 @@ export function AccountForm({ planId, paymentId, clientSecret }: Props) {
         setIsSubmitting(false);
       }
     },
-    [clientSecret, planId, makeConfirmPayment, router],
+    [planId, amount, buySubPlan, params],
   );
 
   return (

@@ -29,9 +29,8 @@ export function SuccessModal({ open, onClose }: SuccessModalProps) {
 
   console.log("paymentId", paymentId);
 
-  const { data: planData, isLoading } = useGetMyPaymentIdQuery(paymentId || "");
+  const { data: planData, isLoading } = useGetMyPaymentIdQuery(paymentId || "") as any;
 
-  console.log("planData", planData);
 
   const plan = planData?.data;
 
@@ -53,20 +52,16 @@ export function SuccessModal({ open, onClose }: SuccessModalProps) {
           </div>
         </div>
 
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">
           Payment Successful
         </h2>
 
-        <p className="text-gray-600 mb-6">
-          Welcome to the future of automotive diagnostics
-        </p>
-
         <div className="bg-gray-50 rounded-lg p-4 mb-6 space-y-2">
           <div className="flex justify-between">
-            <span className="text-gray-600">Plan</span>
-            <span className="font-semibold text-gray-900">
+            {/* <span className="text-gray-600">Plan</span> */}
+            {/* <span className="font-semibold text-gray-900">
               {planNames || "N/A"}
-            </span>
+            </span> */}
           </div>
           <div className="flex justify-between">
             <span className="text-gray-600">Status</span>
@@ -76,9 +71,9 @@ export function SuccessModal({ open, onClose }: SuccessModalProps) {
 
         <Button
           onClick={handleGoToDashboard}
-          className="w-full bg-[#042055] text-white hover:bg-[#042055]/20 font-semibold py-2"
+          className="w-full bg-primary text-white hover:bg-primary/80 font-semibold py-2"
         >
-          Go to dashboard
+          Back to home
         </Button>
       </div>
     </div>

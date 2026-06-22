@@ -15,15 +15,15 @@ const footerSections: FooterSection[] = [
   {
     title: "Notices",
     links: [
-      { label: "Obituary Notices", href: "/notices/obituaries" },
-      { label: "Funeral Notices", href: "/notices/funerals" },
+      { label: "Obituary Notices", href: "/obituaries-notices" },
+      { label: "Funeral Notices", href: "/funeral-notices" },
     ],
   },
   {
     title: "Memorials",
     links: [
-      { label: "Shared Memories", href: "/memorials/shared" },
-      { label: "Add New Memory", href: "/memorials/new" },
+      { label: "Shared Memories", href: "/memories" },
+      { label: "Add New Memory", href: "/memories/new" },
     ],
   },
   {
@@ -41,7 +41,7 @@ const currentYear = new Date().getFullYear();
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#add8e6]">
+    <footer className="w-full bg-[#062664] text-white">
       {/* Main Footer Content */}
       <div className={`${wrapperClasses} py-16`}>
         <div className="flex flex-col items-center gap-10 md:flex-row md:items-start md:justify-between md:gap-12">
@@ -52,7 +52,7 @@ export default function Footer() {
               className="group relative h-20 w-20 shrink-0 transition-transform hover:scale-105 sm:h-24 sm:w-24"
             >
               <Image
-                src="/images/Logo.png"
+                src="/logo_1.png"
                 alt="Remembered Forever Logo"
                 fill
                 sizes="96px"
@@ -71,7 +71,7 @@ export default function Footer() {
                 key={section.title}
                 className="flex flex-col items-center gap-4 sm:items-start"
               >
-                <h3 className="text-sm font-semibold text-slate-800">
+                <h3 className="text-sm font-semibold text-white">
                   {section.title}
                 </h3>
                 <ul className="flex flex-col items-center gap-3 sm:items-start">
@@ -79,7 +79,7 @@ export default function Footer() {
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="text-sm text-slate-600 transition-colors hover:text-slate-900"
+                        className="text-sm text-white/70 transition-colors hover:text-white"
                       >
                         {link.label}
                       </Link>
@@ -94,12 +94,12 @@ export default function Footer() {
 
       {/* Divider */}
       <div className={wrapperClasses}>
-        <div className="border-t border-slate-300" />
+        <div className="border-t border-white/20" />
       </div>
 
       {/* Copyright Section */}
       <div className={`${wrapperClasses} py-8`}>
-        <p className="text-center text-sm text-slate-600">
+        <p className="text-center text-sm text-white/70">
           © {currentYear} Remembered Forever. All rights reserved.
         </p>
       </div>

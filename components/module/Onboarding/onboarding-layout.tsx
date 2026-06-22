@@ -16,18 +16,13 @@ export function OnboardingLayout({
         {/* Logo */}
         <div className="flex justify-center mb-6">
           <Image
-            src="/r_logo.png"
+            src="/logo.png"
             alt="SmartAuto"
             width={300}
             height={300}
             className="object-contain w-38 h-38"
           />
         </div>
-
-        {/* Title */}
-        <h1 className="text-3xl font-bold text-center text-gray-900 mb-8">
-          Shop Owner On-boarding
-        </h1>
 
         {/* Step Indicator */}
         <StepIndicator currentStep={currentStep} />

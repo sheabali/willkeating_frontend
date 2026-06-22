@@ -7,7 +7,7 @@ import { OnboardingProvider } from "@/redux/context/onboarding-context";
 export default function PaymentPage() {
   return (
     <OnboardingProvider>
-      <OnboardingLayout currentStep={4}>
+      <OnboardingLayout currentStep={2}>
         <SubscriptionSection />
       </OnboardingLayout>
     </OnboardingProvider>

@@ -13,9 +13,8 @@ interface PricingCardProps {
 const PricingCard = ({ plan, onSelect, isProcessing }: PricingCardProps) => {
   return (
     <div
-      className={`relative rounded-2xl p-8 sm:p-10 flex flex-col h-full transition-all duration-300 hover:shadow-lg ${
-        plan.backgroundColor ? "bg-primary/5" : "bg-slate-50"
-      } ${plan.isPopular ? "md:scale-105 md:shadow-xl" : ""}`}
+      className={`relative rounded-2xl p-8 sm:p-10 flex flex-col h-full transition-all duration-300 hover:shadow-lg ${plan.backgroundColor ? "bg-primary/5" : "bg-slate-50"
+        } ${plan.isPopular ? "md:scale-105 md:shadow-xl" : ""}`}
     >
       {plan.showBackgroundImage && (
         <Image
@@ -30,7 +29,7 @@ const PricingCard = ({ plan, onSelect, isProcessing }: PricingCardProps) => {
       {/* Popular Badge */}
       {plan.isPopular && (
         <div className="absolute top-6 right-6 sm:top-8 sm:right-8">
-          <span className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold bg-[#0496FF] text-white">
+          <span className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold bg-white text-primary">
             Popular
           </span>
         </div>
@@ -69,12 +68,11 @@ const PricingCard = ({ plan, onSelect, isProcessing }: PricingCardProps) => {
       <Button
         variant={plan.buttonVariant}
         disabled={isProcessing}
-        onClick={() => onSelect?.(plan)}
-        className={`w-full mb-8 font-semibold text-base py-3 ${
-          plan.buttonVariant === "default"
-            ? "bg-primary rounded-md py-6 hover:bg-primary/90 text-white"
-            : "border-slate-300 rounded-md py-6 text-slate-900 hover:bg-slate-100"
-        }`}
+        onClick={() => onSelect?.(plan as any)}
+        className={`w-full mb-8 font-semibold text-base py-3 ${plan.buttonVariant === "default"
+          ? "bg-primary rounded-md py-6 hover:bg-primary/90 text-white"
+          : "border-slate-300 rounded-md py-6 text-slate-900 hover:bg-slate-100"
+          }`}
       >
         {isProcessing ? "Processing..." : plan.buttonText}
       </Button>

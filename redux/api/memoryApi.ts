@@ -48,6 +48,15 @@ export const memoryApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+
+    reportMemorial: builder.mutation({
+      query: ({ id, data }: any) => ({
+        url: `/reports/memorial/${id}`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
@@ -56,4 +65,5 @@ export const {
   useGetSingleFuneralQuery,
   useGetAllMemoryQuery,
   useCommentsMemorialMutation,
+  useReportMemorialMutation,
 } = memoryApi;

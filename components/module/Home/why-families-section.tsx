@@ -23,28 +23,28 @@ const defaultFeatures: WhyFamiliesFeature[] = [
     title: "Respectful & Compassionate",
     description:
       "Created to support families during life's most difficult moments.",
-    backgroundColor: "bg-[#466c7a]",
+    backgroundColor: "bg-[#8060a0]",
   },
   {
     number: 2,
     title: "Easy to Share",
     description:
       "Keep everyone informed with a single place for funeral and memorial information.",
-    backgroundColor: "bg-[#6f628c]",
+    backgroundColor: "bg-[#8060a0]",
   },
   {
     number: 3,
     title: "Preserve Memories",
     description:
       "Collect stories, photographs, and messages that can be treasured for years to come.",
-    backgroundColor: "bg-[#4c4624]",
+    backgroundColor: "bg-[#8060a0]",
   },
   {
     number: 4,
     title: "Accessible Anywhere",
     description:
       "Friends and family can participate from anywhere in the world.",
-    backgroundColor: "bg-[#86736b]",
+    backgroundColor: "bg-[#8060a0]",
   },
 ];
 
@@ -56,7 +56,7 @@ export function WhyFamiliesSection({
   subtitleClassName,
 }: WhyFamiliesSectionProps) {
   return (
-    <section className="bg-[#fff8eb] py-12 md:py-16 lg:py-20 px-4 md:px-6">
+    <section className="bg-[#f3e8ff] py-12 md:py-16 lg:py-20 px-4 md:px-6">
       <div className="container mx-auto">
         {/* Header */}
         <div className="text-center mb-12 md:mb-16">

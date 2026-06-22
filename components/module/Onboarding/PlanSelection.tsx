@@ -151,6 +151,7 @@ interface PricingFeature {
 }
 
 export type PricingPlan = {
+  id: string;
   name: string;
   price: number;
   period?: string;
@@ -191,6 +192,7 @@ function mapApiPlan(plan: ApiPlan, index: number): PricingPlan {
   const isPopular = plan.planType !== "LIFETIME";
 
   return {
+    id: plan.id,
     name: plan.planName,
     price,
     period: PERIOD_BY_TYPE[plan.planType],
@@ -230,7 +232,7 @@ export function PricingSection() {
         </div>
 
         {/* Pricing Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-8">
           {isLoading ? (
             <p className="text-slate-500">Loading plans...</p>
           ) : (

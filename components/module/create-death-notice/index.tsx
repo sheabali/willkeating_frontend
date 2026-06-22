@@ -14,6 +14,7 @@ import { useCreateObituariesMutation } from "@/redux/api/obituariesApi";
 import { format } from "date-fns";
 import { CalendarIcon, Upload } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -28,6 +29,10 @@ interface DeathNoticeFormData {
 }
 
 export function DeathNoticeForm() {
+
+
+  const router = useRouter()
+
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragActive, setIsDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -123,6 +128,7 @@ export function DeathNoticeForm() {
     try {
       await createDeathNotice(formData).unwrap();
       toast.success("Death notice created successfully!");
+      router.push('/obituaries-notices')
     } catch (error) {
       console.error(error);
       toast.error("Failed to create death notice");
@@ -297,11 +303,10 @@ export function DeathNoticeForm() {
           onDragLeave={handleDrag}
           onDragOver={handleDrag}
           onDrop={handleDrop}
-          className={`flex flex-col items-center justify-center rounded-3xl border-2 border-dashed py-12 transition-colors ${
-            isDragActive
-              ? "border-slate-400 bg-slate-50"
-              : "border-slate-300 bg-white"
-          }`}
+          className={`flex flex-col items-center justify-center rounded-3xl border-2 border-dashed py-12 transition-colors ${isDragActive
+            ? "border-slate-400 bg-slate-50"
+            : "border-slate-300 bg-white"
+            }`}
         >
           {preview ? (
             <div className="flex flex-col items-center gap-4">

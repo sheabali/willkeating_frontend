@@ -5,6 +5,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import Loading from "@/components/ui/loading";
+import { Spinner } from "@/components/ui/spinner";
 import {
   CardCvcElement,
   CardExpiryElement,
@@ -126,9 +127,9 @@ export function BookingAndPaymentForm({
         type="button"
         onClick={handleValidateCard}
         disabled={isDisabled}
-        className="w-full bg-primary hover:bg-primary/90 py-6"
+        className="w-full bg-primary rounded-xl hover:bg-primary/90 py-6"
       >
-        {loading ? <Loading /> : isSubmitting ? <Loading /> : "Continue"}
+        {loading ? <Spinner /> : isSubmitting ? <Spinner /> : "Complete Subscription"}
       </Button>
     </div>
   );

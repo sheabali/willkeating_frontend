@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Loading from "@/components/ui/loading";
 import { useCreateFuneralMutation } from "@/redux/api/funeralApi";
 import { Upload, X } from "lucide-react";
 import Image from "next/image";
@@ -305,9 +306,8 @@ export default function FuneralNoticeForm() {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`border-2 border-dashed rounded-lg p-8 text-center bg-white transition ${
-              isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
-            }`}
+            className={`border-2 border-dashed rounded-lg p-8 text-center bg-white transition ${isDragging ? "border-blue-500 bg-blue-50" : "border-gray-300"
+              }`}
           >
             <input
               id="image-input"
@@ -385,7 +385,7 @@ export default function FuneralNoticeForm() {
             disabled={isLoading}
             className="w-[200px] py-6 bg-primary hover:bg-primary/90 text-white font-medium px-8"
           >
-            {isLoading ? "Saving..." : "Save"}
+            {isLoading ? <Loading /> : "Save"}
           </Button>
         </div>
       </div>

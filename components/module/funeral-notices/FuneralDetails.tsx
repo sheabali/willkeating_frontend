@@ -36,10 +36,10 @@ export default function MemorialPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-white px-6 py-12">
-      <div className="w-full max-w-2xl rounded-lg bg-[#f0f0ff] px-8 py-12 shadow-sm">
+      <div className="w-full max-w-2xl rounded-lg bg-[#8060A0] px-8 py-12 shadow-sm">
         <div className="flex flex-col items-center gap-8">
           {/* Name */}
-          <h1 className="text-center text-[28px] font-semibold tracking-wide text-[#052858]">
+          <h1 className="text-center text-[28px] font-semibold tracking-wide text-white">
             {memorial?.name}
           </h1>
 
@@ -59,7 +59,7 @@ export default function MemorialPage() {
 
           {/* Dates */}
           <div className="text-center">
-            <p className="text-[20px] text-[#5B5C57]">
+            <p className="text-[20px] text-[#ffffff]">
               {formatDate(memorial?.dateOfBirth)} –{" "}
               {formatDate(memorial?.dateOfPassing)}
             </p>
@@ -67,7 +67,7 @@ export default function MemorialPage() {
 
           {/* Location */}
           {memorial?.location && (
-            <div className="flex items-center justify-center gap-2 text-primary">
+            <div className="flex items-center justify-center gap-2 text-white">
               <MapPin size={20} />
               <span className="text-[20px] font-medium">
                 {memorial.location}
@@ -77,7 +77,7 @@ export default function MemorialPage() {
 
           {/* Quote */}
           <div className="border-l-4 border-slate-300 pl-6">
-            <blockquote className="text-center text-[24px] leading-relaxed text-[#052858]">
+            <blockquote className="text-center text-[24px] leading-relaxed text-[#ffffff]">
               <span className="text-3xl text-slate-400">&ldquo;</span>
               {memorial?.story}
               <span className="text-3xl text-slate-400">&rdquo;</span>

@@ -45,6 +45,13 @@ export const subscriptionPlans = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    buySubPlan: builder.mutation({
+      query: (payload: any) => ({
+        url: "/plans/buy-sub-plan",
+        method: "POST",
+        body: payload,
+      }),
+    }),
   }),
 });
 
@@ -55,4 +62,5 @@ export const {
   useCreateSubscriptionIntentMutation,
   useGetSingleSubscriptionQuery,
   useGetMyPaymentIdQuery,
+  useBuySubPlanMutation,
 } = subscriptionPlans;
