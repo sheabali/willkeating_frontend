@@ -15,18 +15,26 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Spinner } from "@/components/ui/spinner";
-import { useUpdateUserMutation } from "@/redux/api/authApi";
+import { useDeleteDeathNoticeMutation, useDeleteFuneralNoticeMutation } from "@/redux/api/dashboardApi";
 
-const ActionCell = ({ id }: any) => {
-  const [updateStatus, { isLoading }] = useUpdateUserMutation();
+const ActionCell = ({ id, type }: any) => {
+  const [deleteDeathNotice, { isLoading: isDeletingDeath }] = useDeleteDeathNoticeMutation();
+  const [deleteFuneralNotice, { isLoading: isDeletingFuneral }] = useDeleteFuneralNoticeMutation();
 
-  const handleStatusChange = async () => {
+  const isLoading = isDeletingDeath || isDeletingFuneral;
+
+  const handleDelete = async () => {
     try {
-      await updateStatus({ id, status: "BLOCKED" }).unwrap();
-      toast.success("Technician deleted successfully");
+      if (type === "FUNERAL_NOTICE") {
+        await deleteFuneralNotice(id).unwrap();
+        toast.success("Funeral notice deleted successfully");
+      } else {
+        await deleteDeathNotice(id).unwrap();
+        toast.success("Death notice deleted successfully");
+      }
     } catch (err: any) {
-      toast.error(err?.data?.message || "Failed to delete technician.");
-      console.error("Failed to update status:", err);
+      toast.error(err?.data?.message || "Failed to delete notice.");
+      console.error("Failed to delete notice:", err);
     }
   };
 
@@ -53,7 +61,7 @@ const ActionCell = ({ id }: any) => {
           <AlertDialogCancel className="rounded-full">Cancel</AlertDialogCancel>
           <AlertDialogAction
             className="bg-red-500 hover:bg-red-600"
-            onClick={handleStatusChange}
+            onClick={handleDelete}
             disabled={isLoading}
           >
             Yes, Delete

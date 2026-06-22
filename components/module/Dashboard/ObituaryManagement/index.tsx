@@ -219,7 +219,7 @@ const ObituaryManagement = () => {
             </button>
 
             <button className="rounded-md p-2 cursor-pointer text-gray-600 hover:bg-red-50 hover:text-red-600">
-              <ActionCell id={row.original.id} />
+              <ActionCell id={row.original.id} type={row.original.type} />
             </button>
           </div>
         ),

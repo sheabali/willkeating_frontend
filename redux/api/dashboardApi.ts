@@ -258,6 +258,20 @@ export const dashboardApi = baseApi.injectEndpoints({
       }),
       providesTags: (_result, _error, id) => [{ type: "User", id }],
     }),
+    deleteDeathNotice: builder.mutation<{ success: boolean; message: string }, string>({
+      query: (id) => ({
+        url: `/admin/dashboard/obituaries/death/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [{ type: "User", id: "ADMIN_LIST" }],
+    }),
+    deleteFuneralNotice: builder.mutation<{ success: boolean; message: string }, string>({
+      query: (id) => ({
+        url: `/admin/dashboard/obituaries/funeral/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [{ type: "User", id: "ADMIN_LIST" }],
+    }),
     getPaymentData: builder.query<PaymentApiResponse, any | void>({
       query: (params) => {
         const searchParams = new URLSearchParams();
@@ -314,6 +328,8 @@ export const {
   useGetAllObituaryQuery,
   useGetObituaryDetailsQuery,
   useGetDeathDetailsQuery,
+  useDeleteDeathNoticeMutation,
+  useDeleteFuneralNoticeMutation,
   useGetPaymentDataQuery,
   useDismissReportMutation,
   useRemoveReportedContentMutation,
