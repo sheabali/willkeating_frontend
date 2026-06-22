@@ -59,7 +59,7 @@ const LoginPage = () => {
 
         toast.success(res.message || "Login successful!");
 
-        if (user?.role === "ADMIN") {
+        if (user?.role === "Admin") {
           router.push("/admin/dashboard");
         } else {
           router.push("/");
