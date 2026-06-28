@@ -130,11 +130,10 @@ export default function Navbar() {
   return (
     <div className="mt-12">
       <nav
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          isScrolled
-            ? "bg-white backdrop-blur-md border-b border-gray-200 shadow-sm"
-            : "bg-[#ffff]"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${isScrolled
+          ? "bg-white backdrop-blur-md border-b border-gray-200 shadow-sm"
+          : "bg-[#ffff]"
+          }`}
       >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 ">
           <div className="flex items-center justify-between h-[120px]">
@@ -153,11 +152,10 @@ export default function Navbar() {
                 <button
                   key={idx}
                   onClick={() => handleNavigation(item.href)}
-                  className={`py-2 px-5 rounded-full text-md font-medium transition-all duration-200 active:scale-95 ${
-                    isActive(item.href)
-                      ? "underline underline-offset-4 decoration-2 text-primary font-semibold"
-                      : "text-gray-600 hover:text-black hover:bg-gray-100"
-                  }`}
+                  className={`py-2 px-5 rounded-full text-md font-medium transition-all duration-200 active:scale-95 ${isActive(item.href)
+                    ? "underline underline-offset-4 decoration-2 text-primary font-semibold"
+                    : "text-gray-600 hover:text-black hover:bg-gray-100"
+                    }`}
                   aria-current={isActive(item.href) ? "page" : undefined}
                 >
                   {item.label}
@@ -165,115 +163,128 @@ export default function Navbar() {
               ))}
             </div>
 
-            <div className="hidden lg:flex items-center gap-3">
-              {currentUser ? (
-                <div
-                  ref={profileRef}
-                  className="relative"
-                  onMouseEnter={() => setProfileOpen(true)}
-                  onMouseLeave={() => setProfileOpen(false)}
-                >
-                  <button className="w-12 h-12 rounded-full overflow-hidden border-2 border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2">
-                    {currentUser?.profileImage ? (
-                      <Image
-                        src={currentUser.profileImage}
-                        alt={currentUser.userName}
-                        width={60}
-                        height={60}
-                        className="object-cover w-full h-full"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-green-600 text-sm font-semibold">
-                        {currentUser.userName?.charAt(0).toUpperCase()}
-                      </div>
-                    )}
-                  </button>
-
+            <div className="flex items-center gap-3">
+              {/* Desktop Auth Buttons */}
+              <div className="hidden lg:flex items-center gap-3">
+                {currentUser ? (
                   <div
-                    className={`absolute right-0 top-12 w-56 bg-white border border-gray-100 rounded-xl shadow-xl z-50 transform transition-all duration-200 origin-top-right ${
-                      profileOpen
+                    ref={profileRef}
+                    className="relative"
+                    onMouseEnter={() => setProfileOpen(true)}
+                    onMouseLeave={() => setProfileOpen(false)}
+                  >
+                    <button className="w-12 h-12 rounded-full overflow-hidden border-2 border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2">
+                      {currentUser?.profileImage ? (
+                        <Image
+                          src={currentUser.profileImage}
+                          alt={currentUser.userName}
+                          width={60}
+                          height={60}
+                          className="object-cover w-full h-full"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-100 text-green-600 text-sm font-semibold">
+                          {currentUser.userName?.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                    </button>
+
+                    <div
+                      className={`absolute right-0 top-12 w-56 bg-white border border-gray-100 rounded-xl shadow-xl z-50 transform transition-all duration-200 origin-top-right ${profileOpen
                         ? "scale-100 opacity-100"
                         : "scale-95 opacity-0 pointer-events-none"
-                    }`}
-                  >
-                    <div className="px-4 py-3 border-b border-gray-100">
-                      <p className="text-sm font-semibold text-gray-800 truncate">
-                        {currentUser.firstName} {currentUser.lastName}
-                      </p>
-                      <p className="text-xs text-gray-400 truncate mt-0.5">
-                        {currentUser.email}
-                      </p>
-                    </div>
-                    <ul>
-                      <li>
-                        <Link
-                          href={profileLink}
-                          className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition rounded-t-none"
-                          onClick={() => setProfileOpen(false)}
-                        >
-                          {currentUser?.role === "TECHNICIAN"
-                            ? "Go to Technician Chat"
-                            : currentUser?.role === "USER"
-                              ? "Go to Shop Dashboard"
-                              : currentUser?.role === "ADMIN"
-                                ? "Go to Admin Dashboard"
-                                : ""}
-                        </Link>
-                      </li>
-                      <li className="px-4">
-                        <Link
-                          className="block py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition rounded-b-none"
-                          href="/funeral-notices"
-                        >
-                          Publish Notice
-                        </Link>
-                      </li>
-                      <li>
-                        <button
-                          className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-gray-50 transition rounded-b-xl"
-                          onClick={handleLogout}
-                        >
-                          Logout
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <Link href="/login">
-                    <Button
-                      variant="outline"
-                      className="text-gray-700 py-6 rounded-full hover:text-black font-medium"
+                        }`}
                     >
-                      Sign in
-                    </Button>
-                  </Link>
-                  {currentUser ? (
-                    <Link href="/register">
-                      <Button className="gap-1.5 py-6 px-5 font-medium">
-                        Publish Notice
+                      <div className="px-4 py-3 border-b border-gray-100">
+                        <p className="text-sm font-semibold text-gray-800 truncate">
+                          {currentUser.firstName} {currentUser.lastName}
+                        </p>
+                        <p className="text-xs text-gray-400 truncate mt-0.5">
+                          {currentUser.email}
+                        </p>
+                      </div>
+                      <ul>
+                        <li>
+                          <Link
+                            href={profileLink}
+                            className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition rounded-t-none"
+                            onClick={() => setProfileOpen(false)}
+                          >
+                            {currentUser?.role === "TECHNICIAN"
+                              ? "Go to Technician Chat"
+                              : currentUser?.role === "USER"
+                                ? "Go to Shop Dashboard"
+                                : currentUser?.role === "ADMIN"
+                                  ? "Go to Admin Dashboard"
+                                  : ""}
+                          </Link>
+                        </li>
+                        <li className="px-4">
+                          <Link
+                            className="block py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition rounded-b-none"
+                            href="/funeral-notices"
+                          >
+                            Publish Notice
+                          </Link>
+                        </li>
+                        <li>
+                          <button
+                            className="w-full text-left px-4 py-2.5 text-sm text-red-500 hover:bg-gray-50 transition rounded-b-xl"
+                            onClick={handleLogout}
+                          >
+                            Logout
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <Link href="/login">
+                      <Button
+                        variant="outline"
+                        className="text-gray-700 py-6 rounded-full hover:text-black font-medium"
+                      >
+                        Sign in
                       </Button>
                     </Link>
-                  ) : (
-                    <Link href="/register">
-                      <Button className="gap-1.5 py-6 px-5 font-medium">
-                        Sign up
-                      </Button>
-                    </Link>
-                  )}
-                </>
-              )}
-            </div>
+                    {currentUser ? (
+                      <Link href="/register">
+                        <Button className="gap-1.5 py-6 px-5 font-medium">
+                          Publish Notice
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Link href="/register">
+                        <Button className="gap-1.5 py-6 px-5 font-medium">
+                          Sign up
+                        </Button>
+                      </Link>
+                    )}
+                  </>
+                )}
+              </div>
 
-            {/* Mobile: Hamburger */}
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 hover:bg-gray-100 rounded-xl transition-all duration-200 active:scale-95"
-              aria-label="Open menu"
-            >
-              <Menu size={22} className="text-gray-700" />
-            </button>
+              {/* Right Logo */}
+              <div className="shrink-0 transition-transform duration-200 hover:scale-105">
+                <Image
+                  src="/Logo.png"
+                  alt="Logo"
+                  width={140}
+                  height={140}
+                  className="object-contain w-24 h-24 md:w-48 rounded-2xl"
+                />
+              </div>
+
+              {/* Mobile: Hamburger */}
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="lg:hidden p-2 hover:bg-gray-100 rounded-xl transition-all duration-200 active:scale-95"
+                aria-label="Open menu"
+              >
+                <Menu size={22} className="text-gray-700" />
+              </button>
+            </div>
           </div>
         </div>
       </nav>
@@ -285,11 +296,10 @@ export default function Navbar() {
       <div
         onClick={() => setSidebarOpen(false)}
         aria-hidden="true"
-        className={`fixed inset-0 bg-black/30 backdrop-blur-sm z-50 lg:hidden transition-opacity duration-300 ${
-          sidebarOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 bg-black/30 backdrop-blur-sm z-50 lg:hidden transition-opacity duration-300 ${sidebarOpen
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
+          }`}
       />
 
       {/* Drawer */}
@@ -297,14 +307,13 @@ export default function Navbar() {
         aria-label="Mobile navigation"
         role="dialog"
         aria-modal="true"
-        className={`fixed top-0 right-0 z-60 h-full w-[80vw] max-w-xs bg-[#f7f9fb] shadow-2xl flex flex-col transform transition-transform duration-300 ease-out lg:hidden ${
-          sidebarOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-0 right-0 z-60 h-full w-[80vw] max-w-xs bg-[#f7f9fb] shadow-2xl flex flex-col transform transition-transform duration-300 ease-out lg:hidden ${sidebarOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         {/* Sidebar Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#f7f9fb]">
           <Image
-            src="/r_logo.png"
+            src="/Logo.png"
             alt="Logo"
             width={72}
             height={72}
@@ -325,11 +334,10 @@ export default function Navbar() {
             <button
               key={idx}
               onClick={() => handleNavigation(item.href)}
-              className={`w-full text-left py-2 px-4 rounded-2xl text-base font-medium transition-all duration-200 active:scale-[0.98] border ${
-                isActive(item.href)
-                  ? "bg-primary text-white shadow-sm"
-                  : "bg-white/50 hover:bg-white border-[#042055] text-gray-700"
-              }`}
+              className={`w-full text-left py-2 px-4 rounded-2xl text-base font-medium transition-all duration-200 active:scale-[0.98] border ${isActive(item.href)
+                ? "bg-primary text-white shadow-sm"
+                : "bg-white/50 hover:bg-white border-[#042055] text-gray-700"
+                }`}
             >
               {item.label}
             </button>
