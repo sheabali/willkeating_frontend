@@ -10,7 +10,7 @@ export default function HeroSection() {
         <div className="mx-auto max-w-[800] text-center">
           <h1 className="font-(family-name:--font-lora) text-4xl font-normal leading-tight tracking-tight text-[#052858] sm:text-5xl lg:text-[64px]">
             <span className="text-balance">
-              A Meaningful Place to Remember and Celebrate Life
+              A place to remember our loved ones, forever.
             </span>
           </h1>
 

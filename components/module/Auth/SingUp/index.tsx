@@ -90,7 +90,7 @@ const RegisterPage = () => {
 
         <h1 className="text-center text-[#1B1C1C] text-[32px] mt-4">Sign Up</h1>
 
-        <p className="text-center text-[#1B1C1C] text-[16px] mt-2">
+        <p className="text-center text-[#1b1c1c] text-[16px] mt-2">
           Enter your information below to create an account
         </p>
 
